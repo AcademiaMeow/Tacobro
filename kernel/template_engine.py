@@ -5,7 +5,7 @@ class Template():
         self.file = file
 
     def render(self, request, params):
-        template_html = open(self.file).read()
+        template_html = open("templates/" + self.file).read()
 
         def _gen_condition(matched):
             condition = matched.group(1).strip()
@@ -30,9 +30,3 @@ class Template():
             _get_value, template_html)
 
         return template_html
-
-# Usage:
-# Template("index.html").render({
-#   "name": "Test",
-#   "age": 20
-# })

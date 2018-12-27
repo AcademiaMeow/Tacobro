@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 
-from views.template_engine import Template
+from kernel.template_engine import Template
 from views.board import BoardViews
 
 app = Flask(__name__)
