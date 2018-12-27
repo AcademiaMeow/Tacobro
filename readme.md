@@ -1,6 +1,21 @@
+![](https://img.shields.io/badge/python-3.6-blue.svg)
+
+
 ```shell=
 $ python run.py
 ```
+
+```shell=
+$ git clone https://github.com/kehanlu/Tacobro.git
+$ cd tacobro
+$ pip install -r requirements.txt
+```
+
+## controller
+
+RESTFUL STYLE
+
+Document: [](https://github.com/kehanlu/Tacobro/wiki/Controller)
 
 ## Template
 
