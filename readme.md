@@ -11,11 +11,17 @@ $ cd tacobro
 $ pip install -r requirements.txt
 ```
 
-## controller
+## Branch
+
+- master/ 
+- release/ 放在伺服器上的版本
+- dev/{user} 開發版本
+
+## Controller
 
 RESTFUL STYLE
 
-Document: [](https://github.com/kehanlu/Tacobro/wiki/Controller)
+[Document](https://github.com/kehanlu/Tacobro/wiki/Controller)
 
 ## Template
 
