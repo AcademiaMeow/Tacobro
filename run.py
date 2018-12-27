@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def root():
-    return 'root'
+    return Template("default.html").render(request)
 
 
 @app.route('/<path:path>')
@@ -20,14 +20,14 @@ def router(path):
 
     if 'template' == path.split('/')[0]:
         return Template("index.html").render(request, {
-                "name": "Test",
-                "age": 20,
-                "ouo?": True,
-                "secret": "S3CR3T"
-            })
+            "name": "Test",
+            "age": 20,
+            "ouo?": True,
+            "secret": "S3CR3T"
+        })
 
     return path
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)

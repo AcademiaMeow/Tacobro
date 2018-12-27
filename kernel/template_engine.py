@@ -1,10 +1,11 @@
 import re
 
+
 class Template():
     def __init__(self, file):
         self.file = file
 
-    def render(self, request, params):
+    def render(self, request, params=dict()):
         template_html = open("templates/" + self.file).read()
 
         def _gen_condition(matched):
@@ -19,7 +20,8 @@ class Template():
             else:
                 return ""
 
-        template_html = re.sub("{%[\s]*if[\s]*(\S+)[\s]*%}([\s\S\n]*){%[\s]*else[\s]*%}([\s\S\n]*){% endif %}", _gen_condition, template_html)
+        template_html = re.sub(
+            "{%[\s]*if[\s]*(\S+)[\s]*%}([\s\S\n]*){%[\s]*else[\s]*%}([\s\S\n]*){% endif %}", _gen_condition, template_html)
 
         def _get_value(matched):
             key = matched.group(1)
