@@ -1,4 +1,6 @@
 from models.model import model
+
+
 class Board(model):
 
     def __init__(self, name, description, bucket_list, manager):
