@@ -1,7 +1,7 @@
 import psycopg2
 import os
 
-
+#TODO Fix
 class pg_model():
     def create(self):
         conn = psycopg2.connect('tacobro.db')

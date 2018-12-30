@@ -1,9 +1,8 @@
 import sqlite3
 import os
 
-
 class sqlite_model():
-    def create(self, classname, kwargs):
+    def create(self, classname, **kwargs):
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
         querystring = "INSERT INTO " + classname + " ("
