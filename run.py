@@ -18,13 +18,16 @@ def router(path):
     if 'board' == path.split('/')[0]:
         return BoardViews().list(request)
 
+    if 'login' == path.split('/')[0]:
+        return Template("login.html").render(request)
+
     if 'template' == path.split('/')[0]:
-        return Template("index.html").render(request, {
-            "name": "Test",
-            "age": 20,
-            "ouo?": True,
-            "secret": "S3CR3T"
-        })
+        return Template("test_template.html").render(request, {
+                "name": "Test",
+                "age": 20,
+                "ouo?": True,
+                "secret": "S3CR3T"
+            })
 
     return path
 
