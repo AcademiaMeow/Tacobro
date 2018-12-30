@@ -3,6 +3,5 @@
 from flask import request
 
 
-class BoardViews():
-    def list(self, request):
-        return 'this is board'
+def list(request, name):
+    return 'this is <h2>{}</h2> board'.format(name)
