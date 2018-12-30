@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def root():
-    return 'root'
+    return Template("default.html").render(request)
 
 
 @app.route('/<path:path>')
@@ -33,4 +33,4 @@ def router(path):
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)
