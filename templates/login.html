@@ -1,8 +1,81 @@
-{% extends base.html %}
+{% extends "base.html" %}
 
-{% block %}
+{% block header %}
 
-<h1 class="title">Login</h1>
-<h2 class="subtitle">meow!</h2>
+<title>歡迎使用 Tacabro</title>
+<style>
+.account-form {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100%;
+}
+
+.section {
+    width: 90%;
+}
+
+.field {
+    margin: 1em;
+}
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="columns">
+    <div class="column hero is-medium is-primary is-bold" style="height: 100vh;">
+        <div class="hero-body">
+
+            <h1 class="title">
+                加入 Tacabro
+                <br>
+                天天喵喵叫！
+            </h1>
+            <h2 class="subtitle">
+                Welcome to Tacabro!
+            </h2>
+
+        </div>
+    </div>
+    <div class="column">
+        <form class="account-form" id="login-form">
+            <section class="section">
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" type="text" placeholder="Username">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input" type="password" placeholder="Password">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control">
+                        <button class="button is-success is-fullwidth">
+                            登入
+                        </button>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control">
+                        <a href="/register" class="button is-primary is-outlined is-fullwidth">
+                            註冊
+                        </a>
+                    </p>
+                </div>
+            </section>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

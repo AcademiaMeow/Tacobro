@@ -1,7 +1,6 @@
 from flask import Flask
-from flask import request
+from flask import request, render_template
 
-from kernel.template_engine import Template
 from controller import urls
 
 app = Flask(__name__)
@@ -9,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def root():
-    return Template("default.html").render(request)
+    return render_template("default.html")
 
 
 @app.route('/<path:path>')

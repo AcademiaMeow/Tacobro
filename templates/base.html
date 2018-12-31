@@ -4,13 +4,20 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tacabro</title>
+    {% block header %}
+
+    {% endblock %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <style>
+        .navbar {
+            box-shadow: 0px 0px 5px black;
+        }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
                 <h1>Tacabro</h1>
@@ -30,22 +37,20 @@
             </div>
 
             <div class="navbar-end">
-                <div class="navbar-item">
+                <!-- <div class="navbar-item">
                     <div class="buttons">
                         <a class="button is-primary">
                             <strong>註冊</strong>
                         </a>
                         <a class="button is-light">登入</a>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </nav>
-    <div class="container">
-        {% block %}
+    {% block content %}
 
-        {% endblock %}
-    </div>
+    {% endblock %}
 </body>
 
 </html>
