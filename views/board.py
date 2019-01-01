@@ -1,7 +1,5 @@
-# 版
-
-from flask import request
+from flask import request, render_template
 
 
 def list(request, name):
-    return 'this is <h2>{}</h2> board'.format(name)
+    return render_template("board.html", name=name)

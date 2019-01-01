@@ -19,7 +19,6 @@ def register(request):
     message = None
     username = request.form.get('username')
     password = request.form.get('password')
-    print(request.form.items())
 
     if username or password:
         if not re.match("[A-Za-z0-9]{6,}", username) or not re.match("[A-Za-z0-9]{6,}", password):
