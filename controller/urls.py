@@ -1,6 +1,5 @@
 import re
-from views import board
-from views import post
+from views import board, post, account
 
 from kernel.url import path
 
@@ -15,7 +14,15 @@ from kernel.url import path
     # 你的 view function 不用加括號 ^_^
 
 url_patterns = [
+    # account
+    path('login', account.login),
+    path('register', account.register),
+    path('logout', account.logout),
+
+    # board
     path('board/<name:str>', board.list),
+
+    # post
     path('post/<id:int>', post.single),
     path('post/<id:int>/<id2:int>', post.meow)
 ]

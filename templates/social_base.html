@@ -12,6 +12,7 @@
     <style>
         .navbar {
             box-shadow: 0px 0px 5px black;
+            margin-bottom: 3em;
         }
     </style>
 </head>
@@ -66,9 +67,34 @@
             </div>
         </div>
     </nav>
-    {% block content %}
+    <div class="container">
+        <div class="columns">
+            <div class="column is-one-quarter">
+                <aside class="menu">
+                    <p class="menu-label">
+                        綜合
+                    </p>
+                    <ul class="menu-list">
+                        <li><a>好友動態</a></li>
+                        <li><a>家族動態</a></li>
+                    </ul>
+                    <p class="menu-label">
+                        全部看板
+                    </p>
+                    <ul class="menu-list">
+                        <li><a href="/board/八卦">八卦板</a></li>
+                        <li><a href="/board/西洽">西洽板</a></li>
+                        <li><a href="/board/喵喵">喵喵板</a></li>
+                    </ul>
+                </aside>
+            </div>
+            <div class="column">
+                {% block content %}
 
-    {% endblock %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
