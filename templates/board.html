@@ -13,7 +13,7 @@
 {% block content %}
 <div class="container">
     <div class="columns">
-        <div class="column is-one-quarter">
+        <div class="column is-one-fifth">
             {% include "board_list.html" %}
         </div>
         <div class="column">
@@ -22,11 +22,11 @@
                 {% for i in range(10) %}
                 <div class="box">
                     <article class="media">
-                        <!-- <div class="media-left">
+                        <div class="media-left">
                             <figure class="image is-64x64">
                                 <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
                             </figure>
-                        </div> -->
+                        </div>
                         <div class="media-content">
                             <div class="content">
                                 <p>
@@ -50,9 +50,11 @@
                                     遐邇壹體 率賓歸王
                                     鳴鳳在樹 白駒食場
                                     化被草木 賴及萬方
+                                    ...
                                 </p>
                             </div>
-                            <nav class="level is-mobile">
+                            <!-- icons -->
+                            <!-- <nav class="level is-mobile">
                                 <div class="level-left">
                                     <a class="level-item" aria-label="reply">
                                         <span class="icon is-small">
@@ -70,7 +72,10 @@
                                         </span>
                                     </a>
                                 </div>
-                            </nav>
+                            </nav> -->
+                            <!-- /icons -->
+
+                            <a class="button is-small is-fullwidth" href="/post/{{i}}">閱讀全文</a>
                         </div>
                     </article>
                 </div>
