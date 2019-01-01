@@ -1,8 +1,8 @@
-# 單篇文章
+from flask import request, render_template
 
+def post(request, id):
 
-def single(request, id):
-    return id
+    return render_template("post.html", id=id)
 
 
 def meow(request, id, id2):
