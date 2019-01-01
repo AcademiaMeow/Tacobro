@@ -14,7 +14,8 @@ from kernel.url import path
     # 你的 view function 不用加括號 ^_^
 
 url_patterns = [
-    path('login/', account.login),
+    path('login', account.login),
+    path('register', account.register),
     path('board/<name:str>', board.list),
     path('post/<id:int>', post.single),
     path('post/<id:int>/<id2:int>', post.meow)

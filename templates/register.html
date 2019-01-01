@@ -51,22 +51,25 @@
                 </article>
                 {% endif %}
 
-                {% if username %}
-                <article class="message is-primary">
-                    <div class="message-body">
-                        Hi, {{ username }}
-                    </div>
-                </article>
-                {% else %}
-                <article class="message is-primary">
-                    <div class="message-body">
-                        你還沒登入
-                    </div>
-                </article>
-                {% endif %}
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input" type="text" placeholder="姓氏" name="last_name">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-id-card"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input" type="password" placeholder="名字" name="first_name">
+                        <span class="icon is-small is-left">
+                            <i class="far fa-id-card"></i>
+                        </span>
+                    </p>
+                </div>
                 <div class="field">
                     <p class="control has-icons-left has-icons-right">
-                        <input class="input" type="text" placeholder="Username" name="username">
+                        <input class="input" type="text" placeholder="帳號" name="username">
                         <span class="icon is-small is-left">
                             <i class="fas fa-user"></i>
                         </span>
@@ -74,7 +77,7 @@
                 </div>
                 <div class="field">
                     <p class="control has-icons-left">
-                        <input class="input" type="password" placeholder="Password" name="password">
+                        <input class="input" type="password" placeholder="密碼" name="password">
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
                         </span>
@@ -83,14 +86,14 @@
                 <div class="field">
                     <p class="control">
                         <button class="button is-success is-fullwidth">
-                            登入
+                            註冊
                         </button>
                     </p>
                 </div>
                 <div class="field">
                     <p class="control">
-                        <a href="/register" class="button is-primary is-outlined is-fullwidth">
-                            註冊
+                        <a href="/login" class="button is-primary is-outlined is-fullwidth">
+                            返回登入
                         </a>
                     </p>
                 </div>
