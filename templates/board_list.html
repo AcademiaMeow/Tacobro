@@ -1,3 +1,4 @@
+<div class="menu-ref"></div>
 <aside class="menu">
     <p class="menu-label">
         綜合
@@ -15,3 +16,24 @@
         <li><a href="/board/喵喵">喵喵板</a></li>
     </ul>
 </aside>
+
+<style>
+    .is-pinned {
+        display: block;
+        position: sticky;
+        top: 12px;
+    }
+</style>
+
+<script>
+    window.addEventListener('scroll', function () {
+        window.requestAnimationFrame(function () {
+            const menu_ref = document.querySelector(".menu-ref");
+            const menu = document.querySelector("aside");
+            if (menu_ref.scrollTop < 12)
+                menu.classList.add('is-pinned');
+            else
+                menu.classList.remove('is-pinned');
+        });
+    });
+</script>
