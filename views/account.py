@@ -1,4 +1,4 @@
-from flask import request, render_template, session
+from flask import request, render_template, session, redirect
 import re
 
 def login(request):
@@ -29,3 +29,7 @@ def register(request):
             message = "帳號註冊成功"
     
     return render_template("register.html", message=message)
+
+def logout(request):
+    session.clear()
+    return redirect('/login')

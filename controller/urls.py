@@ -16,6 +16,7 @@ from kernel.url import path
 url_patterns = [
     path('login', account.login),
     path('register', account.register),
+    path('logout', account.logout),
     path('board/<name:str>', board.list),
     path('post/<id:int>', post.single),
     path('post/<id:int>/<id2:int>', post.meow)

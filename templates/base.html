@@ -37,14 +37,32 @@
             </div>
 
             <div class="navbar-end">
-                <!-- <div class="navbar-item">
+                {% if username %}
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        {{ username }}，安安
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item">
+                            個人檔案
+                        </a>
+                        <hr class="navbar-divider">
+                        <a class="navbar-item" href="/logout">
+                            登出
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary">
+                        <a class="button is-primary" href="/register">
                             <strong>註冊</strong>
                         </a>
-                        <a class="button is-light">登入</a>
+                        <a class="button is-light" href="/login">登入</a>
                     </div>
-                </div> -->
+                </div>
+                {% endif %}
             </div>
         </div>
     </nav>
