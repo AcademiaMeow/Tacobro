@@ -1,67 +1,84 @@
-{% extends 'social_base.html' %}
+{% extends 'base.html' %}
 
 {% block header %}
 <title>{{name}}板 | Tacabro</title>
+<style>
+    .container {
+        margin-top: 3em !important;
+        margin-bottom: 3em !important;
+    }
+</style>
 {% endblock header %}
 
 {% block content %}
-<div class="content">
-    <h2 class="title">{{name}}板</h2>
-    {% for i in range(10) %}
-    <div class="box">
-        <article class="media">
-            <!-- <div class="media-left">
-                <figure class="image is-64x64">
-                    <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
-                </figure>
-            </div> -->
-            <div class="media-content">
-                <div class="content">
-                    <p>
-                        <strong>姆咪騎士</strong> <small>@mumi5566</small> <small>2019/01/01</small>
-                        <br>
-                        天地玄黃 宇宙洪荒
-                        日月盈昃 辰宿列張
-                        寒來暑往 秋收冬藏
-                        閏餘成歲 律召調陽
-                        雲騰致雨 露結爲霜
-                        金生麗水 玉出崑岡
-                        劍號巨闕 珠稱夜光
-                        果珍李柰 菜重芥薑
-                        海鹹河淡 鱗潛羽翔
-                        龍師火帝 鳥官人皇
-                        始制文字 乃服衣裳
-                        推位讓國 有虞陶唐
-                        弔民伐罪 周發殷湯
-                        坐朝問道 垂拱平章
-                        愛育黎首 臣伏戎羌
-                        遐邇壹體 率賓歸王
-                        鳴鳳在樹 白駒食場
-                        化被草木 賴及萬方
-                    </p>
+<div class="container">
+    <div class="columns">
+        <div class="column is-one-quarter">
+            {% include "board_list.html" %}
+        </div>
+        <div class="column">
+            <div class="content">
+                <h2 class="title">{{name}}板</h2>
+                {% for i in range(10) %}
+                <div class="box">
+                    <article class="media">
+                        <!-- <div class="media-left">
+                            <figure class="image is-64x64">
+                                <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+                            </figure>
+                        </div> -->
+                        <div class="media-content">
+                            <div class="content">
+                                <p>
+                                    <strong>姆咪騎士</strong> <small>@mumi5566</small> <small>2019/01/01</small>
+                                    <br>
+                                    天地玄黃 宇宙洪荒
+                                    日月盈昃 辰宿列張
+                                    寒來暑往 秋收冬藏
+                                    閏餘成歲 律召調陽
+                                    雲騰致雨 露結爲霜
+                                    金生麗水 玉出崑岡
+                                    劍號巨闕 珠稱夜光
+                                    果珍李柰 菜重芥薑
+                                    海鹹河淡 鱗潛羽翔
+                                    龍師火帝 鳥官人皇
+                                    始制文字 乃服衣裳
+                                    推位讓國 有虞陶唐
+                                    弔民伐罪 周發殷湯
+                                    坐朝問道 垂拱平章
+                                    愛育黎首 臣伏戎羌
+                                    遐邇壹體 率賓歸王
+                                    鳴鳳在樹 白駒食場
+                                    化被草木 賴及萬方
+                                </p>
+                            </div>
+                            <nav class="level is-mobile">
+                                <div class="level-left">
+                                    <a class="level-item" aria-label="reply">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-thumbs-up" aria-hidden="true"></i>
+                                        </span>
+                                    </a>
+                                    <a class="level-item" aria-label="retweet">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-thumbs-down" aria-hidden="true"></i>
+                                        </span>
+                                    </a>
+                                    <a class="level-item" aria-label="like">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-comment" aria-hidden="true"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </nav>
+                        </div>
+                    </article>
                 </div>
-                <nav class="level is-mobile">
-                    <div class="level-left">
-                        <a class="level-item" aria-label="reply">
-                            <span class="icon is-small">
-                                <i class="fas fa-thumbs-up" aria-hidden="true"></i>
-                            </span>
-                        </a>
-                        <a class="level-item" aria-label="retweet">
-                            <span class="icon is-small">
-                                <i class="fas fa-thumbs-down" aria-hidden="true"></i>
-                            </span>
-                        </a>
-                        <a class="level-item" aria-label="like">
-                            <span class="icon is-small">
-                                <i class="fas fa-comment" aria-hidden="true"></i>
-                            </span>
-                        </a>
-                    </div>
-                </nav>
+                {% endfor %}
             </div>
-        </article>
+        </div>
     </div>
-    {% endfor %}
 </div>
+
+{% include "footer.html" %}
 {% endblock content %}
