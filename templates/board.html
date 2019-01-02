@@ -3,7 +3,7 @@
 {% block header %}
 <title>{{name}}板 | Tacabro</title>
 <style>
-    .container {
+    .container.context {
         margin-top: 3em !important;
         margin-bottom: 3em !important;
     }
@@ -11,7 +11,7 @@
 {% endblock header %}
 
 {% block content %}
-<div class="container">
+<div class="container context">
     <div class="columns">
         <div class="column is-one-fifth">
             {% include "board_list.html" %}
