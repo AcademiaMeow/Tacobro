@@ -1,7 +1,11 @@
 import sqlite3
 import os
 
+
 class sqlite_model():
+	"""
+	@return row id
+	"""
     def create(self, classname, **kwargs):
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
@@ -19,10 +23,14 @@ class sqlite_model():
             else:
                 querystring += "?, "
         cur.execute(querystring, parameter)
+		id = cursor.lastrowid
         conn.commit()
         cur.close()
         conn.close()
-
+		return id
+	"""
+	@param q is model.Q object
+	"""
     def filter(self, classname, q):
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
@@ -35,7 +43,10 @@ class sqlite_model():
         else:
             cur.execute()
             return cur.fetchall()
-
+	"""
+	@param kwargs is key-value filter condition (AND)
+	@return key-value
+	"""
     def filter(self, classname, **kwargs):
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
