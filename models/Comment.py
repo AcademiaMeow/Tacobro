@@ -1,4 +1,7 @@
-class Commet():
+from models.model import model
+
+
+class Comment(model):
 
     def __init__(self, author, post, last_modify, publish_date, content):
         self.author = author

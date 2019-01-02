@@ -4,18 +4,17 @@ import os
 
 
 class model():
-    dao = sqlite_model()
-    # dao = pg_model()
+    # dao = sqlite_model()
+    dao = pg_model()
 
     def create(self):
         model.dao.create(type(self).__name__, self.__dict__)
 
-	def filter(self, q):
-		model.dao.filter(type(self).__name__, q)
+    def filter(self, q):
+        model.dao.filter(type(self).__name__, q)
 
-	def filter(self, **kwargs):
-		model.dao.filter(type(self).__name__, **kwargs)
-
+    def filter(self, **kwargs):
+        model.dao.filter(type(self).__name__, **kwargs)
 
 
 class Q():
