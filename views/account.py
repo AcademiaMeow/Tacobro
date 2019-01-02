@@ -1,4 +1,4 @@
-from flask import request, render_template, session, redirect
+from flask import request, session, redirect, render_template
 import re
 
 def login(request):
@@ -12,8 +12,9 @@ def login(request):
         else:
             # TBD
             session['username'] = username
+            request.username = username
             message = "帳號登入成功"
-    return render_template("login.html", message=message, username=session.get('username'))
+    return render_template("login.html", **locals())
 
 def register(request):
     message = None
@@ -27,7 +28,7 @@ def register(request):
             # TBD
             message = "帳號註冊成功"
     
-    return render_template("register.html", message=message)
+    return render_template("register.html", **locals())
 
 def logout(request):
     session.clear()

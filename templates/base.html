@@ -17,53 +17,106 @@
 </head>
 
 <body>
+
     <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-                <h1>Tacabro</h1>
-            </a>
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <h1>Tacabro</h1>
+                </a>
 
-            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
+                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-end">
-                {% if username %}
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        {{ username }}，安安
-                    </a>
-
-                    <div class="navbar-dropdown">
-                        <a class="navbar-item">
-                            個人檔案
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-end">
+                    {% if request.username %}
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            {{ request.username }}，安安
                         </a>
-                        <hr class="navbar-divider">
-                        <a class="navbar-item" href="/logout">
-                            登出
-                        </a>
+
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item">
+                                個人檔案
+                            </a>
+                            <hr class="navbar-divider">
+                            <a class="navbar-item" href="/logout">
+                                登出
+                            </a>
+                        </div>
                     </div>
-                </div>
-                {% else %}
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-primary" href="/register">
-                            <strong>註冊</strong>
-                        </a>
-                        <a class="button is-light" href="/login">登入</a>
+                    {% else %}
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-primary" href="/register">
+                                <strong>註冊</strong>
+                            </a>
+                            <a class="button is-light" href="/login">登入</a>
+                        </div>
                     </div>
+                    {% endif %}
+                    <div class="navbar-item">
+                        <div class="dropdown is-right is-hoverable">
+                            <div class="dropdown-trigger">
+                                <button class="button is-primary">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-cog"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="dropdown-menu" role="menu">
+                                <div class="dropdown-content">
+                                    <p class="dropdown-item">切換主題</p>
+                                    <a href="#" class="dropdown-item theme-item" data-theme="default">
+                                        原本ㄉ
+                                    </a>
+                                    <a href="#" class="dropdown-item theme-item" data-theme="darkly">
+                                        關個燈
+                                    </a>
+                                    <a href="#" class="dropdown-item theme-item" data-theme="nuclear">
+                                        地獄喵喵！
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
                 </div>
-                {% endif %}
             </div>
         </div>
     </nav>
+
     {% block content %}
 
     {% endblock %}
+    <script>
+        window.onload = () =>
+            getCookie("theme") &&
+            document.querySelector("link").setAttribute("href", `https://jenil.github.io/bulmaswatch/${getCookie("theme")}/bulmaswatch.min.css`)
+        function setCookie(name, value) {
+            var exp = new Date();
+            var domain = document.domain;
+            document.cookie = name + "=" + escape(value) + ";path=/;expires=" + exp.toISOString() + ";domain=" + domain + ";"
+        }
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+        }
+        document.querySelectorAll('.theme-item').forEach(element => {
+            element.onclick = () => {
+                setCookie("theme", element.dataset.theme);
+                document.querySelector("link").setAttribute("href", `https://jenil.github.io/bulmaswatch/${element.dataset.theme}/bulmaswatch.min.css`)
+            }
+        });
+    </script>
 </body>
 
 </html>
