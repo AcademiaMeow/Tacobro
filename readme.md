@@ -1,5 +1,6 @@
 ![](https://img.shields.io/badge/python-3.6-blue.svg)
 
+> PR 要發的話自己發R
 
 ```shell=
 $ python run.py
@@ -8,6 +9,9 @@ $ python run.py
 ```shell=
 $ git clone https://github.com/kehanlu/Tacobro.git
 $ cd tacobro
+$ virtualenv .env
+  (or python3 -m venv .env)
+$ . .env/bin/activate
 $ pip install -r requirements.txt
 ```
 
