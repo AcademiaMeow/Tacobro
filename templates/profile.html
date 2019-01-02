@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<title>{{request.username}} | Tacabro</title>
+<style>
+    .container.context {
+        margin-top: 3em !important;
+        margin-bottom: 3em !important;
+    }
+
+    img.avatar {
+        width: 6em;
+        margin: 1em;
+    }
+</style>
+{% endblock header %}
+
+{% block content %}
+
+<section class="hero is-primary has-text-centered is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <img class="avatar" src="https://e-kitaplar.net/assets/images/profil.png">
+            <h1 class="title">
+                姆咪騎士
+            </h1>
+            <h2 class="subtitle">
+                @mumi5566
+            </h2>
+        </div>
+    </div>
+</section>
+
+<div class="container context">
+    <div class="columns">
+        <div class="column is-one-quarter">
+            <div class="box content">
+                我不抽煙，酒僅止於淺嚐。晚上11點睡，每天要睡足8個小時。睡前，我一定喝一杯溫牛奶，然後做20分鐘的柔軟操，上了床，馬上熟睡。一覺到天亮，決不把疲勞和壓力留到第二天。醫生都說我很正常。
+                <hr>
+                <span class="subtitle">Friends</span>
+                <ul>
+                    {% for i in range(10) %}
+                    <li><a href="#">mumu000{{i}}</a></li>
+                    {% endfor%}
+                </ul>
+            </div>
+        </div>
+        <div class="column">
+            {% for i in range(10) %}
+            <div class="box">
+                <article class="media">
+                    <div class="media-left">
+                        <figure class="image is-64x64">
+                            <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>姆咪騎士</strong> <small>@mumi5566</small> <small>2019/01/01</small>
+                                <br>
+                                天地玄黃 宇宙洪荒
+                                日月盈昃 辰宿列張
+                                寒來暑往 秋收冬藏
+                                閏餘成歲 律召調陽
+                                雲騰致雨 露結爲霜
+                                金生麗水 玉出崑岡
+                                劍號巨闕 珠稱夜光
+                                果珍李柰 菜重芥薑
+                                海鹹河淡 鱗潛羽翔
+                                龍師火帝 鳥官人皇
+                                始制文字 乃服衣裳
+                                推位讓國 有虞陶唐
+                                弔民伐罪 周發殷湯
+                                坐朝問道 垂拱平章
+                                愛育黎首 臣伏戎羌
+                                遐邇壹體 率賓歸王
+                                鳴鳳在樹 白駒食場
+                                化被草木 賴及萬方
+                                ...
+                            </p>
+                        </div>
+                        <a class="button is-small is-fullwidth" href="/post/{{i}}">閱讀全文</a>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock content %}

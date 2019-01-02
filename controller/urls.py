@@ -1,5 +1,5 @@
 import re
-from views import board, post, account
+from views import board, post, account, user
 
 from kernel.url import path
 
@@ -19,12 +19,14 @@ url_patterns = [
     path('register', account.register),
     path('logout', account.logout),
 
+    path('me', user.profile),
+    # path('/user/<id:int>', user.profile),
+
     # board
     path('board/<name:str>', board.list),
 
     # post
-    path('post/<id:int>', post.post),
-    # path('post/<id:int>/<id2:int>', post.meow)
+    path('post/<id:int>', post.post)
 ]
 
 
