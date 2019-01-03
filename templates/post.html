@@ -188,27 +188,30 @@
 
                 <h1 class="subtitle is-4">留言</h1>
                 <div class="box">
-                    {% for i in range(10) %}
-                    <article class="media">
-                        <div class="media-left">
-                            <figure class="image is-64x64">
-                                <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
-                            </figure>
-                        </div>
-                        <div class="media-content">
-                            <div class="content">
-                                <p>
-                                    <strong>肥宅</strong> <small>@ouo</small> <small>31m</small>
-                                    <br>
-                                    郭郭郭郭郭
-                                </p>
+                    <div id="comments">
+                        {% for i in range(10) %}
+                        <article class="media">
+                            <div class="media-left">
+                                <figure class="image is-64x64">
+                                    <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+                                </figure>
                             </div>
-                        </div>
-                    </article>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p>
+                                        <strong>肥宅</strong> <small>@ouo</small> <small>31m</small>
+                                        <br>
+                                        郭郭郭郭郭
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
 
-                    {% endfor %}
+                    <hr>
 
-                    <article class="media" id="comment">
+                    <article class="media">
                         <figure class="media-left">
                             <p class="image is-64x64">
                                 <img src="https://bulma.io/images/placeholders/128x128.png">
@@ -217,12 +220,12 @@
                         <div class="media-content">
                             <div class="field">
                                 <p class="control">
-                                    <textarea class="textarea" placeholder="Add a comment..."></textarea>
+                                    <textarea class="textarea" placeholder="Add a comment..." id="comment-content"></textarea>
                                 </p>
                             </div>
                             <div class="field">
                                 <p class="control">
-                                    <button class="button">Post comment</button>
+                                    <button class="button" id="post-comment">Post comment</button>
                                 </p>
                             </div>
                         </div>
@@ -234,4 +237,33 @@
 </div>
 
 {% include "footer.html" %}
+
+<script>
+    document.getElementById("post-comment").onclick = () => {
+        var user = {
+            name: "肥宅",
+            id: "ouo",
+            img: "https://bulma.io/images/placeholders/128x128.png"
+        };
+        var commentContent = document.getElementById("comment-content");
+        var commentMedia = document.createElement("article");
+        commentMedia.className = "media";
+        commentMedia.innerHTML = `<div class="media-left">
+                                <figure class="image is-64x64">
+                                    <img src="${user.img}" alt="Image">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p>
+                                        <strong>${user.name}</strong> <small>@${user.id}</small> <small>${new Date()}</small>
+                                        <br>
+                                        ${commentContent.value}
+                                    </p>
+                                </div>
+                            </div>`;
+        document.getElementById("comments").appendChild(commentMedia);
+        commentContent.value = "";
+    }
+</script>
 {% endblock content %}
