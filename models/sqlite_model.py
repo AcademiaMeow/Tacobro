@@ -1,11 +1,10 @@
 import sqlite3
 import os
 
-
 class sqlite_model():
-	"""
-	@return row id
-	"""
+    """
+    @return row id
+    """
     def create(self, classname, **kwargs):
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
@@ -23,14 +22,14 @@ class sqlite_model():
             else:
                 querystring += "?, "
         cur.execute(querystring, parameter)
-		id = cursor.lastrowid
+        id = cursor.lastrowid
         conn.commit()
         cur.close()
         conn.close()
-		return id
-	"""
-	@param q is model.Q object
-	"""
+        return id
+    """
+    @param q is model.Q object
+    """
     def filter(self, classname, q):
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
@@ -39,14 +38,16 @@ class sqlite_model():
             querystring += " WHERE "
             querystring += q.querystring
             cur.execute(querystring, q.parameter)
-            return cur.fetchall()
+            data = cur.fetchall()
         else:
-            cur.execute()
-            return cur.fetchall()
-	"""
-	@param kwargs is key-value filter condition (AND)
-	@return key-value
-	"""
+            querystring += ";"
+            cur.execute(querystring)
+            data = cur.fetchall()
+        return data
+    """
+    @param kwargs is key-value filter condition (AND)
+    @return key-value
+    """
     def filter(self, classname, **kwargs):
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
@@ -56,8 +57,10 @@ class sqlite_model():
             for arg in kwargs:
                 querystring += arg + " = " + "? AND "
                 parameter += (str(kwargs[arg]),)
-            querystring = querystring[:-4]
+            querystring = querystring[:-4] + ";"
             cur.execute(querystring, parameter)
         else:
+            querystring += ";"
             cur.execute(querystring)
-        return cur.fetchall()
+        data = cur.fetchall()
+        return data
