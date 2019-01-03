@@ -93,3 +93,12 @@ CREATE TABLE Ad (
     FOREIGN KEY (poster)  REFERENCES User(id),
     FOREIGN KEY (board)  REFERENCES AdBoard(id)
 );
+insert into Board (name, description) values ('C_Chat', '姆咪');
+insert into Board (name, description) values ('Sex', 'ii');
+insert into Board (name, description) values ('Tobacco', '雲端抽煙');
+insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
+    '陳姆咪', '3345678', '姆咪', '陳', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, "並沒有");
+insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
+    '李星爆', '949487', '星爆', '李', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 0, 0, 1, "我的名字不好唸 叫做康帕內魯拉");
+insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
+    'Nanoda', 'japari', 'noda', 'Na', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"平成最後的nanoda");
