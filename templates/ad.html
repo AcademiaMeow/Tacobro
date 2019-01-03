@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+<title>廣告購買</title>
+
+{% endblock %}
+
+{% block content %}
+
+<script>
+
+function readURL(input){
+
+  if(input.files && input.files[0]){
+
+    var imageTagID = input.getAttribute("targetID");
+
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+
+       var img = document.getElementById(imageTagID);
+
+       img.setAttribute("src", e.target.result)
+
+    }
+
+    reader.readAsDataURL(input.files[0]);
+
+  }
+
+}
+
+</script>
+
+<h1>購買廣告</h1>
+
+<table>
+	<tr>
+		<th><img src=""></th>
+		<th><img src=""></th>
+		<th><img src=""></th>
+	</tr>
+	<tr>
+		<th><input type="radio" name="ad" value="left"> 貼文列表左側</th>
+		<th><input type="radio" name="ad" value="middle"> 貼文列表下方</th>
+		<th><input type="radio" name="ad" value="right"> 貼文列表右側</th>
+	</tr>
+
+	<tr>
+		<th></th>
+		<th>
+			<form action="/somewhere/to/upload" enctype="multipart/form-data">
+
+   			<input type="file" onchange="readURL(this)" targetID="preview_progressbarTW_img" accept="image/gif, image/jpeg, image/png"/ >
+
+   			<img id="preview_progressbarTW_img" src="#" />
+			</form>
+		</th>
+		<th></th>
+	</tr>
+</table>
+
+
+{% endblock %}
