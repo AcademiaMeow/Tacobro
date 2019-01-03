@@ -3,7 +3,7 @@ from models.model import model
 
 class Comment(model):
 
-    def __init__(self, author, post, last_modify=datetime.now(), publish_date=datetime.now(), content):
+    def __init__(self, author, post, content, last_modify=datetime.now(), publish_date=datetime.now()):
         self.author = author
         self.post = post
         self.last_modify = last_modify
