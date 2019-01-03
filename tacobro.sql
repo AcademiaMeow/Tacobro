@@ -102,12 +102,11 @@ insert into User (username, password, first_name, last_name, birthday, join_date
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     'hank5566', 'japari', 'Hank', 'Lu', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"喵喵叫每一天");
 
-insert into Post (content, author, board) values (
-    '我喜歡喵喵', 4, 1
-);
-insert into Post (content, author, board) values (
-    '我不喜歡喵喵', 4, 1
-);
+insert into Post (content, author, board) values ('我喜歡喵喵', 4, 1);
+insert into Post (content, author, board) values ('我不喜歡喵喵', 4, 1);
+
+insert into Post (content, author, board) values ('艾喵喵', 2, 2);
+insert into Post (content, author, board) values ('討厭喵喵', 2, 2);
 
 insert into Following(user_no, following_no) values (4, 1);
 insert into Following(user_no, following_no) values (4, 2);

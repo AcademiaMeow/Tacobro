@@ -1,6 +1,7 @@
 from models.model import model
 from datetime import datetime
 
+
 class Post(model):
 
     def __init__(self, content, like_count, dislike_count, author, board, publish_date=datetime.now(), last_modify=datetime.now()):
