@@ -19,6 +19,7 @@ url_patterns = [
     path('register', account.register),
     path('logout', account.logout),
 
+    # user
     path('me', user.me),
     path('user/<id:int>', user.profile),
 
@@ -26,7 +27,13 @@ url_patterns = [
     path('board/<name:str>', board.list),
 
     # post
-    path('post/<id:int>', post.post)
+    path('post/<id:int>', post.post),
+
+    # # # #
+    # API #
+    # # # #
+    path('api/follow/<follow_id:int>', user.follow),
+    path('api/unfollow/<follow_id:int>', user.unfollow)
 ]
 
 

@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 def set_user():
     user = session.get("user")
-    if len(user):
+    if user:
         request.user = user
     else:
         request.user = None

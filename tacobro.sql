@@ -47,6 +47,14 @@ CREATE TABLE Following (
     FOREIGN KEY (user_no)  REFERENCES User(id),
     FOREIGN KEY (following_no)  REFERENCES User(id)
 );
+CREATE TABLE Friendship (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_A INTEGER,
+    user_B INTEGER,
+    strength INTEGER default 0,
+    FOREIGN KEY (user_A)  REFERENCES User(id),
+    FOREIGN KEY (user_B)  REFERENCES User(id)
+);
 CREATE TABLE Bucket_list (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     board_no INTEGER,
