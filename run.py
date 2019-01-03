@@ -1,20 +1,33 @@
 from flask import Flask
 from flask import request, render_template, redirect, session
-
+from models.User import User
 from controller import urls
 
 app = Flask(__name__)
 
 
+def set_user():
+    user = session.get("user")
+    if len(user):
+        request.user = user
+    else:
+        request.user = None
+    return request
+
+
 @app.route('/')
 def root():
+    set_user()
+    print('root:', request.user)
     return redirect("/board/八卦")
 
 
-@app.route('/<path:path>', methods = ['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def otherpath(path):
-    request.username = session.get("username")
+    set_user()
+    print('otherpath:', request.user)
     return urls.dispatch(request, path)
+
 
 if __name__ == '__main__':
     import os

@@ -34,10 +34,10 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
-                    {% if request.username %}
+                    {% if request.user %}
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
-                            {{ request.username }}，安安
+                            {{ request.user.username }}，安安
                         </a>
 
                         <div class="navbar-dropdown">
