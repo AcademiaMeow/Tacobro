@@ -28,18 +28,26 @@
 
                     <!-- Right side -->
                     <div class="level-right">
-                        <p class="level-item">
+                        <div class="level-item">
                             <button class="button is-success" id="launch-post-modal">
                                 <span class="icon is-small">
                                     <i class="fas fa-pen" aria-hidden="true"></i>
                                 </span>
                                 <span>發布文章</span>
                             </button>
-                        </p>
+                        </div>
+                        <div class="level-item">
+                            <button class="button is-success" id="launch-board-modal">
+                                <span class="icon is-small">
+                                    <i class="fas fa-pen" aria-hidden="true"></i>
+                                </span>
+                                <span>新增看板</span>
+                            </button>
+                        </div>
                     </div>
                 </nav>
                 {% for post in posts %}
-                <div class="box">
+                <div class="box" id="{{post.id}}">
                     <article class="media">
                         <div class="media-left">
                             <figure class="image is-64x64">
@@ -57,9 +65,11 @@
                             </div>
                             <a class="button is-small is-fullwidth" href="/post/{{ post['id'] }}">閱讀全文</a>
                         </div>
+                        {% if request.user.is_admin %}
                         <div class="media-right">
-                            <button class="button is-small is-danger"><span>刪除</span></button>
+                            <a class="button is-small is-danger" id=post_delete><span>刪除</span></a>
                         </div>
+                        {% endif %}
                     </article>
                 </div>
                 {% endfor %}
@@ -92,12 +102,48 @@
     </div>
     <button class="modal-close is-large" aria-label="close" id="close-modal"></button>
 </div>
+
+<div class="modal" id="board-modal">
+    <div class="modal-background" id="board-modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <span class="subtitle">新增看板</span>
+            <hr>
+            <article class="message is-danger" id="alert" style="display: none">
+                <div class="message-body">
+                    你沒打內容啊幹低能兒
+                </div>
+            </article>
+            <div class="field">
+                <div class="control">
+                    <input class="input" type="text" placeholder="看板名稱ㄛ" id="board-name">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <textarea class="textarea" placeholder="打上你ㄉ廢文或 payload ㄅ >_^" id="board-content"></textarea>
+                </div>
+            </div>
+            <button class="button is-primary is-outlined is-fullwidth" id="board-article">喵！</button>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" id="board-close-modal"></button>
+</div>
 <script>
     const boardId = {{ board['id'] }};
+    let postDeleteBtn = document.getElementById("post_delete");
+    let boardAddBtn = document.getElementById("board-article");
+    let boardCloseBtn = document.getElementById("board-close-modal");
     document.getElementById("launch-post-modal").onclick
         = document.getElementById("close-modal").onclick
         = document.getElementById("modal-background").onclick
         = () => document.getElementById("post-modal").classList.toggle("is-active")
+
+    document.getElementById("launch-board-modal").onclick
+        = document.getElementById("board-close-modal").onclick
+        = document.getElementById("board-modal-background").onclick
+        = () => document.getElementById("board-modal").classList.toggle("is-active")
+
     document.getElementById("post-article").onclick = (e) => {
         var article = document.getElementById("article-content").value;
         if (article.trim() == "") {
@@ -122,6 +168,48 @@
                 document.getElementById("article-content").value = "";
             })
     }
+    boardAddBtn.onclick = (e) => {
+        var boardname = document.getElementById("board-name").value;
+        var boardcontent = document.getElementById("board-content").value;
+        fetch("/api/board_add", {
+            method: "POST",
+            body: JSON.stringify({ board_name: boardname, board_content: boardcontent})
+        })
+        .then(r => r.json())
+        .then(result => {
+            if (result.success) {
+                let boardlist = document.getElementById("boardlist");
+                let boarditem = document.createElement('li');
+                let boardlink = document.createElement('a');
+                boardlist.appendChild(boarditem);
+                boarditem.appendChild(boardlink)
+                boardlink.setAttribute('href', '/board/'+result.boardname);
+                boardlink.innerText = result.boardname
+                boardname.value = "";
+                boardcontent.value = "";
+                boardCloseBtn.click();
+            }
+            else {
+                alert("新增看板失敗");
+            }
+        })
+    }
+    postDeleteBtn.onclick = (e) => {
+        fetch("/api/post_delete", {
+            method: "POST",
+            body: JSON.stringify({ postId: {{ post['id'] }} })
+        })
+        .then(r => r.json())
+        .then(result => {
+            if (result.success) {
+                document.getElementById("{{ post['id'] }}").remove();
+            }
+            else {
+                alert("刪除貼文失敗QQ");
+            }
+        })
+    }
+
 </script>
 
 {% endblock content %}
