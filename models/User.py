@@ -1,9 +1,9 @@
 from models.model import model
-
+from datetime import datetime
 
 class User(model):
 
-    def __init__(self, picture, username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile):
+    def __init__(self, picture, username, password, first_name, last_name, birthday, join_date=datetime.now(), last_login, login_count, is_admin, is_active, profile):
         self.picture = picture
         self.username = username
         self.password = password

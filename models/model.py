@@ -37,9 +37,14 @@ class model():
     """
     @classmethod
     def update(cls, id, **kwargs):
-        return model.dao.update(cls.__name__, **kwargs)
-
-
+        return model.dao.update(cls.__name__, id, **kwargs)
+    """
+    # delete row where id
+    """
+    @classmethod
+    def delete(cls, id):
+        return model.dao.delete(cls.__name__, id)
+        
 class Q():
     AND = 0
     OR = 1

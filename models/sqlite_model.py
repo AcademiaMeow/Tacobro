@@ -1,15 +1,16 @@
 import sqlite3
 import os
 
+
 class sqlite_model():
 
     def dict_factory(cursor, row):
         return dict((col[0], row[idx]) for idx, col in enumerate(cursor.description))
 
-    """
-    @return row id
-    """
     def create(self, classname, **kwargs):
+        """
+        @return row id
+        """
         conn = sqlite3.connect('tacobro.db')
         conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
@@ -32,10 +33,11 @@ class sqlite_model():
         cur.close()
         conn.close()
         return id
-    """
-    @param q is model.Q object
-    """
+
     def filter(self, classname, q):
+        """
+        @param q is model.Q object
+        """
         conn = sqlite3.connect('tacobro.db')
         conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
@@ -52,15 +54,17 @@ class sqlite_model():
         cur.close()
         conn.close()
         return data
-    """
-    @param kwargs is key-value filter condition (AND)
-    @return key-value
-    """
+
     def filter(self, classname, **kwargs):
+        """
+        @param kwargs is key-value filter condition (AND)
+        @return key-value
+        """
         conn = sqlite3.connect('tacobro.db')
         conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "SELECT * FROM " + classname
+        parameter = ()
         if not len(kwargs) == 0:
             querystring += " WHERE "
             for arg in kwargs:
@@ -75,10 +79,11 @@ class sqlite_model():
         cur.close()
         conn.close()
         return data
-    """
-    @param row id 
-    """
+
     def update(self, classname, id, **kwargs):
+        """
+        @param row id
+        """
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
         querystring = "UPDATE " + classname + "SET "
@@ -94,3 +99,16 @@ class sqlite_model():
         conn.commit()
         cur.close()
         conn.close()
+
+    def delete(self, classname, id):
+        """
+        @param row id
+        """
+        conn = sqlite3.connect('tacobro.db')
+        cur = conn.cursor()
+        querystring = "DELETE FROM " + classname + "WHERE id = ?;"
+        cur.execute(querystring, (id,))
+        conn.commit()
+        cur.close()
+        conn.close()
+        

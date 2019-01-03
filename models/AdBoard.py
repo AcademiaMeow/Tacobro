@@ -1,4 +1,7 @@
-class AdBoard():
+from models.model import model
+
+
+class AdBoard(model):
 
     def __init__(self, position, width, height, price):
         self.position = position
