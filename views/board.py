@@ -4,10 +4,10 @@ from models.Board import Board
 from models.Post import Post
 
 
-def list(request, board_id):
+def list(request, name):
     board_list = Board.filter()
 
-    board = Board.filter(id=board_id)
+    board = Board.filter(name=name)
     if not board:
         return render_template("board.html", **locals())
     board = board[0]

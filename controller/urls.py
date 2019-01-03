@@ -41,17 +41,18 @@ url_patterns = [
     path('user/<id:int>', user.profile),
 
     # board
-    path('board/<board_id:int>', board.list),
+    path('board/<name:str>', board.list),
 
     # post
     path('post/<id:int>', post.post),
 
-    # # # #
-    # API #
-    # # # #
+    # # # # # # # # #
+    # SOME COOL API #
+    # # # # # # # # #
     path('api/follow/<follow_id:int>', user.api_follow),
     path('api/unfollow/<follow_id:int>', user.api_unfollow),
-    path('api/drawcard', user.api_drawcard)
+    path('api/drawcard', user.api_drawcard),
+    path('api/post_article', post.api_post_article)
 ]
 
 
