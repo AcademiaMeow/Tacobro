@@ -1,4 +1,5 @@
 import re
+from flask import Response
 from views import board, post, account, user
 
 from kernel.url import path
@@ -13,11 +14,22 @@ from kernel.url import path
 ## 參數2:
     # 你的 view function 不用加括號 ^_^
 
+def robots(request):
+    resp = Response("Disallow: /admin_panel/")
+    resp.headers["content-type"] =  "text/plain; charset=utf-8"
+    return resp
+
+def admin(request):
+    return 'FLAG{OuO_YOU_ARE_ADMIN_OwO}'
+
 url_patterns = [
     # account
     path('login', account.login),
     path('register', account.register),
     path('logout', account.logout),
+
+    path('robots.txt', robots),
+    path('admin_panel', admin),
 
     path('me', user.profile),
     path('user/<id:int>', user.profile),
