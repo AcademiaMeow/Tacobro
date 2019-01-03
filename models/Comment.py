@@ -1,5 +1,5 @@
 from models.model import model
-
+from datetime import datetime
 
 class Comment(model):
 

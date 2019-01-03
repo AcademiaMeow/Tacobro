@@ -1,9 +1,9 @@
-CREATE TABLE Board (
+CREATE TABLE IF NOT EXISTS Board (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name text,
     description text
 );
-CREATE TABLE User (
+CREATE TABLE IF NOT EXISTS User (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     picture text,
     username text,
@@ -18,7 +18,7 @@ CREATE TABLE User (
     is_active BOOLEAN,
     profile text
 );
-CREATE TABLE Post (
+CREATE TABLE IF NOT EXISTS Post (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content text,
     publish_date datetime default current_timestamp,
@@ -30,7 +30,7 @@ CREATE TABLE Post (
     FOREIGN KEY (author)  REFERENCES User(id),
     FOREIGN KEY (board)  REFERENCES Board(id)
 );
-CREATE TABLE Comment (
+CREATE TABLE IF NOT EXISTS Comment (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     author INTEGER,
     post INTEGER,
@@ -40,7 +40,7 @@ CREATE TABLE Comment (
     FOREIGN KEY (author)  REFERENCES User(id),
     FOREIGN KEY (post)  REFERENCES Post(id)
 );
-CREATE TABLE Following (
+CREATE TABLE IF NOT EXISTS Following (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_no INTEGER,
     following_no INTEGER,
@@ -55,35 +55,35 @@ CREATE TABLE Friendship (
     FOREIGN KEY (user_A)  REFERENCES User(id),
     FOREIGN KEY (user_B)  REFERENCES User(id)
 );
-CREATE TABLE Bucket_list (
+CREATE TABLE IF NOT EXISTS Bucket_list (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     board_no INTEGER,
     user_no INTEGER,
     FOREIGN KEY (board_no)  REFERENCES Board(id),
     FOREIGN KEY (user_no)  REFERENCES User(id)
 );
-CREATE TABLE Who_likes (
+CREATE TABLE IF NOT EXISTS Who_likes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_no INTEGER,
     like_no INTEGER,
     FOREIGN KEY (user_no)  REFERENCES User(id),
     FOREIGN KEY (like_no)  REFERENCES User(id)
 );
-CREATE TABLE Who_dislikes (
+CREATE TABLE IF NOT EXISTS Who_dislikes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_no INTEGER,
     dislike_no INTEGER,
     FOREIGN KEY (user_no)  REFERENCES User(id),
     FOREIGN KEY (dislike_no)  REFERENCES User(id)
 );
-CREATE TABLE AdBoard (
+CREATE TABLE IF NOT EXISTS AdBoard (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     position text,
     width INTEGER,
     height INTEGER,
     price INTEGER
 );
-CREATE TABLE Ad (
+CREATE TABLE IF NOT EXISTS Ad (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     ad text,
     URL text,
@@ -102,19 +102,33 @@ insert into Board (name, description) values ('Tobacco', '雲端抽煙');
 
 
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
-    '陳姆咪', '3345678', '姆咪', '陳', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, "並沒有");
+    'mumi5566', '3345678', '姆咪', '陳', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, "並沒有");
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
-    '李星爆', '949487', '星爆', '李', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 0, 0, 1, "我的名字不好唸 叫做康帕內魯拉");
+    'splitline', '949487', '星爆', '李', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 0, 0, 1, "我的名字不好唸 叫做康帕內魯拉");
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     'Nanoda', 'japari', 'noda', 'Na', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"平成最後的nanoda");
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     'hank5566', 'japari', 'Hank', 'Lu', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"喵喵叫每一天");
 
-insert into Post (content, author, board) values ('我喜歡喵喵', 4, 1);
-insert into Post (content, author, board) values ('我不喜歡喵喵', 4, 1);
 
-insert into Post (content, author, board) values ('艾喵喵', 2, 2);
-insert into Post (content, author, board) values ('討厭喵喵', 2, 2);
+insert into Post (content, author, board, like_count, dislike_count) values (
+    '我喜歡喵喵', 4, 1, 1024, 16
+);
+insert into Post (content, author, board, like_count, dislike_count) values (
+    '我不喜歡喵喵', 4, 1, 16, 1024
+);
+
+insert into Post (content, author, board, like_count, dislike_count) values ('艾喵喵', 2, 2, 11, 3);
+insert into Post (content, author, board, like_count, dislike_count) values ('討厭喵喵', 2, 2, 12, 3);
+
+insert into Comment (author, post, content) values (
+    1, 1, 'ouo!!!'
+);
+
+insert into Comment (author, post, content) values (
+    2, 1, 'qwq!!!'
+);
+
 
 insert into Following(user_no, following_no) values (4, 1);
 insert into Following(user_no, following_no) values (4, 2);

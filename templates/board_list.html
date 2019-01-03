@@ -11,9 +11,9 @@
         全部看板
     </p>
     <ul class="menu-list">
-        <li><a href="/board/八卦">八卦板</a></li>
-        <li><a href="/board/西洽">西洽板</a></li>
-        <li><a href="/board/喵喵">喵喵板</a></li>
+        {% for board in board_list %}
+        <li><a href="/board/{{ board['id'] }}">{{ board['name'] }}</a></li>
+        {% endfor %}
     </ul>
 </aside>
 
