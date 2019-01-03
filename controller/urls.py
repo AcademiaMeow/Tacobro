@@ -54,7 +54,10 @@ url_patterns = [
     path('api/follow/<follow_id:int>', user.api_follow),
     path('api/unfollow/<follow_id:int>', user.api_unfollow),
     path('api/drawcard', user.api_drawcard),
-    path('api/post_article', post.api_post_article)
+    path('api/post_article', post.api_post_article),
+    path('api/comment/<id:int>', post.api_comment),
+    path('api/post/like/<id:int>', post.api_post_like),
+    path('api/post/dislike/<id:int>', post.api_post_dislike),
 ]
 
 
