@@ -93,7 +93,7 @@ class sqlite_model():
             parameter += (str(kwargs[arg]),)
         querystring = querystring[:-2]
         querystring += ") "
-        querystring += " WHERE id = ?;"
+        querystring += "WHERE id = ?;"
         parameter += (str(id),)
         cur.execute(querystring, parameter)
         conn.commit()
@@ -106,7 +106,7 @@ class sqlite_model():
         """
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
-        querystring = "DELETE FROM " + classname + "WHERE id = ?;"
+        querystring = "DELETE FROM " + classname + " WHERE id = ?;"
         cur.execute(querystring, (id,))
         conn.commit()
         cur.close()
