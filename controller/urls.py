@@ -38,7 +38,7 @@ url_patterns = [
 
     # user
     path('me', user.me, True),
-    path('user/<id:int>', user.profile),
+    path('user/<username:str>', user.profile),
 
     # board
     path('board/<board_id:int>', board.list),
@@ -49,6 +49,7 @@ url_patterns = [
     # # # #
     # API #
     # # # #
+    path('api/user/profile', user.api_profile),
     path('api/follow/<follow_id:int>', user.api_follow),
     path('api/unfollow/<follow_id:int>', user.api_unfollow),
     path('api/drawcard', user.api_drawcard)
@@ -63,7 +64,7 @@ def dispatch(request, path):
         admin_required = url[3]
 
         # dispatch by rule
-        match = re.search(rule, path)
+        match = re.match(rule, path)
         if match:
             if login_required and not request.user:
                 return redirect('/login')
