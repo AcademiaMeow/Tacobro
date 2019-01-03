@@ -28,7 +28,7 @@ class sqlite_model():
             else:
                 querystring += "?, "
         cur.execute(querystring, parameter)
-        id = cursor.lastrowid
+        id = cur.lastrowid
         conn.commit()
         cur.close()
         conn.close()
@@ -111,4 +111,3 @@ class sqlite_model():
         conn.commit()
         cur.close()
         conn.close()
-        
