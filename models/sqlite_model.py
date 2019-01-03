@@ -113,7 +113,7 @@ class sqlite_model():
         """
         conn = sqlite3.connect('tacobro.db')
         cur = conn.cursor()
-        querystring = "UPDATE " + classname + "SET "
+        querystring = "UPDATE " + classname + " SET "
         parameter = ()
         for arg in kwargs:
             querystring += arg + " = ?, "
@@ -122,6 +122,7 @@ class sqlite_model():
         querystring += ") "
         querystring += "WHERE id = ?;"
         parameter += (str(id),)
+        print(querystring)
         cur.execute(querystring, parameter)
         conn.commit()
         cur.close()
