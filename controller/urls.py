@@ -35,7 +35,7 @@ url_patterns = [
     path('user/<id:int>', user.profile),
 
     # board
-    path('board/<name:str>', board.list),
+    path('board/<board_id:int>', board.list),
 
     # post
     path('post/<id:int>', post.post)
