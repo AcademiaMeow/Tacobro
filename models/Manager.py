@@ -6,6 +6,6 @@ Board_User
 
 class Manager(model):
 
-    def __init__(self, Board_no, User_no):
-        self.Board_no = Board_no
-        self.User_no = User_no
+    def __init__(self, board_no, user_no):
+        self.board_no = board_no
+        self.user_no = user_no

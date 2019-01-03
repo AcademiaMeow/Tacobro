@@ -3,7 +3,7 @@ from models.model import model
 
 class User(model):
 
-    def __init__(self, picture, username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile, follower, following):
+    def __init__(self, picture, username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile):
         self.picture = picture
         self.username = username
         self.password = password
@@ -16,5 +16,3 @@ class User(model):
         self.is_admin = is_admin
         self.is_active = is_active
         self.profile = profile
-        self.follower = follower
-        self.following = following

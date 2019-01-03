@@ -9,6 +9,7 @@ class model():
     """
     Board(name=name, description=description,
     bucket_list=bucket_list, manager=manager).create()
+    datetime format: '2007-01-01 10:00:00'
     """
     def create(self):
         model.dao.create(type(self).__name__, self.__dict__)
