@@ -20,7 +20,7 @@ url_patterns = [
     path('logout', account.logout),
 
     path('me', user.profile),
-    # path('/user/<id:int>', user.profile),
+    path('user/<id:int>', user.profile),
 
     # board
     path('board/<name:str>', board.list),

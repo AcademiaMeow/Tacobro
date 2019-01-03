@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title>{{request.username}} | Tacabro</title>
+<title>{{id or request.username}} | Tacabro</title>
 <style>
     .container.context {
         margin-top: 3em !important;
@@ -25,7 +25,7 @@
                 姆咪騎士
             </h1>
             <h2 class="subtitle">
-                @mumi5566
+                @{{ ("mumi%s" % id) if id else "mumi5566"}}
             </h2>
         </div>
     </div>
@@ -40,7 +40,7 @@
                 <span class="subtitle">Friends</span>
                 <ul>
                     {% for i in range(10) %}
-                    <li><a href="#">mumu000{{i}}</a></li>
+                    <li><a href="/user/{{i}}">mumu000{{i}}</a></li>
                     {% endfor%}
                 </ul>
             </div>
@@ -57,7 +57,7 @@
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>姆咪騎士</strong> <small>@mumi5566</small> <small>2019/01/01</small>
+                                <strong>姆咪騎士</strong> <small>@{{ ("mumi%s" % id) if id else "mumi5566"}}</small> <small>2019/01/01</small>
                                 <br>
                                 天地玄黃 宇宙洪荒
                                 日月盈昃 辰宿列張
