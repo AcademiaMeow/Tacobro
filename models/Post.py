@@ -1,4 +1,7 @@
-class Post():
+from models.model import model
+
+
+class Post(model):
 
     def __init__(self, content, publish_date, last_modify, like_count, dislike_count, author, board):
         self.content = content

@@ -1,7 +1,4 @@
 from models.model import model
-"""
-Board_User
-"""
 
 
 class Bucket_list(model):

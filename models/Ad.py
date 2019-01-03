@@ -1,7 +1,7 @@
 from models.model import model
 
 
-class Ad():
+class Ad(model):
 
     def __init__(self, ad, poster, URL, start_date, end_date, poster, board):
         self.ad = ad
