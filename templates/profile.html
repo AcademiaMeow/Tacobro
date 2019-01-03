@@ -3,11 +3,39 @@
         fetch('/api/follow/{{user.id}}',{
             'method':'POST'
         });
-    }
+    };
     function unfollow(){
         fetch('/api/unfollow/{{user.id}}',{
             'method':'POST'
         });   
+    };
+    function edit(){
+        document.querySelector('#ta_profile').style.display = "inline-block";
+        document.querySelector('#profile').style.display = "none";
+        document.querySelector('#bt_edit').style.display = "none";
+        document.querySelector('#bt_save').style.display = "inline-block";
+        document.querySelector('#bt_cancel').style.display = "inline-block";
+    };
+    function save(){
+        fetch('/api/user/profile',{
+            'method':'POST',
+            body: JSON.stringify({
+                'content': document.querySelector('#ta_profile').value
+            })
+        });
+        document.querySelector('#profile').innerText = document.querySelector('#ta_profile').value;
+        document.querySelector('#profile').style.display = "inline-block";
+        document.querySelector('#bt_edit').style.display = "inline-block";
+        document.querySelector('#ta_profile').style.display = "none";
+        document.querySelector('#bt_save').style.display = "none";
+        document.querySelector('#bt_cancel').style.display = "none";
+    }
+    function cancel(){
+        document.querySelector('#profile').style.display = "inline-block";
+        document.querySelector('#bt_edit').style.display = "inline-block";
+        document.querySelector('#ta_profile').style.display = "none";
+        document.querySelector('#bt_save').style.display = "none";
+        document.querySelector('#bt_cancel').style.display = "none";
     }
 </script>
 
@@ -39,9 +67,11 @@
 <section class="hero is-primary has-text-centered is-bold">
     <div class="hero-body">
         <div class="container">
-            <img class="avatar" src="https://e-kitaplar.net/assets/images/profil.png">
+            <img class="avatar" src="{% if user.picture %}
+                https://e-kitaplar.net/assets/images/profil.png
+                {%else%} {{user.picture}} {% endif %}">
             <h1 class="title">
-                {{ user.first_name }} {{ user.last_name }}
+                {{ user.first_name }}
             </h1>
             <h2 class="subtitle">
                 @{{ user.username }}
@@ -55,21 +85,28 @@
         <div class="column is-one-third">
 
             <div class="box content">
-                {{user.profile}}
+                <span id="profile">{{user.profile}}</span>
+                
+                <textarea id="ta_profile" class="textarea" style="display: none;">{{user.profile}}</textarea>
+
+                <span id="bt_edit" class="button tag is-light" onclick="edit()">編輯</span>
+                <span id="bt_save" class="button tag is-link" style="display: none;" onclick="save()">儲存</span>
+                <span id="bt_cancel" class="button tag is-light" style="display: none;" onclick="cancel()">取消</span>
+
                 <hr>
                 <!-- friends -->
                 <span class="subtitle">羈絆</span>
                 
                 {% for friend in friendship%}
-                <div class="media">
+                <div class="media" style="margin-top: 30px;">
                   <div class="media-left">
                     <figure class="image is-64x64" style="margin-right: 0.2em;margin-left: 1em">
-                      <img src="http://i.imgur.com/2DuRHcm.png" alt="Placeholder image">
+                      <img src="{{friend.picture}}" alt="Placeholder image">
                     </figure>
                   </div>
                   <div class="media-content">
                     <a href="/user/{{friend.id}}">
-                        <p class="title is-6">{{friend.first_name}} {{friend.last_name}}</p>
+                        <p class="title is-6">{{friend.first_name}}</p>
                     </a>
                     <p class="subtitle is-6">@{{friend.username}}</p>
                   </div>
@@ -108,7 +145,7 @@
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>{{user.first_name}} {{user.last_name}}</strong> <small>@{{user.username}}</small> <small>{{post.publish_date}}</small>
+                                <strong>{{user.first_name}}</strong> <small>@{{user.username}}</small> <small>{{post.publish_date}}</small>
                                 <br>
                                 {{post.content}}
                             </p>

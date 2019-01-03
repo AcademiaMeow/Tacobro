@@ -21,51 +21,50 @@ def login(request):
     password = request.form.get('password')
 
     if username or password:
-        if not re.match("[A-Za-z0-9]{6,}", username) or not re.match("[A-Za-z0-9]{6,}", password):
-            message = "帳號密碼須為大於 6 個字的英文/數字字串"
+        hash_password = hashlib.sha256(
+            password.encode('utf-8')).hexdigest()
+        user = User.filter(username=username, password=hash_password)
+        if user:
+            session['user'] = User.filter(username=username)[0]
+            request.user = User.filter(username=username)[0]
+            return redirect('/')
         else:
-            # TBD
-            user = User.filter(username=username)
-            if user:
-                session['user'] = User.filter(username=username)[0]
-                request.user = User.filter(username=username)[0]
-                message = "帳號登入成功"
+            message = "帳號或密碼錯誤"
 
     return render_template("login.html", **locals())
 
 
 def register(request):
     message = None
-    username = request.form.get('username')
-    password = request.form.get('password')
-    last_name = request.form.get('last_name')
-    first_name = request.form.get('first_name')
+    if request.method == 'POST':
+        username = request.form.get('username').lower()
+        password = request.form.get('password')
+        first_name = request.form.get('first_name')
 
-    if username or password:
-        if not re.match("[A-Za-z0-9]{6,}", username) or not re.match("[A-Za-z0-9]{6,}", password):
-            message = "帳號密碼須為大於 6 個字的英文/數字字串"
-        else:
-            if User.filter(username=username):
-                message = "帳號已存在 :("
+        if username or password:
+            if not re.match("[A-Za-z0-9]{6,}", username) or not re.match("[A-Za-z0-9]{6,}", password):
+                message = "帳號密碼須為大於 6 個字的英文/數字字串"
             else:
-                hash_password = hashlib.sha256(
-                    password.encode('utf-8')).hexdigest()
-                User(
-                    picture=choice(default_profile_picture),
-                    username=username,
-                    password=hash_password,
-                    first_name=first_name,
-                    last_name=last_name,
-                    last_login=None,
-                    login_count=None,
-                    is_admin=False,
-                    is_active=True,
-                    profile='我還沒有寫自我介紹喔！ :-)'
-                ).create()
-                session['user'] = User.filter(username=username)[0]
-                request.user = User.filter(username=username)[0]
-                return redirect('/')
-
+                if User.filter(username=username):
+                    message = "帳號已存在 :("
+                else:
+                    hash_password = hashlib.sha256(
+                        password.encode('utf-8')).hexdigest()
+                    User(
+                        picture=choice(default_profile_picture),
+                        username=username,
+                        password=hash_password,
+                        first_name=first_name,
+                        last_name=None,
+                        last_login=None,
+                        login_count=None,
+                        is_admin=False,
+                        is_active=True,
+                        profile='我還沒有寫自我介紹喔！ :-)'
+                    ).create()
+                    session['user'] = User.filter(username=username)[0]
+                    request.user = User.filter(username=username)[0]
+                    return redirect('/')
     return render_template("register.html", **locals())
 
 
