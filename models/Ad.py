@@ -9,5 +9,4 @@ class Ad(model):
         self.URL = URL
         self.start_date = start_date
         self.end_date = end_date
-        self.poster = poster
         self.board = board

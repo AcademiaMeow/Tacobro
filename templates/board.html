@@ -22,7 +22,7 @@
                     <!-- Left side -->
                     <div class="level-left">
                         <div class="level-item">
-                            <h2 class="title">{{ board['name'] }}</h2>
+                            <p class="title">{{ board['name'] }}</p>
                         </div>
                     </div>
 
@@ -57,6 +57,9 @@
                             </div>
                             <a class="button is-small is-fullwidth" href="/post/{{ post['id'] }}">閱讀全文</a>
                         </div>
+                        <div class="media-right">
+                            <button class="button is-small is-danger"><span>刪除</span></button>
+                        </div>
                     </article>
                 </div>
                 {% endfor %}
@@ -74,21 +77,51 @@
         <div class="box">
             <span class="subtitle">發文</span>
             <hr>
+            <article class="message is-danger" id="alert" style="display: none">
+                <div class="message-body">
+                    你沒打內容啊幹低能兒
+                </div>
+            </article>
             <div class="field">
                 <div class="control">
-                    <textarea class="textarea" placeholder="打上你ㄉ廢文或 payload ㄅ >_^" height="1000"></textarea>
+                    <textarea class="textarea" placeholder="打上你ㄉ廢文或 payload ㄅ >_^" id="article-content"></textarea>
                 </div>
             </div>
-            <button class="button is-primary is-outlined is-fullwidth">喵！</button>
+            <button class="button is-primary is-outlined is-fullwidth" id="post-article">喵！</button>
         </div>
     </div>
     <button class="modal-close is-large" aria-label="close" id="close-modal"></button>
 </div>
 <script>
+    const boardId = {{ board['id'] }};
     document.getElementById("launch-post-modal").onclick
         = document.getElementById("close-modal").onclick
         = document.getElementById("modal-background").onclick
         = () => document.getElementById("post-modal").classList.toggle("is-active")
+    document.getElementById("post-article").onclick = (e) => {
+        var article = document.getElementById("article-content").value;
+        if (article.trim() == "") {
+            document.getElementById("alert").style.display = "block";
+            return;
+        }
+        e.target.className = "button is-primary is-fullwidth is-loading";
+        fetch("/api/post_article", {
+            method: "POST",
+            body: JSON.stringify({ content: article, board: boardId })
+        })
+            .then(r => r.json())
+            .then(result => {
+                if (result.success) {
+                    e.target.className = "button is-primary is-outlined is-fullwidth";
+                    window.location = `/post/${result.post}`;
+                }
+                else {
+                    e.target.className = "button is-danger is-fullwidth";
+                    e.target.innerText = "怪怪ㄉ"
+                }
+                document.getElementById("article-content").value = "";
+            })
+    }
 </script>
 
 {% endblock content %}
