@@ -64,6 +64,7 @@ class sqlite_model():
         conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "SELECT * FROM " + classname
+        parameter = ()
         if not len(kwargs) == 0:
             querystring += " WHERE "
             for arg in kwargs:
