@@ -12,7 +12,6 @@ class sqlite_model():
         @return row id
         """
         conn = sqlite3.connect('tacobro.db')
-        conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "INSERT INTO " + classname + " ("
         parameter = ()
@@ -34,30 +33,47 @@ class sqlite_model():
         conn.close()
         return id
 
-    def filter(self, classname, q):
+    def filter(self, classname, q, top=-1, sort=None, desc=True):
         """
         @param q is model.Q object
+        @param sort is array and lenght must equal to desc
+        @param desc is array and lenght must equal to sort
         """
         conn = sqlite3.connect('tacobro.db')
         conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "SELECT * FROM " + classname
+        parameter = ()
         if not q.querystring == "":
             querystring += " WHERE "
             querystring += q.querystring
-            cur.execute(querystring, q.parameter)
-            data = cur.fetchall()
+            parameter = q.parameter
+        if sort and len(sort) == len(desc):
+            querystring += " ORDER BY "
+            for i in range(len(sort)):
+                order = ""
+                if desc[i]:
+                    order = "DESC"
+                else:
+                    order = "ASC"
+                querystring += sort[i] + " " + order + ", "
+            querystring = querystring[:-2]
+        if top > 0:
+            querystring += " LIMIT " + str(top) + ";"
         else:
             querystring += ";"
-            cur.execute(querystring)
-            data = cur.fetchall()
+        cur.execute(querystring, parameter)
+        data = cur.fetchall()
         cur.close()
         conn.close()
         return data
 
-    def filter(self, classname, **kwargs):
+    def filter(self, classname, top=-1, sort=None, desc=None, **kwargs):
         """
         @param kwargs is key-value filter condition (AND)
+        @param q is model.Q object
+        @param sort is array and lenght must equal to desc
+        @param desc is array and lenght must equal to sort
         @return key-value
         """
         conn = sqlite3.connect('tacobro.db')
@@ -70,11 +86,22 @@ class sqlite_model():
             for arg in kwargs:
                 querystring += arg + " = " + "? AND "
                 parameter += (str(kwargs[arg]),)
-            querystring = querystring[:-4] + ";"
-            cur.execute(querystring, parameter)
+            querystring = querystring[:-4]
+        if sort and len(sort) == len(desc):
+            querystring += " ORDER BY "
+            for i in range(len(sort)):
+                order = ""
+                if desc[i]:
+                    order = "DESC"
+                else:
+                    order = "ASC"
+                querystring += sort[i] + " " + order + ", "
+            querystring = querystring[:-2]
+        if top > 0:
+            querystring += " LIMIT " + str(top) + ";"
         else:
             querystring += ";"
-            cur.execute(querystring)
+        cur.execute(querystring, parameter)
         data = cur.fetchall()
         cur.close()
         conn.close()
