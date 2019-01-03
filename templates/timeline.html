@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<title>Tacabro</title>
+<style>
+    .container.context {
+        margin-top: 3em !important;
+        margin-bottom: 3em !important;
+    }
+</style>
+{% endblock header %}
+
+{% block content %}
+<div class="container context">
+    <div class="columns">
+        <div class="column is-one-fifth">
+            {% include "board_list.html" %}
+        </div>
+        <div class="column">
+            <div class="content">
+                <nav class="level">
+                    <!-- Left side -->
+                    <div class="level-left">
+                        <div class="level-item">
+                            <h2 class="title"></h2>
+                        </div>
+                    </div>
+                </nav>
+                {% for post in posts %}
+                <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-64x64">
+                                <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <p>
+                                    <strong>{{ post.author_data.first_name }}{{ post.author_data.last_name }}</strong>
+                                    <small>@{{post.author_data.username }}</small>
+                                    <small>{{ post.publish_date }}</small>
+                                    <br>
+                                    {{ post['content'] }}
+                                </p>
+                            </div>
+                            <a class="button is-small is-fullwidth" href="/post/{{ post['id'] }}">閱讀全文</a>
+                        </div>
+                    </article>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+
+
+<div class="modal" id="post-modal">
+    <div class="modal-background" id="modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <span class="subtitle">發文</span>
+            <hr>
+            <div class="field">
+                <div class="control">
+                    <textarea class="textarea" placeholder="打上你ㄉ廢文或 payload ㄅ >_^" height="1000"></textarea>
+                </div>
+            </div>
+            <button class="button is-primary is-outlined is-fullwidth">喵！</button>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" id="close-modal"></button>
+</div>
+<script>
+    document.getElementById("launch-post-modal").onclick
+        = document.getElementById("close-modal").onclick
+        = document.getElementById("modal-background").onclick
+        = () => document.getElementById("post-modal").classList.toggle("is-active")
+</script>
+
+{% endblock content %}
