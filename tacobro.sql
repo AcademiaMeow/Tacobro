@@ -40,13 +40,6 @@ CREATE TABLE Comment (
     FOREIGN KEY (author)  REFERENCES User(id),
     FOREIGN KEY (post)  REFERENCES Post(id)
 );
-CREATE TABLE Follower (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_no INTEGER,
-    follower_no INTEGER,
-    FOREIGN KEY (user_no)  REFERENCES User(id),
-    FOREIGN KEY (follower_no)  REFERENCES User(id)
-);
 CREATE TABLE Following (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_no INTEGER,
@@ -93,12 +86,31 @@ CREATE TABLE Ad (
     FOREIGN KEY (poster)  REFERENCES User(id),
     FOREIGN KEY (board)  REFERENCES AdBoard(id)
 );
+
+
 insert into Board (name, description) values ('C_Chat', '姆咪');
 insert into Board (name, description) values ('Sex', 'ii');
 insert into Board (name, description) values ('Tobacco', '雲端抽煙');
+
+
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     '陳姆咪', '3345678', '姆咪', '陳', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, "並沒有");
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     '李星爆', '949487', '星爆', '李', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 0, 0, 1, "我的名字不好唸 叫做康帕內魯拉");
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     'Nanoda', 'japari', 'noda', 'Na', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"平成最後的nanoda");
+insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
+    'hank5566', 'japari', 'Hank', 'Lu', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"喵喵叫每一天");
+
+insert into Post (content, author, board) values (
+    '我喜歡喵喵', 4, 1
+);
+insert into Post (content, author, board) values (
+    '我不喜歡喵喵', 4, 1
+);
+
+insert into Following(user_no, following_no) values (4, 1);
+insert into Following(user_no, following_no) values (4, 2);
+
+insert into Following(user_no, following_no) values (2,4);
+insert into Following(user_no, following_no) values (3,4);
