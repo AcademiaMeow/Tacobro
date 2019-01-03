@@ -10,7 +10,7 @@
     <p class="menu-label">
         全部看板
     </p>
-    <ul class="menu-list">
+    <ul class="menu-list" id="boardlist">
         {% for board in board_list %}
         <li><a href="/board/{{ board['name'] }}">{{ board['name'] }}</a></li>
         {% endfor %}
