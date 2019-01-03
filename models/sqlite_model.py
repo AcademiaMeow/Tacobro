@@ -119,10 +119,10 @@ class sqlite_model():
             querystring += arg + " = ?, "
             parameter += (str(kwargs[arg]),)
         querystring = querystring[:-2]
-        querystring += ") "
-        querystring += "WHERE id = ?;"
+        querystring += " WHERE id = ?;"
         parameter += (str(id),)
         print(querystring)
+        print(parameter)
         cur.execute(querystring, parameter)
         conn.commit()
         cur.close()

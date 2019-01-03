@@ -65,7 +65,7 @@
                             </div>
                             <a class="button is-small is-fullwidth" href="/post/{{ post['id'] }}">閱讀全文</a>
                         </div>
-                        {% if request.user.is_admin %}
+                        {% if request.user.is_admin == "True" %}
                         <div class="media-right">
                             <a class="button is-small is-danger" id=post_delete><span>刪除</span></a>
                         </div>
