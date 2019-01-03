@@ -2,11 +2,16 @@ import sqlite3
 import os
 
 class sqlite_model():
+
+    def dict_factory(cursor, row):
+        return dict((col[0], row[idx]) for idx, col in enumerate(cursor.description))
+
     """
     @return row id
     """
     def create(self, classname, **kwargs):
         conn = sqlite3.connect('tacobro.db')
+        conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "INSERT INTO " + classname + " ("
         parameter = ()
@@ -32,6 +37,7 @@ class sqlite_model():
     """
     def filter(self, classname, q):
         conn = sqlite3.connect('tacobro.db')
+        conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "SELECT * FROM " + classname
         if not q.querystring == "":
@@ -43,6 +49,8 @@ class sqlite_model():
             querystring += ";"
             cur.execute(querystring)
             data = cur.fetchall()
+        cur.close()
+        conn.close()
         return data
     """
     @param kwargs is key-value filter condition (AND)
@@ -50,6 +58,7 @@ class sqlite_model():
     """
     def filter(self, classname, **kwargs):
         conn = sqlite3.connect('tacobro.db')
+        conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "SELECT * FROM " + classname
         if not len(kwargs) == 0:
@@ -63,4 +72,25 @@ class sqlite_model():
             querystring += ";"
             cur.execute(querystring)
         data = cur.fetchall()
+        cur.close()
+        conn.close()
         return data
+    """
+    @param row id 
+    """
+    def update(self, classname, id, **kwargs):
+        conn = sqlite3.connect('tacobro.db')
+        cur = conn.cursor()
+        querystring = "UPDATE " + classname + "SET "
+        parameter = ()
+        for arg in kwargs:
+            querystring += arg + " = ?, "
+            parameter += (str(kwargs[arg]),)
+        querystring = querystring[:-2]
+        querystring += ") "
+        querystring += " WHERE id = ?;"
+        parameter += (str(id),)
+        cur.execute(querystring, parameter)
+        conn.commit()
+        cur.close()
+        conn.close()
