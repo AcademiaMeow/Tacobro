@@ -1,7 +1,7 @@
 CREATE TABLE Board (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name text,
-    description text,
+    description text
 );
 CREATE TABLE User (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,8 +16,8 @@ CREATE TABLE User (
     login_count INTEGER,
     is_admin BOOLEAN,
     is_active BOOLEAN,
-    profile text,
-)
+    profile text
+);
 CREATE TABLE Post (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content text,
@@ -28,8 +28,8 @@ CREATE TABLE Post (
     author INTEGER,
     board INTEGER,
     FOREIGN KEY (author)  REFERENCES User(id),
-    FOREIGN KEY (board)  REFERENCES Board(id),
-)
+    FOREIGN KEY (board)  REFERENCES Board(id)
+);
 CREATE TABLE Comment (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     author INTEGER,
@@ -38,27 +38,27 @@ CREATE TABLE Comment (
     publish_date datetime default current_timestamp,
     content text,
     FOREIGN KEY (author)  REFERENCES User(id),
-    FOREIGN KEY (post)  REFERENCES Post(id),
-)
+    FOREIGN KEY (post)  REFERENCES Post(id)
+);
 CREATE TABLE Follower (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_no INTEGER,
     follower_no INTEGER,
     FOREIGN KEY (user_no)  REFERENCES User(id),
-    FOREIGN KEY (follower_no)  REFERENCES User(id),
-)
+    FOREIGN KEY (follower_no)  REFERENCES User(id)
+);
 CREATE TABLE Following (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_no INTEGER,
     following_no INTEGER,
     FOREIGN KEY (user_no)  REFERENCES User(id),
-    FOREIGN KEY (follower_no)  REFERENCES User(id),
-)
+    FOREIGN KEY (following_no)  REFERENCES User(id)
+);
 CREATE TABLE Bucket_list (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     board_no INTEGER,
     user_no INTEGER,
-    FOREIGN KEY (board_no)  REFERENCES board(id),
+    FOREIGN KEY (board_no)  REFERENCES Board(id),
     FOREIGN KEY (user_no)  REFERENCES User(id)
 );
 CREATE TABLE Who_likes (
@@ -89,7 +89,7 @@ CREATE TABLE Ad (
     start_date datetime,
     end_date datetime,
     poster INTEGER,
-    board INTEGER
+    board INTEGER,
     FOREIGN KEY (poster)  REFERENCES User(id),
-    FOREIGN KEY (board)  REFERENCES AdBoard(id),
+    FOREIGN KEY (board)  REFERENCES AdBoard(id)
 );
