@@ -11,9 +11,8 @@ class model():
     bucket_list=bucket_list, manager=manager).create()
     datetime format: '2007-01-01 10:00:00'
     """
-
     def create(self):
-        return model.dao.create(type(self).__name__, self.__dict__)
+        return model.dao.create(type(self).__name__, **self.__dict__)
     """
     Q(name=name)
     Q.add(description=description, Q.OR)
@@ -44,7 +43,7 @@ class model():
     @classmethod
     def delete(cls, id):
         return model.dao.delete(cls.__name__, id)
-        
+
 class Q():
     AND = 0
     OR = 1
