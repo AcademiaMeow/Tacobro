@@ -1,3 +1,24 @@
+<script>
+    function follow(){
+        fetch('/api/follow/{{user.id}}',{
+            'method':'POST'
+        });
+    }
+    function unfollow(){
+        fetch('/api/unfollow/{{user.id}}',{
+            'method':'POST'
+        });   
+    }
+</script>
+
+{% if not is_me %}
+<button onclick="follow()">仰慕</button>
+<button onclick="unfollow()">不仰慕</button>
+{% endif %}
+<h2>{{following}}</h2>
+<h2>{{follower}}</h2>
+<h2>{{fs_}}</h2>
+
 {% extends 'base.html' %}
 
 {% block header %}
@@ -23,7 +44,7 @@
                 {{ user.first_name }} {{ user.last_name }}
             </h1>
             <h2 class="subtitle">
-                {{ user.username }}
+                @{{ user.username }}
             </h2>
         </div>
     </div>
@@ -31,18 +52,49 @@
 
 <div class="container context">
     <div class="columns">
-        <div class="column is-one-quarter">
+        <div class="column is-one-third">
+
             <div class="box content">
                 {{user.profile}}
                 <hr>
                 <!-- friends -->
-                <span class="subtitle">Friends</span>
-                <ul>
-                    {% for i in range(10) %}
-                    <li><a href="/user/{{i}}">mumu000{{i}}</a></li>
-                    {% endfor%}
-                </ul>
+                <span class="subtitle">羈絆</span>
+                
+                {% for friend in friendship%}
+                <div class="media">
+                  <div class="media-left">
+                    <figure class="image is-64x64" style="margin-right: 0.2em;margin-left: 1em">
+                      <img src="http://i.imgur.com/2DuRHcm.png" alt="Placeholder image">
+                    </figure>
+                  </div>
+                  <div class="media-content">
+                    <a href="/user/{{friend.id}}">
+                        <p class="title is-6">{{friend.first_name}} {{friend.last_name}}</p>
+                    </a>
+                    <p class="subtitle is-6">@{{friend.username}}</p>
+                  </div>
+                  <div class="media-right">
+                        {% if friend.strength > 200 %}
+                            <span class="tag is-warning media-ri">點頭之交</span>
+                        {% elif friend.strength > 150 %}
+                            <span class="tag is-primary media-ri">點頭之交</span>
+                        {% elif friend.strength > 100 %}
+                            <span class="tag is-success media-ri">點頭之交</span>
+                        {% elif friend.strength > 10 %}
+                            <span class="tag is-info media-ri">點頭之交</span>
+                        {% elif friend.strength > -1 %}
+                            <span class="tag is-light media-ri">點頭之交</span>
+                        {% endif %}{{friend.strength}}
+                    </span>
+                    </div>
+                </div>
+                {% endfor %}
+
+
+
             </div>
+
+
         </div>
         <div class="column">
             {% for post in postlist %}
@@ -56,7 +108,7 @@
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>{{user.fistname}} {{user.last_name}}</strong> <small>@{{user.username}}</small> <small>{{post.publish_date}}</small>
+                                <strong>{{user.first_name}} {{user.last_name}}</strong> <small>@{{user.username}}</small> <small>{{post.publish_date}}</small>
                                 <br>
                                 {{post.content}}
                             </p>

@@ -5,13 +5,16 @@ import os
 
 
 class pg_model():
+
+    def dict_factory(cursor, row):
+        return dict((col[0], row[idx]) for idx, col in enumerate(cursor.description))
+
     def create(self, classname, **kwargs):
-        user = os.environ['Postgres_USER']
-        host = os.environ['Postgres_HOST']
-        password = os.environ['Postgres_PWD']
-        conn_str = "dbname='tacobro' user='%s' host='%s' " + \
-            "password='%s'"
-        conn = psycopg2.connect(conn_str)
+        """
+        @return row id
+        """
+        conn = sqlite3.connect('tacobro.db')
+        conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "INSERT INTO " + classname + " ("
         parameter = ()
@@ -27,33 +30,84 @@ class pg_model():
             else:
                 querystring += "?, "
         cur.execute(querystring, parameter)
+        res = cur.fetchone()
+        last_inserted_id = res[0]
         cur.close()
         conn.close()
+        return last_inserted_id
 
     def filter(self, classname, q):
+        """
+        @param q is model.Q object
+        """
         conn = sqlite3.connect('tacobro.db')
+        conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "SELECT * FROM " + classname
         if not q.querystring == "":
             querystring += " WHERE "
             querystring += q.querystring
             cur.execute(querystring, q.parameter)
-            return cur.fetchall()
+            data = cur.fetchall()
         else:
-            cur.execute()
-            return cur.fetchall()
+            querystring += ";"
+            cur.execute(querystring)
+            data = cur.fetchall()
+        cur.close()
+        conn.close()
+        return data
 
     def filter(self, classname, **kwargs):
+        """
+        @param kwargs is key-value filter condition (AND)
+        @return key-value
+        """
         conn = sqlite3.connect('tacobro.db')
+        conn.row_factory = sqlite_model.dict_factory
         cur = conn.cursor()
         querystring = "SELECT * FROM " + classname
+        parameter = ()
         if not len(kwargs) == 0:
             querystring += " WHERE "
             for arg in kwargs:
                 querystring += arg + " = " + "? AND "
                 parameter += (str(kwargs[arg]),)
-            querystring = querystring[:-4]
+            querystring = querystring[:-4] + ";"
             cur.execute(querystring, parameter)
         else:
+            querystring += ";"
             cur.execute(querystring)
-        return cur.fetchall()
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+        return data
+
+    def update(self, classname, id, **kwargs):
+        """
+        @param row id
+        """
+        conn = sqlite3.connect('tacobro.db')
+        cur = conn.cursor()
+        querystring = "UPDATE " + classname + "SET "
+        parameter = ()
+        for arg in kwargs:
+            querystring += arg + " = ?, "
+            parameter += (str(kwargs[arg]),)
+        querystring = querystring[:-2]
+        querystring += ") "
+        querystring += "WHERE id = ?;"
+        parameter += (str(id),)
+        cur.execute(querystring, parameter)
+        cur.close()
+        conn.close()
+
+    def delete(self, classname, id):
+        """
+        @param row id
+        """
+        conn = sqlite3.connect('tacobro.db')
+        cur = conn.cursor()
+        querystring = "DELETE FROM " + classname + " WHERE id = ?;"
+        cur.execute(querystring, (id,))
+        cur.close()
+        conn.close()

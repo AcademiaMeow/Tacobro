@@ -18,7 +18,7 @@ def set_user():
 @app.route('/')
 def root():
     set_user()
-    return redirect("/board/八卦")
+    return redirect("/me")
 
 
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
