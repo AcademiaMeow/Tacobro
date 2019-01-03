@@ -65,9 +65,9 @@
                             </div>
                             <a class="button is-small is-fullwidth" href="/post/{{ post['id'] }}">閱讀全文</a>
                         </div>
-                        {% if request.user.is_admin == "True" %}
+                        {% if request.user.is_admin == 1 %}
                         <div class="media-right">
-                            <a class="button is-small is-danger" id=post_delete><span>刪除</span></a>
+                            <a class="button is-small is-danger" id=post_delete_{{ post['id'] }}><span>刪除</span></a>
                         </div>
                         {% endif %}
                     </article>
@@ -131,7 +131,6 @@
 </div>
 <script>
     const boardId = {{ board['id'] }};
-    let postDeleteBtn = document.getElementById("post_delete");
     let boardAddBtn = document.getElementById("board-article");
     let boardCloseBtn = document.getElementById("board-close-modal");
     document.getElementById("launch-post-modal").onclick
@@ -194,7 +193,8 @@
             }
         })
     }
-    postDeleteBtn.onclick = (e) => {
+    {% for post in posts %}
+        document.getElementById("post_delete_{{ post['id'] }}").onclick = (e) => {
         fetch("/api/post_delete", {
             method: "POST",
             body: JSON.stringify({ postId: {{ post['id'] }} })
@@ -209,6 +209,7 @@
             }
         })
     }
+    {% endfor %}
 
 </script>
 
