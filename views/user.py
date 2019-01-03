@@ -1,3 +1,6 @@
+from random import choice
+from operator import itemgetter
+
 from datetime import datetime
 from flask import request, session, redirect, render_template
 from models.User import User
@@ -7,11 +10,26 @@ from models.Following import Following, Friendship
 
 def profile(request, id=None):
     user = User.filter(id=id)[0]
+
+    if request.user and request.user.get('id') == int(id):
+        return redirect('/me')
+
     postlist = Post.filter(author=id)
     following = Following.filter(user_no=id)
     follower = Following.filter(following_no=id)
 
-    friendship = Friendship.filter(user_A=id) + Friendship.filter(user_B=id)
+    fs_ = Friendship.filter(user_A=id) + Friendship.filter(user_B=id)
+    friendship = list()
+    for f in fs_:
+        if f['user_A'] == int(id):
+            friendship.append(User.filter(id=f['user_B'])[0])
+            friendship[-1]['strength'] = f['strength']
+        elif f['user_B'] == int(id):
+            friendship.append(User.filter(id=f['user_A'])[0])
+            friendship[-1]['strength'] = f['strength']
+    friendship.sort(key=lambda x: x['strength'], reverse=True)
+    if len(friendship) > 5:
+        friendship = friendship[:5]
     return render_template("profile.html", **locals())
 
 
@@ -21,12 +39,26 @@ def me(request):
     postlist = Post.filter(author=id)
     following = Following.filter(user_no=id)
     follower = Following.filter(following_no=id)
-    return render_template("profile.html", **locals())
 
+    fs_ = Friendship.filter(user_A=id) + Friendship.filter(user_B=id)
+    friendship = list()
+    for f in fs_:
+        if f['user_A'] == int(id):
+            friendship.append(User.filter(id=f['user_B'])[0])
+            friendship[-1]['strength'] = f['strength']
+        elif f['user_B'] == int(id):
+            friendship.append(User.filter(id=f['user_A'])[0])
+            friendship[-1]['strength'] = f['strength']
+    friendship.sort(key=lambda x: x['strength'], reverse=True)
+    if len(friendship) > 5:
+        friendship = friendship[:5]
+    is_me = True
+    return render_template("profile.html", **locals())
 
 # API
 
-def follow(request, follow_id):
+
+def api_follow(request, follow_id):
     if request.method == 'POST':
         user_id = int(request.user['id'])
         follow_id = int(follow_id)
@@ -42,15 +74,37 @@ def follow(request, follow_id):
             return '200'
 
 
-def unfollow(request, follow_id):
+def api_unfollow(request, follow_id):
     if request.method == 'POST':
         user_id = int(request.user['id'])
         follow_id = int(follow_id)
 
         f = Following.filter(user_no=user_id, following_no=follow_id)
-        if len(f):
+        if f:
             Following.delete(f[0]['id'])
-            return '403'
+
+            fs_ = (Friendship.filter(user_A=user_id, user_B=follow_id) +
+                   Friendship.filter(user_A=follow_id, user_B=user_id))
+            if fs_:
+                Friendship.delete(fs_[0]['id'])
+            else:
+                return '403 - fs'
+            return '200'
         else:
             # not exist
-            return '200'
+            return '403 - unfollow'
+
+
+def api_drawcard(request):
+
+    all_users = User.filter()
+    avaliable_user = list()
+    for user in all_users:
+        if (user['id'] != request.user['id'] and
+                not Following.filter(user_no=request.user['id'], following_no=user['id'])):
+            avaliable_user.append(user)
+
+    if len(avaliable_user) == 0:
+        return '400 - 整個網站都是你的好友了！'
+    else:
+        return str(choice(avaliable_user))
