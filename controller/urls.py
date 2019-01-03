@@ -61,12 +61,16 @@ def dispatch(request, path):
         rule = url[0]
         view_f = url[1]
         login_required = url[2]
+        admin_required = url[3]
 
         # dispatch by rule
         match = re.search(rule, path)
         if match:
             if login_required and not request.user:
                 return redirect('/login')
+            if admin_required and not request.user['is_admin']:
+                return '403 permission dinied'
+
             kwargs = match.groupdict()
             kwargs['request'] = request
             return view_f(**kwargs)
