@@ -22,6 +22,15 @@ def post(request, id):
 
     return render_template("post.html", **locals())
 
+def api_post_delete(request):
+    if request.method == "POST":
+        post_data = json.loads(request.data)
+        id = post_data.get('postId')
+        post = Post.filter(id=id)
+        if not post:
+            return jsonify({"success":False})
+        Post.delete(post[0]['id'])
+        return jsonify({"success":True})
 
 def api_post_article(request):
     try:

@@ -42,10 +42,11 @@ url_patterns = [
 
     # board
     path('board/<name:str>', board.list),
-
+    path('api/board_add', board.api_board_add, False, True),
     # post
     path('post/<id:int>', post.post),
-  
+    path('api/post_delete', post.api_post_delete, False, True),
+
     # # # # # # # # #
     # SOME COOL API #
     # # # # # # # # #
