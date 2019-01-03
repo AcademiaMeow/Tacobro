@@ -99,3 +99,16 @@ class sqlite_model():
         conn.commit()
         cur.close()
         conn.close()
+
+    def delete(self, classname, id):
+        """
+        @param row id
+        """
+        conn = sqlite3.connect('tacobro.db')
+        cur = conn.cursor()
+        querystring = "DELETE FROM " + classname + "WHERE id = ?;"
+        cur.execute(querystring, (id,))
+        conn.commit()
+        cur.close()
+        conn.close()
+        
