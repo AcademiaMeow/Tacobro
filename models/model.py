@@ -30,6 +30,14 @@ class model():
     @classmethod
     def filter(cls, **kwargs):
         return model.dao.filter(cls.__name__, **kwargs)
+    """
+    # update sex board name and description example
+    sex_id = Board.filter(name="sex")[0].id # get sex board # id
+    Board.update(sex_id, name="supersex", description="update name")
+    """
+    @classmethod
+    def update(cls, id, **kwargs):
+        return model.dao.update(cls.__name__, **kwargs)
 
 
 class Q():
