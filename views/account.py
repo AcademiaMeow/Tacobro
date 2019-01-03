@@ -1,5 +1,7 @@
 from flask import request, session, redirect, render_template
+from models.User import User
 import re
+
 
 def login(request):
     message = None
@@ -11,10 +13,13 @@ def login(request):
             message = "帳號密碼須為大於 6 個字的英文/數字字串"
         else:
             # TBD
-            session['username'] = username
-            request.username = username
-            message = "帳號登入成功"
+            user = User.filter(username=username)
+            if len(user):
+                session['user'] = User.filter(username=username)[0]
+                request.user = User.filter(username=username)[0]
+                message = "帳號登入成功"
     return render_template("login.html", **locals())
+
 
 def register(request):
     message = None
@@ -27,8 +32,9 @@ def register(request):
         else:
             # TBD
             message = "帳號註冊成功"
-    
+
     return render_template("register.html", **locals())
+
 
 def logout(request):
     session.clear()

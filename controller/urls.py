@@ -6,13 +6,13 @@ from kernel.url import path
 
 
 # 規則：
-## 參數1:
-    # 目前只支援兩種 str & int
-    # 格式 <name:type>
-    # name 為參數名稱 / type 為str或int
+# 參數1:
+# 目前只支援兩種 str & int
+# 格式 <name:type>
+# name 為參數名稱 / type 為str或int
 
-## 參數2:
-    # 你的 view function 不用加括號 ^_^
+# 參數2:
+# 你的 view function 不用加括號 ^_^
 
 def robots(request):
     resp = Response("Disallow: /admin_panel/")
@@ -31,14 +31,21 @@ url_patterns = [
     path('robots.txt', robots),
     path('admin_panel', admin),
 
-    path('me', user.profile),
+    # user
+    path('me', user.me),
     path('user/<id:int>', user.profile),
 
     # board
     path('board/<board_id:int>', board.list),
 
     # post
-    path('post/<id:int>', post.post)
+    path('post/<id:int>', post.post),
+
+    # # # #
+    # API #
+    # # # #
+    path('api/follow/<follow_id:int>', user.follow),
+    path('api/unfollow/<follow_id:int>', user.unfollow)
 ]
 
 

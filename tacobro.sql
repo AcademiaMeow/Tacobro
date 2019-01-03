@@ -47,6 +47,14 @@ CREATE TABLE IF NOT EXISTS Following (
     FOREIGN KEY (user_no)  REFERENCES User(id),
     FOREIGN KEY (following_no)  REFERENCES User(id)
 );
+CREATE TABLE Friendship (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_A INTEGER,
+    user_B INTEGER,
+    strength INTEGER default 0,
+    FOREIGN KEY (user_A)  REFERENCES User(id),
+    FOREIGN KEY (user_B)  REFERENCES User(id)
+);
 CREATE TABLE IF NOT EXISTS Bucket_list (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     board_no INTEGER,
@@ -102,12 +110,16 @@ insert into User (username, password, first_name, last_name, birthday, join_date
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     'hank5566', 'japari', 'Hank', 'Lu', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"喵喵叫每一天");
 
+
 insert into Post (content, author, board, like_count, dislike_count) values (
     '我喜歡喵喵', 4, 1, 1024, 16
 );
 insert into Post (content, author, board, like_count, dislike_count) values (
     '我不喜歡喵喵', 4, 1, 16, 1024
 );
+
+insert into Post (content, author, board, like_count, dislike_count) values ('艾喵喵', 2, 2, 11, 3);
+insert into Post (content, author, board, like_count, dislike_count) values ('討厭喵喵', 2, 2, 12, 3);
 
 insert into Comment (author, post, content) values (
     1, 1, 'ouo!!!'
