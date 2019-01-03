@@ -135,3 +135,16 @@ insert into Following(user_no, following_no) values (4, 2);
 
 insert into Following(user_no, following_no) values (2,4);
 insert into Following(user_no, following_no) values (3,4);
+
+
+insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values ('apple1', '123456', 'apple', '1', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, 'apple1');
+insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values ('apple2', '123456', 'apple', '2', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, 'apple2');
+insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values ('apple3', '123456', 'apple', '3', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, 'apple3');
+insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values ('apple4', '123456', 'apple', '4', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, 'apple4');
+insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values ('apple5', '123456', 'apple', '5', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, 'apple5');
+
+insert into Friendship(user_A, user_B, strength) values (4,2,222);
+insert into Friendship(user_A, user_B, strength) values (4,3,40);
+insert into Friendship(user_A, user_B, strength) values (4,1,170);
+insert into Friendship(user_A, user_B, strength) values (4,5,5);
+insert into Friendship(user_A, user_B, strength) values (4,9,120);

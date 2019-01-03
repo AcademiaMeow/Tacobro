@@ -1,5 +1,5 @@
 import re
-from flask import Response
+from flask import Response, redirect
 from views import board, post, account, user
 
 from kernel.url import path
@@ -14,13 +14,18 @@ from kernel.url import path
 # 參數2:
 # 你的 view function 不用加括號 ^_^
 
+# 參數3:
+# login_required 預設為 False
+
 def robots(request):
     resp = Response("Disallow: /admin_panel/")
-    resp.headers["content-type"] =  "text/plain; charset=utf-8"
+    resp.headers["content-type"] = "text/plain; charset=utf-8"
     return resp
+
 
 def admin(request):
     return 'FLAG{OuO_YOU_ARE_ADMIN_OwO}'
+
 
 url_patterns = [
     # account
@@ -32,7 +37,7 @@ url_patterns = [
     path('admin_panel', admin),
 
     # user
-    path('me', user.me),
+    path('me', user.me, True),
     path('user/<id:int>', user.profile),
 
     # board
@@ -44,8 +49,9 @@ url_patterns = [
     # # # #
     # API #
     # # # #
-    path('api/follow/<follow_id:int>', user.follow),
-    path('api/unfollow/<follow_id:int>', user.unfollow)
+    path('api/follow/<follow_id:int>', user.api_follow),
+    path('api/unfollow/<follow_id:int>', user.api_unfollow),
+    path('api/drawcard', user.api_drawcard)
 ]
 
 
@@ -53,10 +59,13 @@ def dispatch(request, path):
     for url in url_patterns:
         rule = url[0]
         view_f = url[1]
+        login_required = url[2]
 
         # dispatch by rule
         match = re.search(rule, path)
         if match:
+            if login_required and not request.user:
+                return redirect('/login')
             kwargs = match.groupdict()
             kwargs['request'] = request
             return view_f(**kwargs)

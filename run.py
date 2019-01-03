@@ -18,14 +18,12 @@ def set_user():
 @app.route('/')
 def root():
     set_user()
-    print('root:', request.user)
-    return redirect("/board/八卦")
+    return redirect("/me")
 
 
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def otherpath(path):
     set_user()
-    print('otherpath:', request.user)
     return urls.dispatch(request, path)
 
 
