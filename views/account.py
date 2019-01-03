@@ -5,7 +5,7 @@ import re
 from random import choice
 
 default_profile_picture = [
-    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/155/thinking-face_1f914.png'
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/155/thinking-face_1f914.png',
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/google/146/thinking-face_1f914.png',
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/samsung/148/thinking-face_1f914.png',
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/154/thinking-face_1f914.png',

@@ -3,11 +3,15 @@
         fetch('/api/follow/{{user.id}}',{
             'method':'POST'
         });
+        document.querySelector('#bt_follow').style.display = "none";
+        document.querySelector('#bt_unfollow').style.display = "inline-block";
     };
     function unfollow(){
         fetch('/api/unfollow/{{user.id}}',{
             'method':'POST'
-        });   
+        });
+        document.querySelector('#bt_follow').style.display = "inline-block";
+        document.querySelector('#bt_unfollow').style.display = "none";
     };
     function edit(){
         document.querySelector('#ta_profile').style.display = "inline-block";
@@ -39,14 +43,6 @@
     }
 </script>
 
-{% if not is_me %}
-<button onclick="follow()">仰慕</button>
-<button onclick="unfollow()">不仰慕</button>
-{% endif %}
-<h2>{{following}}</h2>
-<h2>{{follower}}</h2>
-<h2>{{fs_}}</h2>
-
 {% extends 'base.html' %}
 
 {% block header %}
@@ -67,7 +63,7 @@
 <section class="hero is-primary has-text-centered is-bold">
     <div class="hero-body">
         <div class="container">
-            <img class="avatar" src="{% if user.picture %}
+            <img class="avatar" src="{% if not user.picture %}
                 https://e-kitaplar.net/assets/images/profil.png
                 {%else%} {{user.picture}} {% endif %}">
             <h1 class="title">
@@ -76,6 +72,11 @@
             <h2 class="subtitle">
                 @{{ user.username }}
             </h2>
+            {% if not is_me %}
+
+            <a id="bt_follow" class="button is-success is-inverted" {%if is_followed%} style="display: none;" {%endif%} onclick="follow()">建立友誼</a>
+            <a id="bt_unfollow" class="button is-danger is-inverted" {%if not is_followed%} style="display: none;" {%endif%} onclick="unfollow()">與他絕交</a>
+            {% endif %}
         </div>
     </div>
 </section>
@@ -105,23 +106,23 @@
                     </figure>
                   </div>
                   <div class="media-content">
-                    <a href="/user/{{friend.id}}">
+                    <a href="/user/{{friend.username}}">
                         <p class="title is-6">{{friend.first_name}}</p>
                     </a>
                     <p class="subtitle is-6">@{{friend.username}}</p>
                   </div>
                   <div class="media-right">
                         {% if friend.strength > 200 %}
-                            <span class="tag is-warning media-ri">點頭之交</span>
+                            <span class="tag is-warning media-ri">不鏽鋼交</span>
                         {% elif friend.strength > 150 %}
-                            <span class="tag is-primary media-ri">點頭之交</span>
+                            <span class="tag is-primary media-ri">鑽石之交</span>
                         {% elif friend.strength > 100 %}
                             <span class="tag is-success media-ri">點頭之交</span>
                         {% elif friend.strength > 10 %}
-                            <span class="tag is-info media-ri">點頭之交</span>
+                            <span class="tag is-info media-ri">之交</span>
                         {% elif friend.strength > -1 %}
-                            <span class="tag is-light media-ri">點頭之交</span>
-                        {% endif %}{{friend.strength}}
+                            <span class="tag is-light media-ri">萍水相逢</span>
+                        {% endif %}
                     </span>
                     </div>
                 </div>
@@ -134,12 +135,33 @@
 
         </div>
         <div class="column">
+            {% if not postlist %}
+            <div class="box">
+                <article class="media">
+                    <div class="media-left">
+                        <figure class="image is-64x64">
+                            <img src="{{user.picture}}" alt="Image">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>{{user.first_name}}</strong> <small>@{{user.username}}</small>
+                                <br>
+                                我還沒有貼文喔！去論壇逛逛八
+                            </p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endif %}
+
             {% for post in postlist %}
             <div class="box">
                 <article class="media">
                     <div class="media-left">
                         <figure class="image is-64x64">
-                            <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+                            <img src="{{user.picture}}" alt="Image">
                         </figure>
                     </div>
                     <div class="media-content">
@@ -155,6 +177,7 @@
                 </article>
             </div>
             {% endfor %}
+
         </div>
 
     </div>
