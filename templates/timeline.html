@@ -26,6 +26,25 @@
                         </div>
                     </div>
                 </nav>
+                {% if not posts %}
+                    <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-96x96">
+                                <img src="https://i.pinimg.com/originals/15/a8/21/15a821ea79990bb7edd4eb058a510862.png" alt="Image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <p><br>
+                                    你的動態時報上還沒有任何貼文唷！可以尋找仰慕的朋友，即時知道他們的消息～
+                                    <a href="/card">以牌會友</a>
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                {% endif %}
                 {% for post in posts %}
                 <div class="box">
                     <article class="media">

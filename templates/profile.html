@@ -100,6 +100,12 @@
                 <!-- friends -->
                 <span class="subtitle">羈絆</span>
                 
+                {% if not friendship %}
+                    <br>
+                    <br>
+                    <p>當兩人互相仰慕時，就會產生羈絆關係，可以透過互動提升親密度等級～</p>
+                {% endif %}
+
                 {% for friend in friendship%}
                 <div class="media" style="margin-top: 30px;">
                   <div class="media-left">
@@ -142,15 +148,14 @@
                 <article class="media">
                     <div class="media-left">
                         <figure class="image is-64x64">
-                            <img src="{{user.picture}}" alt="Image">
+                            <img src="https://i.pinimg.com/originals/15/a8/21/15a821ea79990bb7edd4eb058a510862.png" alt="Image">
                         </figure>
                     </div>
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>{{user.first_name}}</strong> <small>@{{user.username}}</small>
                                 <br>
-                                我還沒有貼文喔！去論壇逛逛八
+                                還沒有貼文喔！去論壇逛逛八
                             </p>
                         </div>
                     </div>

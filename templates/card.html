@@ -6,7 +6,7 @@
     .board {
         background-image: url("https://i.ytimg.com/vi/4rW81GKsdfg/maxresdefault.jpg");
         background-repeat: no-repeat;
-        background-size: contain;
+        background-size: cover;
         height: 100vh;
         text-align: center;
     }
@@ -342,7 +342,7 @@
                 console.log(user);
                 document.getElementById("name").innerText = user.first_name;
                 // document.getElementById("pic").setAttribute("src", user.picture);
-                document.getElementById("link").setAttribute('href', "/user/" + user.id);
+                document.getElementById("link").setAttribute('href', "/user/" + user.username);
                 setTimeout(() => {
                     fade(beam);
                     setTimeout(()=>{
