@@ -109,7 +109,7 @@ insert into User (username, password, first_name, last_name, birthday, join_date
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     'Nanoda', 'japari', 'noda', 'Na', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"平成最後的nanoda");
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
-    'hank5566', 'applepie', 'Hank', 'Lu', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"喵喵叫每一天");
+    'hank5566', '2e8db3aceb4b0eb09d42bd545be707ece82981a09e728aa4616d4bdd0e3e11cc', 'Hank', 'Lu', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"喵喵叫每一天");
 
 
 insert into Post (content, author, board, like_count, dislike_count) values (

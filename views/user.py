@@ -87,6 +87,8 @@ def api_follow(request, follow_id):
             if Following.filter(user_no=follow_id, following_no=user_id):
                 Friendship(user_A=user_id, user_B=follow_id).create()
             return '200'
+    else:
+        return 'FLAG{you_GET_nothing}'
 
 
 def api_unfollow(request, follow_id):

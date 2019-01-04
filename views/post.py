@@ -5,6 +5,7 @@ from models.User import User
 from models.Comment import Comment
 from models.Board import Board
 from models.Following import Friendship
+from datetime import datetime
 
 
 def post(request, id):
@@ -27,7 +28,8 @@ def post(request, id):
 def api_comment(request, id):
     post_data = json.loads(request.data)
     Comment(author=request.user['id'], post=id,
-            content=post_data['content']).create()
+            content=post_data['content'],
+            publish_date=datetime.now()).create()
     return '200'
 
 
@@ -80,15 +82,15 @@ def api_post_delete(request, id):
 
 
 def api_post_article(request):
-    try:
-        user = User.filter(id=request.user['id'])[0]
-        print(user)
-        User.update(id=user['id'], tacobit=user['tacobit'] + 10)
+    # try:
+    user = User.filter(id=request.user['id'])[0]
+    User.update(id=user['id'], tacobit=user['tacobit'] + 10)
 
-        post_article = json.loads(request.data)
-        ID = Post(content=post_article['content'],
-                  board=post_article['board'],
-                  author=request.user['id']).create()
-        return jsonify({"success": True, "post": ID})
-    except:
-        return jsonify({"success": False})
+    post_article = json.loads(request.data)
+    ID = Post(content=post_article['content'],
+              board=post_article['board'],
+              author=request.user['id'],
+              publish_date=datetime.now()).create()
+    return jsonify({"success": True, "post": ID})
+    # except:
+    #     return jsonify({"success": False})
