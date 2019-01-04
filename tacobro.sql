@@ -111,8 +111,10 @@ insert into User (picture, username, password, first_name, last_name, birthday, 
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/mozilla/36/smiling-face-with-smiling-eyes_1f60a.png', 'splitline', '949487', '星爆', '李', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 0, 0, 1, "我的名字不好唸 叫做康帕內魯拉");
 insert into User (picture, username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/smiling-face-with-smiling-eyes-and-three-hearts_1f970.png', 'Nanoda', 'japari', 'noda', 'Na', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"平成最後的nanoda");
-insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
-    'hank5566', '2e8db3aceb4b0eb09d42bd545be707ece82981a09e728aa4616d4bdd0e3e11cc', 'Hank', 'Lu', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"喵喵叫每一天");
+insert into User (picture,tacobit,username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
+    'https://pbs.twimg.com/profile_images/2370446440/6e2jwf7ztbr5t1yjq4c5_400x400.jpeg',10000,'hank5566', '2e8db3aceb4b0eb09d42bd545be707ece82981a09e728aa4616d4bdd0e3e11cc', 'Hank', 'Lu', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"喵喵叫每一天");
+insert into User (picture,tacobit,username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQffpKD__eKLPR2piV-j1g7jochChQ2geX1KU63RDDgT1A1p3v6',10000,'mumi5566', '2e8db3aceb4b0eb09d42bd545be707ece82981a09e728aa4616d4bdd0e3e11cc', '姆咪騎士', 'Lu', '2008-01-01 10:00:00', '2008-01-01 10:00:00', '2008-01-01 10:00:00', 1, 1, 1,"我自己改就好");
 
 
 insert into Post (content, author, board, like_count, dislike_count) values (
