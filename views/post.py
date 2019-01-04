@@ -81,6 +81,10 @@ def api_post_delete(request, id):
 
 def api_post_article(request):
     try:
+        user = User.filter(id=request.user['id'])[0]
+        print(user)
+        User.update(id=user['id'], tacobit=user['tacobit'] + 10)
+
         post_article = json.loads(request.data)
         ID = Post(content=post_article['content'],
                   board=post_article['board'],

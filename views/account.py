@@ -11,7 +11,17 @@ default_profile_picture = [
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/154/thinking-face_1f914.png',
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/thinking-face_1f914.png',
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/lg/57/thinking-face_1f914.png',
-    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/htc/122/thinking-face_1f914.png'
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/htc/122/thinking-face_1f914.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/samsung/148/face-with-tears-of-joy_1f602.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/face-with-tears-of-joy_1f602.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/mozilla/36/face-with-tears-of-joy_1f602.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/samsung/148/smiling-face-with-smiling-eyes-and-three-hearts_1f970.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/smiling-face-with-smiling-eyes-and-three-hearts_1f970.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/155/smiling-face-with-smiling-eyes-and-three-hearts_1f970.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/samsung/148/smiling-face-with-smiling-eyes_1f60a.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/smiling-face-with-smiling-eyes_1f60a.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/facebook/65/smiling-face-with-smiling-eyes_1f60a.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/mozilla/36/smiling-face-with-smiling-eyes_1f60a.png',
 ]
 
 
