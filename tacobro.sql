@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS User (
     login_count INTEGER,
     is_admin BOOLEAN,
     is_active BOOLEAN,
-    profile text
+    profile text,
+    tacobit INTEGER default 0
 );
 CREATE TABLE IF NOT EXISTS Post (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

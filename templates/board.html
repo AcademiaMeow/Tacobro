@@ -27,6 +27,7 @@
                     </div>
 
                     <!-- Right side -->
+                    {% if request.user %}
                     <div class="level-right">
                         <div class="level-item">
                             <button class="button is-success" id="launch-post-modal">
@@ -36,14 +37,11 @@
                                 <span>發布文章</span>
                             </button>
                         </div>
-                        <div class="level-item">
-                            <button class="button is-success" id="launch-board-modal">
-                                <span class="icon is-small">
-                                    <i class="fas fa-pen" aria-hidden="true"></i>
-                                </span>
-                                <span>新增看板</span>
-                            </button>
-                        </div>
+
+                    {% endif %}
+
+                        
+
                     </div>
                 </nav>
                 {% for post in posts %}
@@ -51,13 +49,14 @@
                     <article class="media">
                         <div class="media-left">
                             <figure class="image is-64x64">
-                                <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+                                <img src="{{post.author_data.picture}}" alt="Image">
                             </figure>
                         </div>
                         <div class="media-content">
                             <div class="content">
                                 <p>
-                                    <strong>{{ post['author_data']['first_name'] }}</strong> <small>@{{
+                                    <strong><a href="/user/{{post.author_data.username}}">{{ post.author_data.first_name }}</a></strong>
+                                    <small>@{{
                                         post['author_data']['username'] }}</small> <small>{{ post['publish_date'] }}</small>
                                     <br>
                                     {{ post['content'] }}
@@ -81,6 +80,7 @@
 {% include "footer.html" %}
 
 
+{% if request.user %}
 <div class="modal" id="post-modal">
     <div class="modal-background" id="modal-background"></div>
     <div class="modal-content">
@@ -102,6 +102,9 @@
     </div>
     <button class="modal-close is-large" aria-label="close" id="close-modal"></button>
 </div>
+{% endif %}
+
+
 
 <div class="modal" id="board-modal">
     <div class="modal-background" id="board-modal-background"></div>
@@ -131,18 +134,12 @@
 </div>
 
 <script>
-    const boardId = {{ board['id'] }};
-    let boardAddBtn = document.getElementById("board-article");
-    let boardCloseBtn = document.getElementById("board-close-modal");
+    {% if request.user %}
+    let boardId = {{board['id']}};
     document.getElementById("launch-post-modal").onclick
         = document.getElementById("close-modal").onclick
         = document.getElementById("modal-background").onclick
         = () => document.getElementById("post-modal").classList.toggle("is-active")
-
-    document.getElementById("launch-board-modal").onclick
-        = document.getElementById("board-close-modal").onclick
-        = document.getElementById("board-modal-background").onclick
-        = () => document.getElementById("board-modal").classList.toggle("is-active")
 
     document.getElementById("post-article").onclick = (e) => {
         var article = document.getElementById("article-content").value;
@@ -168,32 +165,8 @@
                 document.getElementById("article-content").value = "";
             })
     }
-    boardAddBtn.onclick = (e) => {
-        var boardname = document.getElementById("board-name").value;
-        var boardcontent = document.getElementById("board-content").value;
-        fetch("/api/board_add", {
-            method: "POST",
-            body: JSON.stringify({ board_name: boardname, board_content: boardcontent})
-        })
-        .then(r => r.json())
-        .then(result => {
-            if (result.success) {
-                let boardlist = document.getElementById("boardlist");
-                let boarditem = document.createElement('li');
-                let boardlink = document.createElement('a');
-                boardlist.appendChild(boarditem);
-                boarditem.appendChild(boardlink)
-                boardlink.setAttribute('href', '/board/'+result.boardname);
-                boardlink.innerText = result.boardname
-                boardname.value = "";
-                boardcontent.value = "";
-                boardCloseBtn.click();
-            }
-            else {
-                alert("新增看板失敗");
-            }
-        })
-    }
+    {% endif %}
+    {% if request.user.is_admin == 1%}
     {% for post in posts %}
         document.getElementById("post_delete_{{ post['id'] }}").onclick = (e) => {
         fetch("/api/post_delete", {
@@ -211,6 +184,7 @@
         })
     }
     {% endfor %}
+    {% endif %}
 
 </script>
 

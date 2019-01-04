@@ -7,10 +7,8 @@ import os
 from views.timeline import timeline
 
 app = Flask(__name__)
-app.secret_key = os.getenv('TACA_SECRET')
-# Generate secret_key:
-# $ python -c "import os, binascii;print(binascii.hexlify(os.urandom(24)))"
-# $ export TACA_SECRET=***
+app.config['SESSION_TYPE'] = 'memcached'
+app.config['SECRET_KEY'] = os.getenv('TACA_SECRET')
 
 def set_user():
     user = session.get("user")
@@ -36,4 +34,4 @@ def otherpath(path):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

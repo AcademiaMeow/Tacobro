@@ -36,8 +36,9 @@ def profile(request, username):
     if len(friendship) > 5:
         friendship = friendship[:5]
 
-    is_followed = bool(Following.filter(
-        user_no=request.user['id'], following_no=user['id']))
+    if request.user:
+        is_followed = bool(Following.filter(
+            user_no=request.user['id'], following_no=user['id']))
     return render_template("profile.html", **locals())
 
 

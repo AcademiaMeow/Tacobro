@@ -13,6 +13,7 @@
         document.querySelector('#bt_follow').style.display = "inline-block";
         document.querySelector('#bt_unfollow').style.display = "none";
     };
+    {% if is_me %}
     function edit(){
         document.querySelector('#ta_profile').style.display = "inline-block";
         document.querySelector('#profile').style.display = "none";
@@ -41,6 +42,7 @@
         document.querySelector('#bt_save').style.display = "none";
         document.querySelector('#bt_cancel').style.display = "none";
     }
+    {% endif %}
 </script>
 
 {% extends 'base.html' %}
@@ -72,9 +74,8 @@
             <h2 class="subtitle">
                 @{{ user.username }}
             </h2>
-            {% if not is_me %}
-
-            <a id="bt_follow" class="button is-success is-inverted" {%if is_followed%} style="display: none;" {%endif%} onclick="follow()">建立友誼</a>
+            {% if not is_me and request.user%}
+            <a id="bt_follow" class="button is-success is-inverted" {%if is_followed%} style="display: none;" {%endif%} onclick="follow()">仰慕此人</a>
             <a id="bt_unfollow" class="button is-danger is-inverted" {%if not is_followed%} style="display: none;" {%endif%} onclick="unfollow()">與他絕交</a>
             {% endif %}
         </div>
@@ -88,12 +89,13 @@
             <div class="box content">
                 <span id="profile">{{user.profile}}</span>
                 
+                {% if is_me %}
                 <textarea id="ta_profile" class="textarea" style="display: none;">{{user.profile}}</textarea>
-
+                
                 <span id="bt_edit" class="button tag is-light" onclick="edit()">編輯</span>
                 <span id="bt_save" class="button tag is-link" style="display: none;" onclick="save()">儲存</span>
                 <span id="bt_cancel" class="button tag is-light" style="display: none;" onclick="cancel()">取消</span>
-
+                {% endif %}
                 <hr>
                 <!-- friends -->
                 <span class="subtitle">羈絆</span>
@@ -117,9 +119,9 @@
                         {% elif friend.strength > 150 %}
                             <span class="tag is-primary media-ri">鑽石之交</span>
                         {% elif friend.strength > 100 %}
-                            <span class="tag is-success media-ri">點頭之交</span>
+                            <span class="tag is-success media-ri">情如兄弟</span>
                         {% elif friend.strength > 10 %}
-                            <span class="tag is-info media-ri">之交</span>
+                            <span class="tag is-info media-ri">點頭之交</span>
                         {% elif friend.strength > -1 %}
                             <span class="tag is-light media-ri">萍水相逢</span>
                         {% endif %}

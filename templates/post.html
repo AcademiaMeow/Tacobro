@@ -22,13 +22,13 @@
                     <article class="media">
                         <div class="media-left">
                             <figure class="image is-64x64">
-                                <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+                                <img src="{{ author['picture'] }}" alt="Image">
                             </figure>
                         </div>
                         <div class="media-content">
                             <div class="content">
                                 <p>
-                                    <strong>{{ author['first_name'] }}</strong> <small>@{{ author['username'] }}</small> <small>{{ post['publish_date'] }}</small>
+                                    <strong><a href="/user/{{ author['username'] }}">{{ author['first_name'] }}</a></strong> <small>@{{ author['username'] }}</small> <small>{{ post['publish_date'] }}</small>
                                     <br>
                                     {{ post['content'] }}
                                 </p>
@@ -36,13 +36,13 @@
                             <br>
                             <!-- icons -->
                             <div class="buttons has-addons columns">
-                                <a class="button is-fullwidth is-primary is-outlined column">
+                                <a id="bt_like" class="button is-fullwidth is-primary is-outlined column">
                                     <span class="icon is-small">
                                         <i class="fas fa-thumbs-up"></i>
                                     </span>
                                     <span id="like-count">{{ post['like_count'] }}</span>
                                 </a>
-                                <a class="button is-fullwidth is-danger is-outlined column">
+                                <a id="bt_dislike" class="button is-fullwidth is-danger is-outlined column">
                                     <span class="icon is-small">
                                         <i class="fas fa-thumbs-down"></i>
                                     </span>
@@ -68,13 +68,17 @@
                         <article class="media">
                             <div class="media-left">
                                 <figure class="image is-64x64">
-                                    <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+                                    <img src="{{ comment['author_data']['picture'] }}" alt="Image">
                                 </figure>
                             </div>
                             <div class="media-content">
                                 <div class="content">
                                     <p>
-                                        <strong>{{ comment['author_data']['first_name'] }}</strong> <small>@{{ comment['author_data']['username'] }}</small> <small>{{ comment['publish_date'] }}</small>
+                                        <strong>
+                                            <a href="/user/{{ comment['author_data']['username'] }}">
+                                            {{ comment['author_data']['first_name'] }}
+                                            </a>
+                                        </strong> <small>@{{ comment['author_data']['username'] }}</small> <small>{{ comment['publish_date'] }}</small>
                                         <br>
                                         {{ comment['content'] }}
                                     </p>
@@ -85,11 +89,11 @@
                     </div>
 
                     <hr>
-
+                    {% if request.user %}
                     <article class="media" id="comment-block">
                         <figure class="media-left">
                             <p class="image is-64x64">
-                                <img src="https://bulma.io/images/placeholders/128x128.png">
+                                <img src="{{request.user.picture}}">
                             </p>
                         </figure>
                         <div class="media-content">
@@ -100,11 +104,12 @@
                             </div>
                             <div class="field">
                                 <p class="control">
-                                    <button class="button" id="post-comment">Post comment</button>
+                                    <button class="button" id="post-comment">留言</button>
                                 </p>
                             </div>
                         </div>
                     </article>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -113,25 +118,27 @@
 
 {% include "footer.html" %}
 
+{% if request.user %}
 <script>
     document.getElementById("post-comment").onclick = () => {
-        var user = {
-            name: "肥宅",
-            id: "ouo",
-            img: "https://bulma.io/images/placeholders/128x128.png"
-        };
+        fetch('/api/comment/{{post.id}}',{
+            'method':'POST',
+            body: JSON.stringify({
+                'content': document.getElementById("comment-content").value
+            })
+        });
         var commentContent = document.getElementById("comment-content");
         var commentMedia = document.createElement("article");
         commentMedia.className = "media";
         commentMedia.innerHTML = `<div class="media-left">
                                 <figure class="image is-64x64">
-                                    <img src="${user.img}" alt="Image">
+                                    <img src="{{request.user.picture}}" alt="Image">
                                 </figure>
                             </div>
                             <div class="media-content">
                                 <div class="content">
                                     <p>
-                                        <strong>${user.name}</strong> <small>@${user.id}</small> <small>${new Date()}</small>
+                                        <strong>{{request.user.first_name}}</strong> <small>@{{request.user.username}}</small> <small>${new Date()}</small>
                                         <br>
                                         ${commentContent.value}
                                     </p>
@@ -141,5 +148,21 @@
         document.getElementById("comment-count").innerText = parseInt(document.getElementById("comment-count").innerText) + 1;
         commentContent.value = "";
     }
+
+    document.getElementById("bt_like").onclick = () => {
+        fetch('/api/post/like/{{post.id}}',{
+            'method':'POST'
+        });
+        document.getElementById("like-count").innerText = parseInt(document.getElementById("like-count").innerText)+1
+    }
+
+    document.getElementById("bt_dislike").onclick = () => {
+        fetch('/api/post/dislike/{{post.id}}',{
+            'method':'POST'
+        });
+        document.getElementById("dislike-count").innerText = parseInt(document.getElementById("dislike-count").innerText)+1
+    }
+
 </script>
+{% endif %}
 {% endblock content %}
