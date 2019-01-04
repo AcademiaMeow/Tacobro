@@ -20,6 +20,7 @@
         <div class="column is-one-fifth">
             {% include "board_list.html" %}
             {% if ad_list['left'] %}
+            <hr>
             <a href="{{ ad_list['left']['URL'] }}">
                 <img src="{{ ad_list['left']['ad'] }}" class="ad-item" id="left-ad">
             </a>
@@ -99,6 +100,7 @@
                 {% endfor %}
             </div>
             {% if ad_list['bottom'] %}
+            <hr>
             <a href="{{ ad_list['bottom']['URL'] }}">
                 <img src="{{ ad_list['bottom']['ad'] }}" class="ad-item" id="bottom-ad">
             </a>
