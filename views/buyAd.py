@@ -8,7 +8,10 @@ def buyAd(request):
     if request.method == 'POST':
         #user_id = int(request.user['id'])
         ad_img = request.form.get('ad_img')
+<<<<<<< Updated upstream
         print(ad_img)
+=======
+>>>>>>> Stashed changes
         ad_URL = request.form.get('ad_URL')
 
         Ad(ad=ad_img, poster=None , URL=ad_URL, start_date=None, end_date=None, board=None).create()
