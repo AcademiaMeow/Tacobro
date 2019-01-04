@@ -11,9 +11,6 @@ def list(request, name):
     board = Board.filter(name=name)
     if not board:
         return '404 not found'
-
-    if not board:
-        return render_template("board.html", **locals())
     board = board[0]
     posts = Post.filter(board=board['id'], sort=['publish_date'], desc=[True])
     for post in posts:
