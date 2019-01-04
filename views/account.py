@@ -28,19 +28,20 @@ default_profile_picture = [
 
 def login(request):
     message = None
-    username = request.form.get('username').lower()
-    password = request.form.get('password')
+    if request.method == 'POST':
+        username = request.form.get('username').lower()
+        password = request.form.get('password')
 
-    if username or password:
-        hash_password = hashlib.sha256(
-            password.encode('utf-8')).hexdigest()
-        user = User.filter(username=username, password=hash_password)
-        if user:
-            session['user'] = User.filter(username=username)[0]
-            request.user = User.filter(username=username)[0]
-            return redirect('/')
-        else:
-            message = "帳號或密碼錯誤"
+        if username or password:
+            hash_password = hashlib.sha256(
+                password.encode('utf-8')).hexdigest()
+            user = User.filter(username=username, password=hash_password)
+            if user:
+                session['user'] = User.filter(username=username)[0]
+                request.user = User.filter(username=username)[0]
+                return redirect('/')
+            else:
+                message = "帳號或密碼錯誤"
 
     return render_template("login.html", **locals())
 
