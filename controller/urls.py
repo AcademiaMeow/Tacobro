@@ -1,6 +1,6 @@
 import re
 from flask import Response, redirect
-from views import board, post, account, user
+from views import board, post, account, user, buyAd
 
 from kernel.url import path
 
@@ -38,22 +38,25 @@ url_patterns = [
 
     # user
     path('me', user.me, True),
-    path('user/<id:int>', user.profile),
     path('card', user.card),
+    path('user/<username:str>', user.profile),
 
     # board
     path('board/<name:str>', board.list),
-
+    path('api/board_add', board.api_board_add, False, True),
     # post
     path('post/<id:int>', post.post),
+    path('api/post_delete', post.api_post_delete, False, True),
 
     # # # # # # # # #
     # SOME COOL API #
     # # # # # # # # #
+    path('api/user/profile', user.api_profile),
     path('api/follow/<follow_id:int>', user.api_follow),
     path('api/unfollow/<follow_id:int>', user.api_unfollow),
     path('api/drawcard', user.api_drawcard),
-    path('api/post_article', post.api_post_article)
+    path('api/post_article', post.api_post_article),
+    path('api/ad', buyAd.buyAd)
 ]
 
 
@@ -62,12 +65,16 @@ def dispatch(request, path):
         rule = url[0]
         view_f = url[1]
         login_required = url[2]
+        admin_required = url[3]
 
         # dispatch by rule
         match = re.match(rule, path)
         if match:
             if login_required and not request.user:
                 return redirect('/login')
+            if admin_required and not request.user['is_admin']:
+                return '403 permission dinied'
+
             kwargs = match.groupdict()
             kwargs['request'] = request
             return view_f(**kwargs)

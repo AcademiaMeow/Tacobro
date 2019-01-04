@@ -44,7 +44,7 @@
         <form class="account-form" method="POST">
             <section class="section">
                 {% if message %}
-                <article class="message is-primary">
+                <article class="message is-danger">
                     <div class="message-body">
                         {{ message }}
                     </div>
@@ -53,17 +53,9 @@
 
                 <div class="field">
                     <p class="control has-icons-left">
-                        <input class="input" type="text" placeholder="姓氏" name="last_name">
+                        <input class="input" type="text" placeholder="暱稱" name="first_name">
                         <span class="icon is-small is-left">
                             <i class="fas fa-id-card"></i>
-                        </span>
-                    </p>
-                </div>
-                <div class="field">
-                    <p class="control has-icons-left">
-                        <input class="input" type="password" placeholder="名字" name="first_name">
-                        <span class="icon is-small is-left">
-                            <i class="far fa-id-card"></i>
                         </span>
                     </p>
                 </div>

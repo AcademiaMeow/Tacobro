@@ -1,3 +1,4 @@
+import json
 from random import choice
 from operator import itemgetter
 
@@ -8,8 +9,12 @@ from models.Post import Post
 from models.Following import Following, Friendship
 
 
-def profile(request, id=None):
-    user = User.filter(id=id)[0]
+def profile(request, username):
+    user = User.filter(username=username)
+    if not user:
+        return '404 not found'
+    user = user[0]
+    id = int(user['id'])
 
     if request.user and request.user.get('id') == int(id):
         return redirect('/me')
@@ -30,12 +35,15 @@ def profile(request, id=None):
     friendship.sort(key=lambda x: x['strength'], reverse=True)
     if len(friendship) > 5:
         friendship = friendship[:5]
+
+    is_followed = bool(Following.filter(
+        user_no=request.user['id'], following_no=user['id']))
     return render_template("profile.html", **locals())
 
 
 def me(request):
-    user = request.user
-    id = user['id']
+    user = User.filter(id=request.user['id'])[0]
+    id = int(user['id'])
     postlist = Post.filter(author=id)
     following = Following.filter(user_no=id)
     follower = Following.filter(following_no=id)
@@ -97,6 +105,13 @@ def api_unfollow(request, follow_id):
         else:
             # not exist
             return '403 - unfollow'
+
+
+def api_profile(request):
+    if request.method == 'POST':
+        POST = json.loads(request.data)
+        User.update(id=request.user['id'], profile=POST['content'])
+    return '200'
 
 
 def api_drawcard(request):
