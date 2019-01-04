@@ -10,10 +10,14 @@ app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'memcached'
 app.config['SECRET_KEY'] = os.getenv('TACA_SECRET')
 
+
 def set_user():
     user = session.get("user")
     if user:
-        request.user = User.filter(id=user['id'])[0]
+        if User.filter(id=user['id']):
+            request.user = User.filter(id=user['id'])[0]
+        else:
+            request.user = None
     else:
         request.user = None
     return request
@@ -34,4 +38,4 @@ def otherpath(path):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
