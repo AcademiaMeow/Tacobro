@@ -38,6 +38,7 @@ url_patterns = [
 
     # user
     path('me', user.me, True),
+    path('card', user.card),
     path('user/<username:str>', user.profile),
 
     # board
