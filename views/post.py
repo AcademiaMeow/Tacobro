@@ -70,10 +70,11 @@ def api_post_dislike(request, id):
     return '200'
 
 
-def api_post_delete(request, id):
+def api_post_delete(request):
     if request.method == "POST":
         post_data = json.loads(request.data)
-        id = post_data.get('postId')
+        print(post_data)
+        id = post_data['postId']
         post = Post.filter(id=id)
         if not post:
             return jsonify({"success": False})

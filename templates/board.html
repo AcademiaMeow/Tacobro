@@ -70,7 +70,7 @@
                 </div>
                 {% endif %}
                 {% for post in posts %}
-                <div class="box" id="{{post.id}}">
+                <div class="box" id="post-{{post.id}}">
                     <article class="media">
                         <div class="media-left">
                             <figure class="image is-64x64">
@@ -92,7 +92,7 @@
                         </div>
                         {% if request.user.is_admin == 1 %}
                         <div class="media-right">
-                            <a class="button is-small is-danger" id=post_delete_{{ post['id'] }}><span>刪除</span></a>
+                            <a class="button is-small is-danger delete-post" data-post-id="{{ post['id'] }}"><span>刪除</span></a>
                         </div>
                         {% endif %}
                     </article>
@@ -207,23 +207,21 @@
     }
     {% endif %}
     {% if request.user.is_admin == 1 %}
-    {% for post in posts %}
-    document.getElementById("post_delete_{{ post['id'] }}").onclick = (e) => {
-        fetch("/api/post_delete", {
-            method: "POST",
-            body: JSON.stringify({ postId: {{ post['id'] }} })
-        })
-        .then(r => r.json())
-        .then(result => {
-            if (result.success) {
-                document.getElementById("{{ post['id'] }}").remove();
-            }
-            else {
-                alert("刪除貼文失敗QQ");
-            }
-        })
-    }
-    {% endfor %}
+    document.querySelectorAll(".delete-post").forEach(elem => {
+        elem.onclick = (e) => {
+            fetch("/api/post_delete", {
+                method: "POST",
+                body: JSON.stringify({ postId: elem.dataset.postId })
+            })
+                .then(r => r.json())
+                .then(result => {
+                    if (result.success)
+                        document.getElementById("post-" + elem.dataset.postId).remove();
+                    else 
+                        alert("刪除貼文失敗QQ");
+                })
+        }
+    })
     {% endif %}
 
 </script>
