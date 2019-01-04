@@ -85,7 +85,7 @@
                                     <small>@{{
                                         post['author_data']['username'] }}</small> <small>{{ post['publish_date'] }}</small>
                                     <br>
-                                    {{ post['content'] }}
+                                    {{ post['content'][:50] }}...
                                 </p>
                             </div>
                             <a class="button is-small is-fullwidth" href="/post/{{ post['id'] }}">閱讀全文</a>
