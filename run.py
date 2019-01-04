@@ -11,7 +11,7 @@ app = Flask(__name__)
 def set_user():
     user = session.get("user")
     if user:
-        request.user = user
+        request.user = User.filter(id=user['id'])[0]
     else:
         request.user = None
     return request
