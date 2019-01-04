@@ -13,6 +13,7 @@
         document.querySelector('#bt_follow').style.display = "inline-block";
         document.querySelector('#bt_unfollow').style.display = "none";
     };
+    {% if is_me %}
     function edit(){
         document.querySelector('#ta_profile').style.display = "inline-block";
         document.querySelector('#profile').style.display = "none";
@@ -41,6 +42,7 @@
         document.querySelector('#bt_save').style.display = "none";
         document.querySelector('#bt_cancel').style.display = "none";
     }
+    {% endif %}
 </script>
 
 {% extends 'base.html' %}
@@ -70,11 +72,10 @@
                 {{ user.first_name }}
             </h1>
             <h2 class="subtitle">
-                @{{ user.username }}
+                @{{ user.username }} · $ {{user.tacobit}}
             </h2>
-            {% if not is_me %}
-
-            <a id="bt_follow" class="button is-success is-inverted" {%if is_followed%} style="display: none;" {%endif%} onclick="follow()">建立友誼</a>
+            {% if not is_me and request.user%}
+            <a id="bt_follow" class="button is-success is-inverted" {%if is_followed%} style="display: none;" {%endif%} onclick="follow()">仰慕此人</a>
             <a id="bt_unfollow" class="button is-danger is-inverted" {%if not is_followed%} style="display: none;" {%endif%} onclick="unfollow()">與他絕交</a>
             {% endif %}
         </div>
@@ -88,16 +89,23 @@
             <div class="box content">
                 <span id="profile">{{user.profile}}</span>
                 
+                {% if is_me %}
                 <textarea id="ta_profile" class="textarea" style="display: none;">{{user.profile}}</textarea>
-
+                
                 <span id="bt_edit" class="button tag is-light" onclick="edit()">編輯</span>
                 <span id="bt_save" class="button tag is-link" style="display: none;" onclick="save()">儲存</span>
                 <span id="bt_cancel" class="button tag is-light" style="display: none;" onclick="cancel()">取消</span>
-
+                {% endif %}
                 <hr>
                 <!-- friends -->
                 <span class="subtitle">羈絆</span>
                 
+                {% if not friendship %}
+                    <br>
+                    <br>
+                    <p>當兩人互相仰慕時，就會產生羈絆關係，可以透過互動提升親密度等級～</p>
+                {% endif %}
+
                 {% for friend in friendship%}
                 <div class="media" style="margin-top: 30px;">
                   <div class="media-left">
@@ -117,9 +125,9 @@
                         {% elif friend.strength > 150 %}
                             <span class="tag is-primary media-ri">鑽石之交</span>
                         {% elif friend.strength > 100 %}
-                            <span class="tag is-success media-ri">點頭之交</span>
+                            <span class="tag is-success media-ri">情如兄弟</span>
                         {% elif friend.strength > 10 %}
-                            <span class="tag is-info media-ri">之交</span>
+                            <span class="tag is-info media-ri">點頭之交</span>
                         {% elif friend.strength > -1 %}
                             <span class="tag is-light media-ri">萍水相逢</span>
                         {% endif %}
@@ -140,15 +148,14 @@
                 <article class="media">
                     <div class="media-left">
                         <figure class="image is-64x64">
-                            <img src="{{user.picture}}" alt="Image">
+                            <img src="https://i.pinimg.com/originals/15/a8/21/15a821ea79990bb7edd4eb058a510862.png" alt="Image">
                         </figure>
                     </div>
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>{{user.first_name}}</strong> <small>@{{user.username}}</small>
                                 <br>
-                                我還沒有貼文喔！去論壇逛逛八
+                                還沒有貼文喔！去論壇逛逛八
                             </p>
                         </div>
                     </div>

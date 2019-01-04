@@ -4,8 +4,8 @@
         綜合
     </p>
     <ul class="menu-list">
-        <li><a href="/">動態首頁</a></li>
-        <!-- <li><a>家族動態</a></li> -->
+        <li><a href="/">動態時報</a></li>
+        <li><a href="/card">以牌會友</a></li>
     </ul>
     <p class="menu-label">
         全部看板
@@ -15,8 +15,48 @@
         <li><a href="/board/{{ board['name'] }}">{{ board['name'] }}</a></li>
         {% endfor %}
     </ul>
+    
+    {% if request.user.is_admin == 1%}
+    <hr>
+    <div class="level-item">
+        <button class="button is-success" id="launch-board-modal">
+            <span class="icon is-small">
+                <i class="fas fa-pen" aria-hidden="true"></i>
+            </span>
+            <span>新增看板</span>
+        </button>
+    </div>
+    {% endif %}
 </aside>
 
+{% if request.user.is_admin == 1%}
+<div class="modal" id="board-modal">
+    <div class="modal-background" id="board-modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <span class="subtitle">新增看板</span>
+            <hr>
+            <article class="message is-danger" id="alert" style="display: none">
+                <div class="message-body">
+                    你沒打內容啊幹低能兒
+                </div>
+            </article>
+            <div class="field">
+                <div class="control">
+                    <input class="input" type="text" placeholder="看板名稱ㄛ" id="board-name">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <textarea class="textarea" placeholder="打上你ㄉ廢文或 payload ㄅ >_^" id="board-content"></textarea>
+                </div>
+            </div>
+            <button class="button is-primary is-outlined is-fullwidth" id="board-article">喵！</button>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" id="board-close-modal"></button>
+</div>
+{% endif %}
 <style>
     .is-pinned {
         display: block;
@@ -36,4 +76,42 @@
                 menu.classList.remove('is-pinned');
         });
     });
+
+    
+    {% if request.user.is_admin == 1%}
+    let boardAddBtn = document.getElementById("board-article");
+    let boardCloseBtn = document.getElementById("board-close-modal");
+
+    document.getElementById("launch-board-modal").onclick
+        = document.getElementById("board-close-modal").onclick
+        = document.getElementById("board-modal-background").onclick
+        = () => document.getElementById("board-modal").classList.toggle("is-active")
+
+    boardAddBtn.onclick = (e) => {
+        var boardname = document.getElementById("board-name").value;
+        var boardcontent = document.getElementById("board-content").value;
+        fetch("/api/board_add", {
+            method: "POST",
+            body: JSON.stringify({ board_name: boardname, board_content: boardcontent})
+        })
+        .then(r => r.json())
+        .then(result => {
+            if (result.success) {
+                let boardlist = document.getElementById("boardlist");
+                let boarditem = document.createElement('li');
+                let boardlink = document.createElement('a');
+                boardlist.appendChild(boarditem);
+                boarditem.appendChild(boardlink)
+                boardlink.setAttribute('href', '/board/'+result.boardname);
+                boardlink.innerText = result.boardname
+                boardname.value = "";
+                boardcontent.value = "";
+                boardCloseBtn.click();
+            }
+            else {
+                alert("新增看板失敗");
+            }
+        })
+    }
+    {% endif %}
 </script>

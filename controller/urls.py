@@ -31,7 +31,7 @@ url_patterns = [
     # account
     path('login', account.login),
     path('register', account.register),
-    path('logout', account.logout),
+    path('logout', account.logout, True),
 
     path('robots.txt', robots),
     path('admin_panel', admin),
@@ -54,12 +54,16 @@ url_patterns = [
     # # # # # # # # #
     # SOME COOL API #
     # # # # # # # # #
-    path('api/user/profile', user.api_profile),
-    path('api/follow/<follow_id:int>', user.api_follow),
-    path('api/unfollow/<follow_id:int>', user.api_unfollow),
-    path('api/drawcard', user.api_drawcard),
-    path('api/post_article', post.api_post_article),
-    path('api/ad', buyAd.api_buy_ad),
+    path('api/user/profile', user.api_profile, True),
+    path('api/follow/<follow_id:int>', user.api_follow, True),
+    path('api/unfollow/<follow_id:int>', user.api_unfollow, True),
+    path('api/drawcard', user.api_drawcard, True),
+    path('api/post_article', post.api_post_article, True),
+    path('api/comment/<id:int>', post.api_comment, True),
+    path('api/post/like/<id:int>', post.api_post_like, True),
+    path('api/post/dislike/<id:int>', post.api_post_dislike, True),
+    path('api/ad', buyAd.api_buy_ad, True),
+
 ]
 
 

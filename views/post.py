@@ -4,6 +4,8 @@ from models.Post import Post
 from models.User import User
 from models.Comment import Comment
 from models.Board import Board
+from models.Following import Friendship
+from datetime import datetime
 
 
 def post(request, id):
@@ -22,23 +24,73 @@ def post(request, id):
 
     return render_template("post.html", **locals())
 
-def api_post_delete(request):
+
+def api_comment(request, id):
+    post_data = json.loads(request.data)
+    Comment(author=request.user['id'], post=id,
+            content=post_data['content'],
+            publish_date=datetime.now()).create()
+    return '200'
+
+
+def api_post_like(request, id):
+    Post.update(id=id, like_count=Post.filter(id=id)[0]['like_count'] + 1)
+
+    author_id = Post.filter(id=id)[0]['author']
+    fs = (Friendship.filter(
+        user_A=author_id,
+        user_B=request.user['id']) +
+        Friendship.filter(
+        user_A=request.user['id'],
+        user_B=author_id))
+
+    if fs:
+        Friendship.update(id=fs[0]['id'], strength=fs[0]['strength'] + 10)
+
+    user = User.filter(id=author_id)[0]
+    User.update(id=user['id'], tacobit=user['tacobit'] + 1)
+
+    user = User.filter(id=request.user['id'])[0]
+    User.update(id=user['id'], tacobit=user['tacobit'] - 1)
+
+    return '200'
+
+
+def api_post_dislike(request, id):
+    Post.update(id=id, dislike_count=Post.filter(
+        id=id)[0]['dislike_count'] + 1)
+    fs = Friendship.filter(user_A=Post.filter(
+        id=id)[0]['id'], user_B=request.user['id']) + Friendship.filter(user_A=request.user['id'], user_B=Post.filter(
+            id=id)[0]['id'])
+    if fs:
+        Friendship.update(id=fs[0]['id'], strength=fs[0]['strength'] - 10)
+
+    user = User.filter(id=request.user['id'])[0]
+    User.update(id=user['id'], tacobit=user['tacobit'] - 1)
+    return '200'
+
+
+def api_post_delete(request, id):
     if request.method == "POST":
         post_data = json.loads(request.data)
         id = post_data.get('postId')
         post = Post.filter(id=id)
         if not post:
-            return jsonify({"success":False})
+            return jsonify({"success": False})
         Post.delete(post[0]['id'])
-        return jsonify({"success":True})
+        return jsonify({"success": True})
+
 
 def api_post_article(request):
-    try:
-        post_article = json.loads(request.data)
-        ID = Post(content=post_article['content'],
-                  board=post_article['board'],
-                  author=request.user['id']).create()
-        print(ID)
-        return jsonify({"success": True, "post": ID})
-    except:
-        return jsonify({"success": False})
+    # try:
+    user = User.filter(id=request.user['id'])[0]
+    User.update(id=user['id'], tacobit=user['tacobit'] + 10)
+
+    post_article = json.loads(request.data)
+    ID = Post(content=post_article['content'],
+              board=post_article['board'],
+              author=request.user['id'],
+              publish_date=datetime.now()).create()
+    return jsonify({"success": True, "post": ID})
+    # except:
+    #     return jsonify({"success": False})

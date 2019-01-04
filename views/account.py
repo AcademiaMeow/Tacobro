@@ -3,6 +3,7 @@ from models.User import User
 import hashlib
 import re
 from random import choice
+from datetime import datetime
 
 default_profile_picture = [
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/155/thinking-face_1f914.png',
@@ -11,25 +12,47 @@ default_profile_picture = [
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/154/thinking-face_1f914.png',
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/thinking-face_1f914.png',
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/lg/57/thinking-face_1f914.png',
-    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/htc/122/thinking-face_1f914.png'
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/htc/122/thinking-face_1f914.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/samsung/148/face-with-tears-of-joy_1f602.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/face-with-tears-of-joy_1f602.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/mozilla/36/face-with-tears-of-joy_1f602.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/samsung/148/smiling-face-with-smiling-eyes-and-three-hearts_1f970.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/smiling-face-with-smiling-eyes-and-three-hearts_1f970.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/155/smiling-face-with-smiling-eyes-and-three-hearts_1f970.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/samsung/148/smiling-face-with-smiling-eyes_1f60a.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/smiling-face-with-smiling-eyes_1f60a.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/facebook/65/smiling-face-with-smiling-eyes_1f60a.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/mozilla/36/smiling-face-with-smiling-eyes_1f60a.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/samsung/148/face-with-stuck-out-tongue_1f61b.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/154/face-with-stuck-out-tongue_1f61b.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojidex/112/face-with-stuck-out-tongue_1f61b.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/mozilla/36/face-with-stuck-out-tongue_1f61b.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/microsoft/153/smiling-face-with-sunglasses_1f60e.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/facebook/158/smiling-face-with-sunglasses_1f60e.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/htc/122/smiling-face-with-sunglasses_1f60e.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/mozilla/36/smiling-face-with-sunglasses_1f60e.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/google/146/hushed-face_1f62f.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/151/hushed-face_1f62f.png',
+    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/mozilla/36/hushed-face_1f62f.png'
 ]
 
 
 def login(request):
     message = None
-    username = request.form.get('username')
-    password = request.form.get('password')
+    if request.method == 'POST':
+        username = request.form.get('username').lower()
+        password = request.form.get('password')
 
-    if username or password:
-        hash_password = hashlib.sha256(
-            password.encode('utf-8')).hexdigest()
-        user = User.filter(username=username, password=hash_password)
-        if user:
-            session['user'] = User.filter(username=username)[0]
-            request.user = User.filter(username=username)[0]
-            return redirect('/')
-        else:
-            message = "帳號或密碼錯誤"
+        if username or password:
+            hash_password = hashlib.sha256(
+                password.encode('utf-8')).hexdigest()
+            user = User.filter(username=username, password=hash_password)
+            if user:
+                session['user'] = User.filter(username=username)[0]
+                request.user = User.filter(username=username)[0]
+                return redirect('/')
+            else:
+                message = "帳號或密碼錯誤"
 
     return render_template("login.html", **locals())
 
