@@ -10,6 +10,9 @@ def list(request, name):
 
     board = Board.filter(name=name)
     if not board:
+        return '404 not found'
+
+    if not board:
         return render_template("board.html", **locals())
     board = board[0]
     posts = Post.filter(board=board['id'], sort=['publish_date'], desc=[True])
@@ -20,9 +23,10 @@ def list(request, name):
 
 def api_board_add(request):
     if request.method == "POST":
-        print("test")
         post_data = json.loads(request.data)
         board_name = post_data.get('board_name')
         board_content = post_data.get('board_content')
         Board(name=board_name, description=board_content).create()
         return jsonify({'success': True, 'boardname': board_name})
+    else:
+        return 'FLAG{you_GET_nothing}'

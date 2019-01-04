@@ -72,7 +72,7 @@
                 {{ user.first_name }}
             </h1>
             <h2 class="subtitle">
-                @{{ user.username }}
+                @{{ user.username }} · $ {{user.tacobit}}
             </h2>
             {% if not is_me and request.user%}
             <a id="bt_follow" class="button is-success is-inverted" {%if is_followed%} style="display: none;" {%endif%} onclick="follow()">仰慕此人</a>

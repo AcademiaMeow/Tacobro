@@ -72,6 +72,8 @@ def card(request):
 # API
 
 def api_follow(request, follow_id):
+    if User.filter(id=user_id):
+        return '404 not found'
     if request.method == 'POST':
         user_id = int(request.user['id'])
         follow_id = int(follow_id)
@@ -88,6 +90,8 @@ def api_follow(request, follow_id):
 
 
 def api_unfollow(request, follow_id):
+    if User.filter(id=user_id):
+        return '404 not found'
     if request.method == 'POST':
         user_id = int(request.user['id'])
         follow_id = int(follow_id)
@@ -106,13 +110,17 @@ def api_unfollow(request, follow_id):
         else:
             # not exist
             return '403 - unfollow'
+    else:
+        return 'FLAG{you_GET_nothing}'
 
 
 def api_profile(request):
     if request.method == 'POST':
         POST = json.loads(request.data)
         User.update(id=request.user['id'], profile=POST['content'])
-    return '200'
+        return '200'
+    else:
+        return 'FLAG{you_GET_nothing}'
 
 
 def api_drawcard(request):
