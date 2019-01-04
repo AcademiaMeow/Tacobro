@@ -2,11 +2,20 @@ from flask import request, render_template, jsonify
 from models.User import User
 from models.Board import Board
 from models.Post import Post
-import json
+from models.Ad import Ad
+import json, random
 
 
 def list(request, name):
     board_list = Board.filter()
+
+    choice = lambda ls: random.choice(ls) if ls else None
+
+    ad_list = {}
+    ad_list['left'] = choice(Ad.filter(board=1))
+    ad_list['bottom'] = choice(Ad.filter(board=2))
+    ad_list['right'] = choice(Ad.filter(board=3))
+    print(ad_list)
 
     board = Board.filter(name=name)
     if not board:

@@ -2,68 +2,154 @@
 
 {% block header %}
 
-<title>廣告購買</title>
-
+<title>廣告購買 | Tacabro</title>
+<style>
+	.container.context {
+		margin-top: 3em !important;
+		margin-bottom: 3em !important;
+	}
+</style>
 {% endblock %}
 
 {% block content %}
 
-<script>
+<div class="container context">
+	<span class="title">購買廣告</span>
+	<hr>
 
-function readURL(input){
-
-  if(input.files && input.files[0]){
-
-    var imageTagID = input.getAttribute("targetID");
-
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-
-       var img = document.getElementById(imageTagID);
-
-       img.setAttribute("src", e.target.result)
-
-    }
-
-    reader.readAsDataURL(input.files[0]);
-
-  }
-
-}
-
-</script>
-
-<h1>購買廣告</h1>
-
-<div>
 	<form method="POST" enctype="multipart/form-data">
 
-		<div>
-			<img src="https://i.imgur.com/fu7NcoF.jpg" width="200">
-			<input type="radio" name="ad" value="left"> 貼文列表左側
-			<img src="https://i.imgur.com/31YJ6xe.jpg" width="200">
-			<input type="radio" name="ad" value="middle"> 貼文列表下面
-			<img src="https://i.imgur.com/JV0PLbB.jpg" width="200">
-			<input type="radio" name="ad" value="right"> 貼文列表右側
+		<div class="columns has-text-centered">
+			<div class="column">
+				<img src="https://i.imgur.com/fu7NcoF.jpg" width="200">
+				<br>
+				<input type="radio" name="ad" value="left"> 貼文列表左側 $128
+			</div>
+			<div class="column">
+				<img src="https://i.imgur.com/31YJ6xe.jpg" width="200">
+				<br>
+				<input type="radio" name="ad" value="middle"> 貼文列表下面 $256
+			</div>
+			<div class="column">
+				<img src="https://i.imgur.com/JV0PLbB.jpg" width="200">
+				<br>
+				<input type="radio" name="ad" value="right"> 貼文列表右側 $512
+			</div>
 		</div>
 
 		<br>
 
 		<div>
 			<input type="hidden" name="imagestring">
-			<input type="file" onchange="readURL(this)" name="ad_img" targetID="preview_img" accept="image/gif, image/jpeg, image/png"/ >
-			<br><br>
-   			<img id="preview_img" src="#" width="200">
-   			<br><br>
-   			<p>輸入廣告導向的網址：</p>
-			<input type="text" name="ad_URL">
-			<br><br>
-			<input type="submit" value="Submit">
+			<div class="columns">
+				<div class="column">
+					<div class="field">
+						<div class="file is-large is-boxed has-name">
+							<label class="file-label">
+								<input class="file-input" id="imgur-file" type="file" onchange="readURL(this)" name="ad_img" targetID="preview_img"
+								 accept="image/*" data-max-size="5000" />
+								<span class="file-cta">
+									<span class="file-icon">
+										<i class="fas fa-upload"></i>
+									</span>
+									<span class="file-label">
+										上傳廣告圖片
+									</span>
+								</span>
+								<span class="file-name has-text-centered" id="file-name">請上傳你的檔案</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="column">
+					<img id="preview_img" src="" width="200">
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">廣告點下去會去的網址</label>
+				<div class="control">
+					<input class="input" id="link-url" type="text" placeholder="http(s)://">
+				</div>
+			</div>
+			<div class="control">
+				<button class="button is-primary is-large is-fullwidth" id="post-ad">發佈我ㄉ廣告</button>
+			</div>
 		</div>
 
 	</form>
 </div>
 
+<script>
+	function readURL(input) {
+		if (input.files && input.files[0]) {
+			var file = input.files[0];
+			var imageTagID = input.getAttribute("targetID");
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				var img = document.getElementById(imageTagID);
+				img.setAttribute("src", e.target.result);
+				document.getElementById("file-name").innerText = file.name;
+			}
+			reader.readAsDataURL(file);
+		}
+	}
+
+	document.getElementById("post-ad").onclick = (e) => {
+		e.preventDefault();
+
+		var file = document.querySelector('#imgur-file').files;
+		var linkUrl = document.getElementById("link-url").value;
+		var position = document.querySelector('input[name="ad"]:checked');
+
+		if (!file || !linkUrl || !position) {
+			alert("填完啊幹");
+			return;
+		}
+
+		e.target.classList.add("is-loading");
+		file = file[0];
+		position = position.value;
+
+		if (file.size > document.querySelector('#imgur-file').dataset['max-size'] * 1024) {
+			alert("太大ㄌ ❤️");
+			return false;
+		}
+
+		// Imgur
+		var formData = new FormData();
+		formData.append("image", file);
+
+		fetch("https://api.imgur.com/3/image", {
+			method: "POST",
+			headers: new Headers({
+				Authorization: 'Client-ID ba74cde600e29e8',
+				Accept: 'application/json',
+			}),
+			mode: "cors",
+			body: formData
+		})
+			.then(r => r.json())
+			.then(imgurData => {
+				return fetch("/api/ad", {
+					method: "POST",
+					body: JSON.stringify({
+						img_url: imgurData.data.link,
+						link_url: linkUrl,
+						positoin: position
+					})
+				})
+			})
+			.then(r => r.json())
+			.then(r => {
+				e.target.classList.remove("is-loading");
+				if (r.success) {
+					alert("ㄣㄣ成功了");
+				} else {
+					alert(r.message);
+				}
+			})
+			.catch(r => alert("怪怪ㄉ"));
+	}
+</script>
 
 {% endblock %}
