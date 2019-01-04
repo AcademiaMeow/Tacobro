@@ -28,6 +28,8 @@ def post(request, id):
 def api_comment(request, id):
     if request.method == 'POST':
         post_data = json.loads(request.data)
+        if len(post_data['content']) > 150:
+            return '403'
         Comment(author=request.user['id'], post=id,
                 content=post_data['content'],
                 publish_date=datetime.now()).create()
@@ -101,7 +103,7 @@ def api_post_article(request):
 
             post_article = json.loads(request.data)
 
-            if post_article > 150:
+            if len(post_article) > 150:
                 return jsonify({"success": False})
 
             ID = Post(content=post_article['content'],
