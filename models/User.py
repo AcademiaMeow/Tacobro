@@ -4,7 +4,7 @@ from datetime import datetime
 
 class User(model):
 
-    def __init__(self, picture, username, password, first_name, last_name, birthday, last_login, login_count, is_admin, is_active, profile, join_date=datetime.now()):
+    def __init__(self, username, password, first_name, last_name, profile, birthday=None, picture=None, last_login=None, login_count=None, is_admin=False, is_active=True, join_date=datetime.now()):
         self.picture = picture
         self.username = username
         self.password = password
