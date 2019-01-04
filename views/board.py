@@ -4,6 +4,7 @@ from models.Board import Board
 from models.Post import Post
 import json
 
+
 def list(request, name):
     board_list = Board.filter()
 
@@ -11,10 +12,11 @@ def list(request, name):
     if not board:
         return render_template("board.html", **locals())
     board = board[0]
-    posts = Post.filter(board=board['id'])
+    posts = Post.filter(board=board['id'], sort=['publish_date'], desc=[True])
     for post in posts:
         post['author_data'] = User.filter(id=post['author'])[0]
     return render_template("board.html", **locals())
+
 
 def api_board_add(request):
     if request.method == "POST":

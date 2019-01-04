@@ -35,6 +35,9 @@
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
                     {% if request.user %}
+                    <div class="navbar-item">
+                        $ {{request.user.tacobit}}
+                    </div>
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
                             {{ request.user.username }}，安安
@@ -49,7 +52,11 @@
                                 登出
                             </a>
                         </div>
+
+                        
+                        
                     </div>
+                    
                     {% else %}
                     <div class="navbar-item">
                         <div class="buttons">

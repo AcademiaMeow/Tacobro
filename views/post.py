@@ -34,16 +34,22 @@ def api_comment(request, id):
 def api_post_like(request, id):
     Post.update(id=id, like_count=Post.filter(id=id)[0]['like_count'] + 1)
 
+    author_id = Post.filter(id=id)[0]['author']
     fs = (Friendship.filter(
-        user_A=Post.filter(id=id)[0]['author'],
+        user_A=author_id,
         user_B=request.user['id']) +
-
         Friendship.filter(
         user_A=request.user['id'],
-        user_B=Post.filter(id=id)[0]['author']))
-    print(fs)
+        user_B=author_id))
+
     if fs:
         Friendship.update(id=fs[0]['id'], strength=fs[0]['strength'] + 10)
+
+    user = User.filter(id=author_id)[0]
+    User.update(id=user['id'], tacobit=user['tacobit'] + 1)
+
+    user = User.filter(id=request.user['id'])[0]
+    User.update(id=user['id'], tacobit=user['tacobit'] - 1)
 
     return '200'
 
@@ -55,7 +61,10 @@ def api_post_dislike(request, id):
         id=id)[0]['id'], user_B=request.user['id']) + Friendship.filter(user_A=request.user['id'], user_B=Post.filter(
             id=id)[0]['id'])
     if fs:
-        Friendship.update(id=fs[0]['id'], strength=fs[0]['strength'] - 1)
+        Friendship.update(id=fs[0]['id'], strength=fs[0]['strength'] - 10)
+
+    user = User.filter(id=request.user['id'])[0]
+    User.update(id=user['id'], tacobit=user['tacobit'] - 1)
     return '200'
 
 
