@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+<style>
+    .board {
+        background-image: url("https://i.ytimg.com/vi/4rW81GKsdfg/maxresdefault.jpg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: 100vh;
+        text-align: center;
+    }
+
+    #summon-button {
+        width: fit-content;
+        height: fit-content;
+        line-height: 100vh;
+    }
+
+    .summon {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+
+        display: none;
+        opacity: 0;
+
+        perspective-origin: center center;
+        -moz-perspective-origin: center center;
+        -webkit-perspective-origin: center center;
+        perspective: 700px;
+        -moz-perspective: 700px;
+        -webkit-perspective: 700px;
+    }
+
+    .gots {
+        background-color: transparent;
+        position: fixed;
+        top: 15%;
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+        perspective: 1000px;
+    }
+
+    .gots img {
+        height: 70vh;
+    }
+
+    #summon-done {
+        position: fixed;
+        left: 50%;
+        top: 80%;
+        width: 100px;
+        margin-left: -50px;
+    }
+
+    #magic-circle {
+        width: 512px;
+        height: 512px;
+        position: relative;
+        top: 50%;
+        margin: 0px auto;
+        transform: rotateX(90deg) rotateZ(0deg);
+        animation: spin 3s infinite;
+        -webkit-animation: spin 3s infinite;
+        animation-timing-function: linear;
+        animation-play-state: paused;
+        -webkit-animation-play-state: paused;
+    }
+
+    #magic-circle img {
+        animation: exapnd 3s;
+        -webkit-animation: exapnd 3s;
+        animation-play-state: paused;
+        -webkit-animation-play-state: paused;
+    }
+
+    .circle-beam1 {
+        width: 600px;
+        height: 600px;
+        border: 24px white solid;
+        position: relative;
+        margin: 0px auto;
+        opacity: 0;
+        transform: rotateX(90deg) translate3d(0, -408px, 0);
+        border-radius: 300px;
+        animation: circle1 3s;
+        -webkit-animation: circle1 3s;
+        animation-play-state: paused;
+        -webkit-animation-play-state: paused;
+        animation-fill-mode: forwards;
+        -webkit-animation-fill-mode: forwards;
+    }
+
+    .circle-beam2 {
+        width: 600px;
+        height: 600px;
+        border: 24px white solid;
+        position: relative;
+        margin: 0px auto;
+        opacity: 0;
+        transform: rotateX(90deg) translate3d(0, -408px, 0);
+        border-radius: 300px;
+        animation: circle2 3s;
+        -webkit-animation: circle2 3s;
+        animation-play-state: paused;
+        -webkit-animation-play-state: paused;
+        animation-fill-mode: forwards;
+        -webkit-animation-fill-mode: forwards;
+    }
+
+    .circle-beam3 {
+        width: 600px;
+        height: 600px;
+        border: 24px white solid;
+        position: relative;
+        margin: 0px auto;
+        opacity: 0;
+        transform: rotateX(90deg)translate3d(0, -408px, 0);
+        ;
+        border-radius: 300px;
+        animation: circle3 3s;
+        -webkit-animation: circle3 3s;
+        animation-play-state: paused;
+        -webkit-animation-play-state: paused;
+        animation-fill-mode: forwards;
+        -webkit-animation-fill-mode: forwards;
+    }
+
+    .beam {
+        background-color: white;
+        height: 110%;
+        position: fixed;
+        left: 50%;
+        width: 0px;
+        margin-left: 0px;
+        top: -50px;
+        filter: blur(30px);
+        z-index: 100;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotateX(90deg) rotateZ(360deg);
+        }
+    }
+
+    @keyframes circle1 {
+        to {
+            transform: rotateX(90deg) translate3d(0, -408px, 450px);
+            opacity: 1;
+        }
+    }
+
+    @keyframes circle2 {
+        to {
+            transform: rotateX(90deg) translate3d(0, -408px, 1200px);
+            opacity: 1;
+        }
+    }
+
+    @keyframes circle3 {
+        to {
+            transform: rotateX(90deg) translate3d(0, -408px, 1500px);
+            opacity: 1;
+        }
+    }
+
+    @keyframes exapnd {
+        from {
+            width: 0%;
+            height: 0%;
+        }
+
+        to {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .card {
+        position: fixed;
+        top: 15%;
+    }
+
+    /* This container is needed to position the front and back side */
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+    }
+
+    /* Do an horizontal flip when you move the mouse over the flip box container */
+    .gots:hover .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    /* Position the front and back side */
+    .flip-card-front,
+    .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    /* Style the front side (fallback if image is missing) */
+    .flip-card-front {
+        background-color: #bbb;
+        color: black;
+    }
+
+    /* Style the back side */
+    .flip-card-back {
+        background-image: url("https://i.imgur.com/HVqYzlu.png") !important;
+        height: 70vh;
+        background-size: auto 70vh;
+        background-repeat: no-repeat;
+        background-position: center;
+        color: white !important;
+        transform: rotateY(180deg);
+        text-align: center !important;
+    }
+
+    .flip-card-back a {
+        font-size: 72px;
+        line-height: 50vh;
+        text-shadow: 0px 0px 48px #000;
+        color: white !important;
+    }
+</style>
+
+{% endblock header %}
+
+{% block content %}
+
+<div class="board">
+    <a id="summon-button">
+        <img src="https://raw.githubusercontent.com/Arathi/fgo-summon-emu/master/img/ui/btn-summon-1.png" alt="">
+    </a>
+    <div class="summon">
+        <div id="magic-circle">
+            <img src="https://i.imgur.com/5uFiAwo.png">
+        </div>
+        <div class="circle-beam1"></div>
+        <div class="circle-beam2"></div>
+        <div class="circle-beam3"></div>
+        <div class="beam"></div>
+
+        <div class="gots">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://i.imgur.com/yhJzZYC.jpg">
+                </div>
+
+                <div class="flip-card-back">
+                    <a id="link">
+                        <span class="title is-white is-1" id="name"></span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+<script>
+    function fade(element) {
+        var op = 1;  // initial opacity
+        var timer = setInterval(function () {
+            if (op <= 0.1) {
+                clearInterval(timer);
+                element.style.display = 'none';
+            }
+            element.style.opacity = op;
+            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+            op -= op * 0.1;
+        }, 50);
+    }
+    function unfade(element) {
+        var op = 0.1;
+        element.style.display = 'block';
+        var timer = setInterval(function () {
+            if (op >= 1) clearInterval(timer);
+            element.style.opacity = op;
+            op += op * 0.1;
+        }, 10);
+    }
+
+    function widthAni(element) {
+        var w = element.offsetWidth;
+
+        var timer = setInterval(function () {
+            if (w >= 512) clearInterval(timer);
+            element.style.width = w + "px";
+            w += 20;
+        }, 1);
+    }
+
+    function mlAni(element) {
+        var ml = parseInt(element.style.marginLeft);
+
+        var timer = setInterval(function () {
+            if (ml <= -(512 / 2)) clearInterval(timer);
+            element.style.marginLeft = ml + "px";
+            ml -= 10;
+        }, 1);
+    }
+
+    document.getElementById("summon-button").onclick = (e) => {
+        e.target.style.display = 'none';
+        var beam = document.querySelector(".beam");
+        beam.style.display = "block";
+        beam.style.width = "0%";
+        beam.style.marginLeft = "0";
+        beam.style.opacity = "1";
+
+        document.querySelector(".flip-card-inner").style.opacity = "1";
+        document.querySelector(".flip-card-inner").style.display = "none";
+
+        var summon = document.querySelector(".summon");
+        summon.style.display = "block";
+        unfade(summon);
+
+        document.querySelectorAll(".summon *").forEach(elem => {
+            elem.style.webkitAnimationPlayState = "running";
+            elem.style.AnimationPlayState = "running";
+        })
+        var beam = document.querySelector('.beam');
+        widthAni(beam);
+        mlAni(beam);
+        fetch('/api/drawcard')
+            .then(r => r.json())
+            .then(user => {
+                console.log(user);
+                document.getElementById("name").innerText = user.first_name;
+                // document.getElementById("pic").setAttribute("src", user.picture);
+                document.getElementById("link").setAttribute('href', "/user/" + user.id);
+                setTimeout(() => {
+                    fade(beam);
+                    setTimeout(()=>{
+                        unfade(document.querySelector(".flip-card-inner"));
+                    }, 1000);
+                }, 500);
+            })
+
+
+    }
+</script>
+{% endblock content %}

@@ -2,7 +2,7 @@ from random import choice
 from operator import itemgetter
 
 from datetime import datetime
-from flask import request, session, redirect, render_template
+from flask import request, session, redirect, render_template, jsonify
 from models.User import User
 from models.Post import Post
 from models.Following import Following, Friendship
@@ -55,8 +55,12 @@ def me(request):
     is_me = True
     return render_template("profile.html", **locals())
 
-# API
 
+def card(request):
+    return render_template("card.html", **locals())
+
+
+# API
 
 def api_follow(request, follow_id):
     if request.method == 'POST':
@@ -96,7 +100,6 @@ def api_unfollow(request, follow_id):
 
 
 def api_drawcard(request):
-
     all_users = User.filter()
     avaliable_user = list()
     for user in all_users:
@@ -107,4 +110,4 @@ def api_drawcard(request):
     if len(avaliable_user) == 0:
         return '400 - 整個網站都是你的好友了！'
     else:
-        return str(choice(avaliable_user))
+        return jsonify(choice(avaliable_user))
