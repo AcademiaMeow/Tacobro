@@ -44,9 +44,12 @@ url_patterns = [
     # board
     path('board/<name:str>', board.list),
     path('api/board_add', board.api_board_add, False, True),
+
     # post
     path('post/<id:int>', post.post),
     path('api/post_delete', post.api_post_delete, False, True),
+
+    path('ad', buyAd.buy_ad),
 
     # # # # # # # # #
     # SOME COOL API #
@@ -56,7 +59,7 @@ url_patterns = [
     path('api/unfollow/<follow_id:int>', user.api_unfollow),
     path('api/drawcard', user.api_drawcard),
     path('api/post_article', post.api_post_article),
-    path('api/ad', buyAd.buyAd)
+    path('api/ad', buyAd.api_buy_ad),
 ]
 
 

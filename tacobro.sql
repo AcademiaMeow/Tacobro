@@ -79,9 +79,9 @@ CREATE TABLE IF NOT EXISTS Who_dislikes (
 CREATE TABLE IF NOT EXISTS AdBoard (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     position text,
-    width INTEGER,
-    height INTEGER,
-    price INTEGER
+    width INTEGER default 0,
+    height INTEGER default 0,
+    price INTEGER default 0
 );
 CREATE TABLE IF NOT EXISTS Ad (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -100,6 +100,9 @@ insert into Board (name, description) values ('C_Chat', '姆咪');
 insert into Board (name, description) values ('Sex', 'ii');
 insert into Board (name, description) values ('Tobacco', '雲端抽煙');
 
+insert into AdBoard (position, price) values ('left', 128);
+insert into AdBoard (position, price) values ('middle', 256);
+insert into AdBoard (position, price) values ('right', 512);
 
 insert into User (username, password, first_name, last_name, birthday, join_date, last_login, login_count, is_admin, is_active, profile) values (
     'mango', '3345678', '姆咪', '陳', '2007-01-01 10:00:00', '2007-01-01 10:00:00', '2007-01-01 10:00:00', 0, 0, 1, "並沒有");
