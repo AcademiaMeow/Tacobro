@@ -19,7 +19,8 @@ def profile(request, username):
     if request.user and request.user.get('id') == int(id):
         return redirect('/me')
 
-    postlist = Post.filter(author=id)
+    postlist = Post.filter(author=id, sort=['publish_date'], desc=[True])
+
     following = Following.filter(user_no=id)
     follower = Following.filter(following_no=id)
 
@@ -45,7 +46,7 @@ def profile(request, username):
 def me(request):
     user = User.filter(id=request.user['id'])[0]
     id = int(user['id'])
-    postlist = Post.filter(author=id)
+    postlist = Post.filter(author=id, sort=['publish_date'], desc=[True])
     following = Following.filter(user_no=id)
     follower = Following.filter(following_no=id)
 
