@@ -1,6 +1,6 @@
 import re
 from flask import Response, redirect
-from views import board, post, account, user
+from views import board, post, account, user, buyAd
 
 from kernel.url import path
 
@@ -38,6 +38,7 @@ url_patterns = [
 
     # user
     path('me', user.me, True),
+    path('card', user.card),
     path('user/<username:str>', user.profile),
 
     # board
@@ -58,6 +59,7 @@ url_patterns = [
     path('api/comment/<id:int>', post.api_comment),
     path('api/post/like/<id:int>', post.api_post_like),
     path('api/post/dislike/<id:int>', post.api_post_dislike),
+    path('api/ad', buyAd.buyAd)
 ]
 
 

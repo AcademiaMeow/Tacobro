@@ -105,6 +105,34 @@
 {% endif %}
 
 
+
+<div class="modal" id="board-modal">
+    <div class="modal-background" id="board-modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <span class="subtitle">新增看板</span>
+            <hr>
+            <article class="message is-danger" id="alert" style="display: none">
+                <div class="message-body">
+                    你沒打內容啊幹低能兒
+                </div>
+            </article>
+            <div class="field">
+                <div class="control">
+                    <input class="input" type="text" placeholder="看板名稱ㄛ" id="board-name">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <textarea class="textarea" placeholder="打上你ㄉ廢文或 payload ㄅ >_^" id="board-content"></textarea>
+                </div>
+            </div>
+            <button class="button is-primary is-outlined is-fullwidth" id="board-article">喵！</button>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" id="board-close-modal"></button>
+</div>
+
 <script>
     {% if request.user %}
     let boardId = {{board['id']}};

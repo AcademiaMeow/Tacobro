@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+<title>廣告購買</title>
+
+{% endblock %}
+
+{% block content %}
+
+<script>
+
+function readURL(input){
+
+  if(input.files && input.files[0]){
+
+    var imageTagID = input.getAttribute("targetID");
+
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+
+       var img = document.getElementById(imageTagID);
+
+       img.setAttribute("src", e.target.result)
+
+    }
+
+    reader.readAsDataURL(input.files[0]);
+
+  }
+
+}
+
+</script>
+
+<h1>購買廣告</h1>
+
+<div>
+	<form method="POST" enctype="multipart/form-data">
+
+		<div>
+			<img src="https://i.imgur.com/fu7NcoF.jpg" width="200">
+			<input type="radio" name="ad" value="left"> 貼文列表左側
+			<img src="https://i.imgur.com/31YJ6xe.jpg" width="200">
+			<input type="radio" name="ad" value="middle"> 貼文列表下面
+			<img src="https://i.imgur.com/JV0PLbB.jpg" width="200">
+			<input type="radio" name="ad" value="right"> 貼文列表右側
+		</div>
+
+		<br>
+
+		<div>
+			<input type="hidden" name="imagestring">
+			<input type="file" onchange="readURL(this)" name="ad_img" targetID="preview_img" accept="image/gif, image/jpeg, image/png"/ >
+			<br><br>
+   			<img id="preview_img" src="#" width="200">
+   			<br><br>
+   			<p>輸入廣告導向的網址：</p>
+			<input type="text" name="ad_URL">
+			<br><br>
+			<input type="submit" value="Submit">
+		</div>
+
+	</form>
+</div>
+
+
+{% endblock %}
