@@ -60,8 +60,10 @@
                                     <small>@{{post.author_data.username }}</small>
                                     <small>{{ post.publish_date }}</small>
                                     <br>
-                                    {{ post['content'][:50] }}...
+                                    
                                 </p>
+                                <p style="word-wrap: break-word;word-break: break-all;">
+                                        {{ post['content'] }}</p>
                             </div>
                             <a class="button is-small is-fullwidth" href="/post/{{ post['id'] }}">閱讀全文</a>
                         </div>
