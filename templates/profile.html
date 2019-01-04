@@ -176,8 +176,9 @@
                             <p>
                                 <strong>{{user.first_name}}</strong> <small>@{{user.username}}</small> <small>{{post.publish_date}}</small>
                                 <br>
-                                {{post.content}}
                             </p>
+                            <p style="word-wrap: break-word;word-break: break-all;">
+                                {{ post['content'] }}</p>
                         </div>
                         <a class="button is-small is-fullwidth" href="/post/{{post.id}}">閱讀全文</a>
                     </div>

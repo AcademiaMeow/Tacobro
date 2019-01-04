@@ -100,6 +100,10 @@ def api_post_article(request):
             User.update(id=user['id'], tacobit=user['tacobit'] + 10)
 
             post_article = json.loads(request.data)
+
+            if post_article > 150:
+                return jsonify({"success": False})
+
             ID = Post(content=post_article['content'],
                       board=post_article['board'],
                       author=request.user['id'],
