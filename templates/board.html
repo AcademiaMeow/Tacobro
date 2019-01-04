@@ -7,6 +7,10 @@
         margin-top: 3em !important;
         margin-bottom: 3em !important;
     }
+
+    .ad-item {
+        width: 100vh;
+    }
 </style>
 {% endblock header %}
 
@@ -15,6 +19,11 @@
     <div class="columns">
         <div class="column is-one-fifth">
             {% include "board_list.html" %}
+            {% if ad_list['left'] %}
+            <a href="{{ ad_list['left']['URL'] }}">
+                <img src="{{ ad_list['left']['ad'] }}" class="ad-item" id="left-ad">
+            </a>
+            {% endif %}
         </div>
         <div class="column">
             <div class="content">
@@ -37,19 +46,16 @@
                                 <span>發布文章</span>
                             </button>
                         </div>
-
-                    {% endif %}
-
-                        
-
+                        {% endif %}
                     </div>
                 </nav>
                 {% if not posts %}
-                    <div class="box">
+                <div class="box">
                     <article class="media">
                         <div class="media-left">
                             <figure class="image is-96x96">
-                                <img src="https://i.pinimg.com/originals/15/a8/21/15a821ea79990bb7edd4eb058a510862.png" alt="Image">
+                                <img src="https://i.pinimg.com/originals/15/a8/21/15a821ea79990bb7edd4eb058a510862.png"
+                                    alt="Image">
                             </figure>
                         </div>
                         <div class="media-content">
@@ -73,7 +79,8 @@
                         <div class="media-content">
                             <div class="content">
                                 <p>
-                                    <strong><a href="/user/{{post.author_data.username}}">{{ post.author_data.first_name }}</a></strong>
+                                    <strong><a href="/user/{{post.author_data.username}}">{{
+                                            post.author_data.first_name }}</a></strong>
                                     <small>@{{
                                         post['author_data']['username'] }}</small> <small>{{ post['publish_date'] }}</small>
                                     <br>
@@ -91,7 +98,20 @@
                 </div>
                 {% endfor %}
             </div>
+            {% if ad_list['bottom'] %}
+            <a href="{{ ad_list['bottom']['URL'] }}">
+                <img src="{{ ad_list['bottom']['ad'] }}" class="ad-item" id="bottom-ad">
+            </a>
+            {% endif %}
         </div>
+
+        {% if ad_list['right'] %}
+        <div class="column is-one-fifth">
+            <a href="{{ ad_list['right']['URL'] }}">
+                <img src="{{ ad_list['right']['ad'] }}" class="ad-item" id="right-ad">
+            </a>
+        </div>
+        {% endif %}
     </div>
 </div>
 
@@ -153,7 +173,7 @@
 
 <script>
     {% if request.user %}
-    let boardId = {{board['id']}};
+    let boardId = {{ board['id']}};
     document.getElementById("launch-post-modal").onclick
         = document.getElementById("close-modal").onclick
         = document.getElementById("modal-background").onclick
@@ -184,9 +204,9 @@
             })
     }
     {% endif %}
-    {% if request.user.is_admin == 1%}
+    {% if request.user.is_admin == 1 %}
     {% for post in posts %}
-        document.getElementById("post_delete_{{ post['id'] }}").onclick = (e) => {
+    document.getElementById("post_delete_{{ post['id'] }}").onclick = (e) => {
         fetch("/api/post_delete", {
             method: "POST",
             body: JSON.stringify({ postId: {{ post['id'] }} })

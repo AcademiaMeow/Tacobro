@@ -63,7 +63,6 @@ url_patterns = [
     path('api/post/like/<id:int>', post.api_post_like, True),
     path('api/post/dislike/<id:int>', post.api_post_dislike, True),
     path('api/ad', buyAd.api_buy_ad, True),
-
 ]
 
 
