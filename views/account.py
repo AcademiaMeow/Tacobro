@@ -3,6 +3,7 @@ from models.User import User
 import hashlib
 import re
 from random import choice
+from datetime import datetime
 
 default_profile_picture = [
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/155/thinking-face_1f914.png',
@@ -27,7 +28,7 @@ default_profile_picture = [
 
 def login(request):
     message = None
-    username = request.form.get('username')
+    username = request.form.get('username').lower()
     password = request.form.get('password')
 
     if username or password:
