@@ -72,7 +72,7 @@ def card(request):
 # API
 
 def api_follow(request, follow_id):
-    if User.filter(id=user_id):
+    if not User.filter(id=follow_id):
         return '404 not found'
     if request.method == 'POST':
         user_id = int(request.user['id'])
@@ -90,7 +90,7 @@ def api_follow(request, follow_id):
 
 
 def api_unfollow(request, follow_id):
-    if User.filter(id=user_id):
+    if not User.filter(id=follow_id):
         return '404 not found'
     if request.method == 'POST':
         user_id = int(request.user['id'])
