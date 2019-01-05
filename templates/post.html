@@ -31,7 +31,7 @@
                                     <strong><a href="/user/{{ author.username }}">{{ author.first_name }}</a></strong> <small>@{{ author.username }}</small> <small>{{ post.publish_date }}</small>
                                 </p>
                                 <p style="word-wrap: break-word;word-break: break-all;">
-                                {{ post.content | n2br }}</p>
+                                {{ post.content | markdown }}</p>
                             </div>
                             <br>
                             <!-- icons -->

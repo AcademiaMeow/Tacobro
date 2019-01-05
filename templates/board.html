@@ -97,7 +97,7 @@
                                             post.author_data.first_name }}</a></strong>
                                     <small>@{{ post.author_data.username }}</small> <small>{{ post.publish_date }}</small>
                                     <br>
-                                    {{ post.content[:128] }}
+                                    {{ post.content[:128] | no_markdown }}
                                     {% if post.content|length > 128 %} ... {% endif %}
                                 </p>
                             </div>
@@ -139,7 +139,7 @@
         <div class="box">
             <span class="subtitle">發文</span>
             <hr>
-            <article class="message is-danger" id="alert" style="display: none">
+            <article class="message is-danger" id="alert-post" style="display: none">
                 <div class="message-body">
                     你沒打內容啊幹低能兒
                 </div>
@@ -148,6 +148,7 @@
                 <div class="control">
                     <textarea class="textarea" placeholder="打上你ㄉ廢文或 payload ㄅ >_^" id="article-content"></textarea>
                 </div>
+                <p class="help"><b>**粗體**</b><i>__斜體__</i><s>~~刪除線~~</s><code>`程式碼`</code></p>
             </div>
             <button class="button is-primary is-outlined is-fullwidth" id="post-article">喵！</button>
         </div>
@@ -207,7 +208,7 @@
     document.getElementById("post-article").onclick = (e) => {
         var article = document.getElementById("article-content").value;
         if (article.trim() == "") {
-            document.getElementById("alert").style.display = "block";
+            document.getElementById("alert-post").style.display = "block";
             return;
         }
         e.target.className = "button is-primary is-fullwidth is-loading";
@@ -217,10 +218,8 @@
         })
             .then(r => r.json())
             .then(result => {
-                if (result.success) {
-                    e.target.className = "button is-primary is-outlined is-fullwidth";
+                if (result.success)
                     window.location = `/post/${result.post}`;
-                }
                 else {
                     e.target.className = "button is-danger is-fullwidth";
                     e.target.innerText = "怪怪ㄉ"
