@@ -16,8 +16,8 @@
         <li><a href="/board/{{ board['name'] }}">{{ board['name'] }}</a></li>
         {% endfor %}
     </ul>
-    
-    {% if request.user.is_admin == 1%}
+
+    {% if request.user.is_admin %}
     <hr>
     <div class="level-item">
         <button class="button is-success" id="launch-board-modal">
@@ -28,9 +28,10 @@
         </button>
     </div>
     {% endif %}
+    <hr>
 </aside>
 
-{% if request.user.is_admin == 1%}
+{% if request.user.is_admin %}
 <div class="modal" id="board-modal">
     <div class="modal-background" id="board-modal-background"></div>
     <div class="modal-content">
@@ -45,11 +46,6 @@
             <div class="field">
                 <div class="control">
                     <input class="input" type="text" placeholder="看板名稱ㄛ" id="board-name">
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <textarea class="textarea" placeholder="打上你ㄉ廢文或 payload ㄅ >_^" id="board-content"></textarea>
                 </div>
             </div>
             <button class="button is-primary is-outlined is-fullwidth" id="board-article">喵！</button>
@@ -78,41 +74,41 @@
         });
     });
 
-    
-    {% if request.user.is_admin == 1%}
+
+    {% if request.user.is_admin %}
     let boardAddBtn = document.getElementById("board-article");
     let boardCloseBtn = document.getElementById("board-close-modal");
 
     document.getElementById("launch-board-modal").onclick
         = document.getElementById("board-close-modal").onclick
         = document.getElementById("board-modal-background").onclick
-        = () => document.getElementById("board-modal").classList.toggle("is-active")
+        = () => document.getElementById("board-modal").classList.toggle("is-active");
 
     boardAddBtn.onclick = (e) => {
         var boardname = document.getElementById("board-name").value;
         var boardcontent = document.getElementById("board-content").value;
         fetch("/api/board_add", {
             method: "POST",
-            body: JSON.stringify({ board_name: boardname, board_content: boardcontent})
+            body: JSON.stringify({ board_name: boardname, board_content: boardcontent })
         })
-        .then(r => r.json())
-        .then(result => {
-            if (result.success) {
-                let boardlist = document.getElementById("boardlist");
-                let boarditem = document.createElement('li');
-                let boardlink = document.createElement('a');
-                boardlist.appendChild(boarditem);
-                boarditem.appendChild(boardlink)
-                boardlink.setAttribute('href', '/board/'+result.boardname);
-                boardlink.innerText = result.boardname
-                boardname.value = "";
-                boardcontent.value = "";
-                boardCloseBtn.click();
-            }
-            else {
-                alert("新增看板失敗");
-            }
-        })
+            .then(r => r.json())
+            .then(result => {
+                if (result.success) {
+                    let boardlist = document.getElementById("boardlist");
+                    let boarditem = document.createElement('li');
+                    let boardlink = document.createElement('a');
+                    boardlist.appendChild(boarditem);
+                    boarditem.appendChild(boardlink)
+                    boardlink.setAttribute('href', '/board/' + result.boardname);
+                    boardlink.innerText = result.boardname
+                    boardname.value = "";
+                    boardcontent.value = "";
+                    boardCloseBtn.click();
+                }
+                else {
+                    alert("新增看板失敗");
+                }
+            })
     }
     {% endif %}
 </script>

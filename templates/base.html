@@ -7,7 +7,11 @@
     {% block header %}
 
     {% endblock %}
+    {% if request.cookies.get("theme") %}
+    <link rel="stylesheet" href="https://jenil.github.io/bulmaswatch/{{request.cookies.get("theme")}}/bulmaswatch.min.css">
+    {% else %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    {% endif %}
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <style>
         .navbar {
@@ -16,9 +20,9 @@
     </style>
 </head>
 
-<body>
+<body class="has-navbar-fixed-top">
 
-    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-primary is-fixed-top" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">

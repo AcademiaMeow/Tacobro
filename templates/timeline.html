@@ -55,15 +55,14 @@
                         </div>
                         <div class="media-content">
                             <div class="content">
-                                <p>
+                                <p style="word-wrap: break-word;word-break: break-all;">
                                     <strong><a href="/user/{{post.author_data.username}}">{{ post.author_data.first_name }}</a></strong>
                                     <small>@{{post.author_data.username }}</small>
                                     <small>{{ post.publish_date }}</small>
                                     <br>
-                                    
+                                    {{ post.content[:128] }}
+                                    {% if post.content|length > 128 %} ... {% endif %}
                                 </p>
-                                <p style="word-wrap: break-word;word-break: break-all;">
-                                        {{ post['content'] }}</p>
                             </div>
                             <a class="button is-small is-fullwidth" href="/post/{{ post['id'] }}">閱讀全文</a>
                         </div>
