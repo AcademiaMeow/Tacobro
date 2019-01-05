@@ -55,6 +55,7 @@ url_patterns = [
     # SOME COOL API #
     # # # # # # # # #
     path('api/user/profile', user.api_profile, True),
+    path('api/user/avatar', user.api_avatar, True),
     path('api/follow/<follow_id:int>', user.api_follow, True),
     path('api/unfollow/<follow_id:int>', user.api_unfollow, True),
     path('api/drawcard', user.api_drawcard, True),

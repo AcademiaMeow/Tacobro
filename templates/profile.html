@@ -8,26 +8,46 @@
         margin-bottom: 3em !important;
     }
 
-    img.avatar {
-        width: 6em;
-        margin: 1em;
+    .avatar {
+        border-radius: 4em;
+        position: relative;
+        width: 8em;
+        height: 8em;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        margin: 0 auto;
+        margin-bottom: 1em;
     }
+
+    .avatar #edit-avatar {
+        position: absolute;
+        bottom: 0px;
+        right: -1em;
+    }
+
 </style>
 {% endblock header %}
 {% block content %}
 <section class="hero is-primary has-text-centered is-bold">
     <div class="hero-body">
         <div class="container">
-            <img class="avatar" src="{% if not user.picture %}
-                https://e-kitaplar.net/assets/images/profil.png
-                {%else%} {{user.picture}} {% endif %}">
+            <div class="avatar" style="background-image: url('{% if not user.picture %}https://e-kitaplar.net/assets/images/profil.png{%else%}{{user.picture}}{% endif %}')">
+                {% if is_me and request.user %}
+                <button class="button is-rounded" id="edit-avatar">
+                    <span class="icon">
+                        <i class="fas fa-pen"></i>
+                    </span>
+                </button>
+                {% endif %}
+            </div>
             <h1 class="title">
                 {{ user.first_name }}
             </h1>
             <h2 class="subtitle">
                 @{{ user.username }} · $ {{user.tacobit}}
             </h2>
-            {% if not is_me and request.user%}
+            {% if not is_me and request.user %}
             <a id="bt_follow" class="button is-success is-inverted" {%if is_followed %} style="display: none;"
                 {%endif%} onclick="follow()">仰慕此人</a>
             <a id="bt_unfollow" class="button is-danger is-inverted" {%if not is_followed %} style="display: none;" {%
@@ -143,6 +163,57 @@
 </div>
 
 {% include "footer.html" %}
+
+
+<div class="modal" id="avatar-modal">
+    <div class="modal-background" id="avatar-modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <span class="subtitle">上傳大頭貼</span>
+            <hr>
+            <article class="message is-danger" id="avatar-alert" style="display: none">
+                <div class="message-body">
+                    選檔案啊幹低能兒
+                </div>
+            </article>
+            <div class="columns">
+                <div class="column">
+                    <div class="file is-boxed is-large">
+                        <label class="file-label">
+                            <input id="avatar-file-input" onchange="readURL(this)" data-target-id="preview-img" type="file"
+                                accept="image/*" data-max-size="5000" hidden>
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    選擇你的圖片
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure id="preview-img" class="image avatar is-1by1" style="width:100%; height:auto; background-image: url('https://dummyimage.com/256');">
+                            </figure>
+                        </div>
+                        <span class="card-header-title">圖片預覽</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <button class="button is-primary is-fullwidth" id="upload-avatar">
+                <span class="icon"><i class="fas fa-check"></i></span>
+                <span>上傳</span>
+            </button>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" id="avatar-close-modal"></button>
+</div>
+
 <script>
     class Imgur {
         constructor(token, API_URL = "https://api.imgur.com/3/image") {
@@ -184,6 +255,53 @@
         document.querySelector('#bt_unfollow').style.display = "none";
     };
     {% if is_me %}
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var file = input.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var img = document.getElementById(input.dataset.targetId);
+                img.style.backgroundImage = `url(${e.target.result})`;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    document.getElementById("edit-avatar").onclick
+        = document.getElementById("avatar-close-modal").onclick
+        = document.getElementById("avatar-modal-background").onclick
+        = () => document.getElementById("avatar-modal").classList.toggle("is-active")
+
+    document.getElementById("upload-avatar").onclick = (e) => {
+        e.preventDefault();
+        var file = document.getElementById('avatar-file-input').files;
+        if (!file) {
+            document.getElementById("avatar-alert").style.display = "block";
+            return;
+        }
+        e.target.classList.add("is-loading");
+        file = file[0];
+        new Imgur("ba74cde600e29e8")
+            .upload("#avatar-file-input")
+            .then(imgurData => {
+                return fetch("/api/user/avatar", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        avatar: imgurData.data.link,
+                    })
+                })
+            }).then(r => r.json())
+			.then(r => {
+				e.target.classList.remove("is-loading");
+				if (r.success) {
+					alert("ㄣㄣ成功了");
+                    document.location.reload();
+				} else {
+					alert(r.message);
+				}
+			}).catch(r => alert("怪怪ㄉ"));
+    }
+
     function edit() {
         document.querySelector('#ta_profile').style.display = "inline-flex";
         document.querySelector('#profile').style.display = "none";

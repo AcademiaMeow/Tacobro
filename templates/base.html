@@ -8,7 +8,7 @@
 
     {% endblock %}
     {% if request.cookies.get("theme") %}
-    <link rel="stylesheet" href="https://jenil.github.io/bulmaswatch/{{request.cookies.get("theme")}}/bulmaswatch.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulmaswatch@0.7.2/{{request.cookies.get('theme')}}/bulmaswatch.min.css">
     {% else %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
     {% endif %}
