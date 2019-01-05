@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request, render_template, redirect, session
 from models.User import User
 from controller import urls
+import jinja2
 import os
 
 from views.timeline import timeline
@@ -22,6 +23,10 @@ def set_user():
         request.user = None
     return request
 
+@app.template_filter('n2br')
+def n2br(string):
+    string = str(jinja2.escape(string))
+    return jinja2.Markup(string.replace('\n', '<br/>\n'))
 
 @app.route('/')
 def root():

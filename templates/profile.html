@@ -1,50 +1,3 @@
-<script>
-    function follow() {
-        fetch('/api/follow/{{user.id}}', {
-            method: 'POST'
-        });
-        document.querySelector('#bt_follow').style.display = "none";
-        document.querySelector('#bt_unfollow').style.display = "inline-block";
-    };
-    function unfollow() {
-        fetch('/api/unfollow/{{user.id}}', {
-            method: 'POST'
-        });
-        document.querySelector('#bt_follow').style.display = "inline-block";
-        document.querySelector('#bt_unfollow').style.display = "none";
-    };
-    {% if is_me %}
-    function edit() {
-        document.querySelector('#ta_profile').style.display = "inline-block";
-        document.querySelector('#profile').style.display = "none";
-        document.querySelector('#bt_edit').style.display = "none";
-        document.querySelector('#bt_save').style.display = "inline-block";
-        document.querySelector('#bt_cancel').style.display = "inline-block";
-    };
-    function save() {
-        fetch('/api/user/profile', {
-            method: 'POST',
-            body: JSON.stringify({
-                content: document.querySelector('#ta_profile').value
-            })
-        });
-        document.querySelector('#profile').innerText = document.querySelector('#ta_profile').value;
-        document.querySelector('#profile').style.display
-            = document.querySelector('#bt_edit').style.display = "inline-block";
-        document.querySelector('#ta_profile').style.display
-            = document.querySelector('#bt_save').style.display
-            = document.querySelector('#bt_cancel').style.display = "none";
-    }
-    function cancel() {
-        document.querySelector('#profile').style.display
-            = document.querySelector('#bt_edit').style.display = "inline-block";
-        document.querySelector('#ta_profile').style.display
-            = document.querySelector('#bt_save').style.display
-            = document.querySelector('#bt_cancel').style.display = "none";
-    }
-    {% endif %}
-</script>
-
 {% extends 'base.html' %}
 
 {% block header %}
@@ -190,4 +143,75 @@
 </div>
 
 {% include "footer.html" %}
+<script>
+    class Imgur {
+        constructor(token, API_URL = "https://api.imgur.com/3/image") {
+            this.token = token;
+            this.API_URL = API_URL;
+        }
+
+        upload(selector) {
+            var file = document.querySelector(selector).files;
+            if (!file) throw "Incorrect file input element.";
+            file = file[0];
+            var formData = new FormData();
+            formData.append("image", file);
+
+            return fetch("https://api.imgur.com/3/image", {
+                method: "POST",
+                headers: new Headers({
+                    Authorization: `Client-ID ${this.token}`,
+                    Accept: 'application/json'
+                }),
+                mode: "cors",
+                body: formData
+            }).then(r => r.json())
+        }
+    }
+
+    function follow() {
+        fetch('/api/follow/{{user.id}}', {
+            method: 'POST'
+        });
+        document.querySelector('#bt_follow').style.display = "none";
+        document.querySelector('#bt_unfollow').style.display = "inline-flex";
+    };
+    function unfollow() {
+        fetch('/api/unfollow/{{user.id}}', {
+            method: 'POST'
+        });
+        document.querySelector('#bt_follow').style.display = "inline-flex";
+        document.querySelector('#bt_unfollow').style.display = "none";
+    };
+    {% if is_me %}
+    function edit() {
+        document.querySelector('#ta_profile').style.display = "inline-flex";
+        document.querySelector('#profile').style.display = "none";
+        document.querySelector('#bt_edit').style.display = "none";
+        document.querySelector('#bt_save').style.display = "inline-flex";
+        document.querySelector('#bt_cancel').style.display = "inline-flex";
+    };
+    function save() {
+        fetch('/api/user/profile', {
+            method: 'POST',
+            body: JSON.stringify({
+                content: document.querySelector('#ta_profile').value
+            })
+        });
+        document.querySelector('#profile').innerText = document.querySelector('#ta_profile').value;
+        document.querySelector('#profile').style.display
+            = document.querySelector('#bt_edit').style.display = "inline-flex";
+        document.querySelector('#ta_profile').style.display
+            = document.querySelector('#bt_save').style.display
+            = document.querySelector('#bt_cancel').style.display = "none";
+    }
+    function cancel() {
+        document.querySelector('#profile').style.display
+            = document.querySelector('#bt_edit').style.display = "inline-flex";
+        document.querySelector('#ta_profile').style.display
+            = document.querySelector('#bt_save').style.display
+            = document.querySelector('#bt_cancel').style.display = "none";
+    }
+    {% endif %}
+</script>
 {% endblock content %}

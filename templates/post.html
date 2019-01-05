@@ -31,7 +31,7 @@
                                     <strong><a href="/user/{{ author.username }}">{{ author.first_name }}</a></strong> <small>@{{ author.username }}</small> <small>{{ post.publish_date }}</small>
                                 </p>
                                 <p style="word-wrap: break-word;word-break: break-all;">
-                                {{ post.content }}</p>
+                                {{ post.content | n2br }}</p>
                             </div>
                             <br>
                             <!-- icons -->
@@ -138,7 +138,7 @@
                             <div class="media-content">
                                 <div class="content">
                                     <p>
-                                        <strong>{{request.user.first_name}}</strong> <small>@{{request.user.username}}</small> <small>${new Date()}</small>
+                                        <strong><a href="/user/{{request.user.first_name}}">{{request.user.first_name}}</a></strong> <small>@{{request.user.username}}</small> <small>剛剛</small>
                                         <br>
                                         ${commentContent.value}
                                     </p>
