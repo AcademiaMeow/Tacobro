@@ -4,16 +4,16 @@ from models.User import User
 from models.Post import Post
 from models.Ad import Ad
 from models.AdBoard import AdBoard
-
+import random
 
 def buy_ad(request):
-    print(AdBoard.filter())
     return render_template("ad.html", **locals())
 
 
 def api_buy_ad(request):
     if request.method == 'POST':
-        check_url = lambda url: url.startswith("https://") or url.startswith("http://")
+        def check_url(url): return url.startswith(
+            "https://") or url.startswith("http://")
 
         try:
             ad_data = json.loads(request.data)
@@ -28,7 +28,7 @@ def api_buy_ad(request):
                 return jsonify({"success": False, "message": "錢不夠 = ="})
 
             User.update(
-                id=user_id, 
+                id=user_id,
                 tacobit=request.user['tacobit']-ad_position['price'])
 
             aid = Ad(ad=ad_data['img_url'], poster=user_id, URL=ad_data['link_url'],
@@ -39,3 +39,14 @@ def api_buy_ad(request):
             return jsonify({"success": False, "message": "我也不知道發生了啥，反正出錯ㄌ"})
 
     return "FLAG{you_GET_nothing}"
+
+
+def get_ads():
+    def choice(ls): return random.choice(ls) if ls else None
+
+    ad_list = {
+        "left": choice(Ad.filter(board=1)),
+        "bottom": choice(Ad.filter(board=2)),
+        "right": choice(Ad.filter(board=3))
+    }
+    return ad_list

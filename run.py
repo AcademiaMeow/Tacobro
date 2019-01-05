@@ -2,6 +2,8 @@ from flask import Flask
 from flask import request, render_template, redirect, session
 from models.User import User
 from controller import urls
+import re
+import jinja2
 import os
 
 from views.timeline import timeline
@@ -21,6 +23,36 @@ def set_user():
     else:
         request.user = None
     return request
+
+@app.template_filter('no_markdown')
+def no_markdown(string):
+    string = str(jinja2.escape(string))
+
+    def _repl(matched):
+        mapping = {'bold': "b", "italics": "i", "strike": "s", "code": "code"}
+        markdown_type = matched.lastgroup
+        return matched.groupdict()[markdown_type]
+
+    markup = re.sub(r"\*\*(?P<bold>[^**]+)\*\*|__(?P<italics>[^*]+)__|~~(?P<strike>[^~]+)~~|`(?P<code>[^`]+)`",
+                    _repl, string, re.MULTILINE)
+    return jinja2.Markup(markup)
+
+@app.template_filter('markdown')
+def markdown(string):
+    string = str(jinja2.escape(string))
+    markup = string.replace('\n', '<br/>\n')
+
+    def _repl(matched):
+        mapping = {'bold': "b", "italics": "i", "strike": "s", "code": "code"}
+        markdown_type = matched.lastgroup
+
+        return "<{tagname}>{content}</{tagname}>".format(
+            tagname=mapping[markdown_type],
+            content=matched.groupdict()[markdown_type])
+
+    markup = re.sub(r"\*\*(?P<bold>[^**]+)\*\*|__(?P<italics>[^*]+)__|~~(?P<strike>[^~]+)~~|`(?P<code>[^`]+)`",
+                    _repl, markup, re.MULTILINE)
+    return jinja2.Markup(markup)
 
 
 @app.route('/')

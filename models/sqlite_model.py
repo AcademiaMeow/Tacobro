@@ -17,6 +17,8 @@ class sqlite_model():
         parameter = ()
         for arg in kwargs:
             querystring += arg + ", "
+            if type(kwargs[arg]) == bool:
+                kwargs[arg] = int(kwargs[arg])
             parameter += (str(kwargs[arg]),)
         querystring = querystring[:-2]
         querystring += ") "
@@ -121,8 +123,6 @@ class sqlite_model():
         querystring = querystring[:-2]
         querystring += " WHERE id = ?;"
         parameter += (str(id),)
-        print(querystring)
-        print(parameter)
         cur.execute(querystring, parameter)
         conn.commit()
         cur.close()

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title>{{ board['name'] }} | Tacabro</title>
+<title>{{ board.name }} | Tacabro</title>
 <style>
     .container.context {
         margin-top: 3em !important;
@@ -11,6 +11,12 @@
     .ad-item {
         width: 100vh;
     }
+
+    .is-pinned {
+        display: block;
+        position: sticky;
+        top: 4.75rem;
+    }
 </style>
 {% endblock header %}
 
@@ -18,13 +24,15 @@
 <div class="container context">
     <div class="columns">
         <div class="column is-one-fifth">
-            {% include "board_list.html" %}
-            {% if ad_list['left'] %}
-            <hr>
-            <a href="{{ ad_list['left']['URL'] }}">
-                <img src="{{ ad_list['left']['ad'] }}" class="ad-item" id="left-ad">
-            </a>
-            {% endif %}
+            <span class="menu-ref"></span>
+            <div id="menu">
+                {% include "board_list.html" %}
+                {% if ad_list.left %}
+                <a href="{{ ad_list.left.URL }}">
+                    <img src="{{ ad_list.left.ad }}" class="ad-item" id="left-ad">
+                </a>
+                {% endif %}
+            </div>
         </div>
         <div class="column">
             <div class="content">
@@ -32,12 +40,12 @@
                     <!-- Left side -->
                     <div class="level-left">
                         <div class="level-item">
-                            <p class="title">{{ board['name'] }}</p>
+                            <p class="title">{{ board.name }}</p>
                         </div>
                     </div>
 
                     <!-- Right side -->
-                    {% if request.user %}
+                    {% if request.user and board.id %}
                     <div class="level-right">
                         <div class="level-item">
                             <button class="button is-success" id="launch-post-modal">
@@ -47,8 +55,8 @@
                                 <span>發布文章</span>
                             </button>
                         </div>
-                        {% endif %}
                     </div>
+                    {% endif %}
                 </nav>
                 {% if not posts %}
                 <div class="box">
@@ -62,7 +70,12 @@
                         <div class="media-content">
                             <div class="content">
                                 <p><br>
+                                    {% if board.id %}
                                     這個板塊還沒有任何貼文唷！
+                                    {% else %}
+                                    你的動態時報上還沒有任何貼文唷！可以尋找仰慕的朋友，即時知道他們的消息～
+                                    <a href="/card">以牌會友</a>
+                                    {% endif %}
                                 </p>
                             </div>
                         </div>
@@ -79,38 +92,37 @@
                         </div>
                         <div class="media-content">
                             <div class="content">
-                                <p>
-                                    <strong><a href="/user/{{post.author_data.username}}">{{
+                                <p style="word-wrap: break-word;word-break: break-all;">
+                                    <strong><a href="/user/{{ post.author_data.username }}">{{
                                             post.author_data.first_name }}</a></strong>
-                                    <small>@{{
-                                        post['author_data']['username'] }}</small> <small>{{ post['publish_date'] }}</small>
+                                    <small>@{{ post.author_data.username }}</small> <small>{{ post.publish_date }}</small>
                                     <br>
-                                    {{ post['content'][:50] }}...
+                                    {{ post.content[:128] | no_markdown }}
+                                    {% if post.content|length > 128 %} ... {% endif %}
                                 </p>
                             </div>
-                            <a class="button is-small is-fullwidth" href="/post/{{ post['id'] }}">閱讀全文</a>
+                            <a class="button is-small is-fullwidth" href="/post/{{ post.id }}">閱讀全文</a>
                         </div>
-                        {% if request.user.is_admin == 1 %}
+                        {% if request.user.is_admin %}
                         <div class="media-right">
-                            <a class="button is-small is-danger delete-post" data-post-id="{{ post['id'] }}"><span>刪除</span></a>
+                            <a class="button is-small is-danger delete-post" data-post-id="{{ post.id }}"><span>刪除</span></a>
                         </div>
                         {% endif %}
                     </article>
                 </div>
                 {% endfor %}
             </div>
-            {% if ad_list['bottom'] %}
-            <hr>
-            <a href="{{ ad_list['bottom']['URL'] }}">
-                <img src="{{ ad_list['bottom']['ad'] }}" class="ad-item" id="bottom-ad">
+            {% if ad_list.bottom %}
+            <a href="{{ ad_list.bottom.URL }}">
+                <img src="{{ ad_list.bottom.ad }}" class="ad-item" id="bottom-ad">
             </a>
             {% endif %}
         </div>
 
-        {% if ad_list['right'] %}
-        <div class="column is-one-fifth">
-            <a href="{{ ad_list['right']['URL'] }}">
-                <img src="{{ ad_list['right']['ad'] }}" class="ad-item" id="right-ad">
+        {% if ad_list.right %}
+        <div class="column is-one-fifth ad-item">
+            <a href="{{ ad_list.right.URL }}">
+                <img src="{{ ad_list.right.ad }}" id="right-ad">
             </a>
         </div>
         {% endif %}
@@ -127,7 +139,7 @@
         <div class="box">
             <span class="subtitle">發文</span>
             <hr>
-            <article class="message is-danger" id="alert" style="display: none">
+            <article class="message is-danger" id="alert-post" style="display: none">
                 <div class="message-body">
                     你沒打內容啊幹低能兒
                 </div>
@@ -136,6 +148,7 @@
                 <div class="control">
                     <textarea class="textarea" placeholder="打上你ㄉ廢文或 payload ㄅ >_^" id="article-content"></textarea>
                 </div>
+                <p class="help"><b>**粗體**</b><i>__斜體__</i><s>~~刪除線~~</s><code>`程式碼`</code></p>
             </div>
             <button class="button is-primary is-outlined is-fullwidth" id="post-article">喵！</button>
         </div>
@@ -174,8 +187,19 @@
 </div>
 
 <script>
-    {% if request.user %}
-    let boardId = {{ board['id']}};
+    window.addEventListener('scroll', function () {
+        window.requestAnimationFrame(function () {
+            const menu_ref = document.querySelector(".menu-ref");
+            const menu = document.querySelector("#menu");
+            if (menu_ref.scrollTop < 120)
+                menu.classList.add('is-pinned') && console.log(menu_ref.scrollTop)
+            else
+                menu.classList.remove('is-pinned');
+        });
+    });
+
+    {% if request.user and board.id %}
+    const boardId = {{ board.id }};
     document.getElementById("launch-post-modal").onclick
         = document.getElementById("close-modal").onclick
         = document.getElementById("modal-background").onclick
@@ -184,7 +208,7 @@
     document.getElementById("post-article").onclick = (e) => {
         var article = document.getElementById("article-content").value;
         if (article.trim() == "") {
-            document.getElementById("alert").style.display = "block";
+            document.getElementById("alert-post").style.display = "block";
             return;
         }
         e.target.className = "button is-primary is-fullwidth is-loading";
@@ -194,10 +218,8 @@
         })
             .then(r => r.json())
             .then(result => {
-                if (result.success) {
-                    e.target.className = "button is-primary is-outlined is-fullwidth";
+                if (result.success)
                     window.location = `/post/${result.post}`;
-                }
                 else {
                     e.target.className = "button is-danger is-fullwidth";
                     e.target.innerText = "怪怪ㄉ"
@@ -206,7 +228,8 @@
             })
     }
     {% endif %}
-    {% if request.user.is_admin == 1 %}
+
+    {% if request.user.is_admin %}
     document.querySelectorAll(".delete-post").forEach(elem => {
         elem.onclick = (e) => {
             fetch("/api/post_delete", {
@@ -217,7 +240,7 @@
                 .then(result => {
                     if (result.success)
                         document.getElementById("post-" + elem.dataset.postId).remove();
-                    else 
+                    else
                         alert("刪除貼文失敗QQ");
                 })
         }

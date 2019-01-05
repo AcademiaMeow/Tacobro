@@ -125,6 +125,17 @@ def api_profile(request):
     else:
         return 'FLAG{you_GET_nothing}'
 
+def api_avatar(request):
+    if request.method == 'POST':
+        try:
+            POST = json.loads(request.data)
+            User.update(id=request.user['id'], picture=POST['avatar'])
+            return jsonify({"success": True})
+        except:
+            return jsonify({"success": False, "message": "總之出錯了"})
+    else:
+        return 'FLAG{you_GET_nothing}'
+
 
 def api_drawcard(request):
     all_users = User.filter()
