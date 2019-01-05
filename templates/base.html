@@ -16,7 +16,7 @@
     <style>
         .navbar {
             box-shadow: 0px 0px 5px black;
-        };
+        }
     </style>
 </head>
 
@@ -53,11 +53,8 @@
                                 登出
                             </a>
                         </div>
-
-                        
-                        
                     </div>
-                    
+
                     {% else %}
                     <div class="navbar-item">
                         <div class="buttons">
@@ -106,18 +103,10 @@
 
     {% endblock %}
     <script>
-        window.onload = () =>
-            getCookie("theme") &&
-            document.querySelector("link").setAttribute("href", `https://jenil.github.io/bulmaswatch/${getCookie("theme")}/bulmaswatch.min.css`)
         function setCookie(name, value) {
             var exp = new Date();
             var domain = document.domain;
             document.cookie = name + "=" + escape(value) + ";path=/;expires=" + exp.toISOString() + ";domain=" + domain + ";"
-        }
-        function getCookie(name) {
-            var value = "; " + document.cookie;
-            var parts = value.split("; " + name + "=");
-            if (parts.length == 2) return parts.pop().split(";").shift();
         }
         document.querySelectorAll('.theme-item').forEach(element => {
             element.onclick = () => {
@@ -127,30 +116,21 @@
         });
 
 
-    document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            if ($navbarBurgers.length > 0) {
+                // Add a click event on each of them
+                $navbarBurgers.forEach(function ($el) {
+                    $el.addEventListener('click', function () {
+                        var target = $el.dataset.target;
+                        var $target = document.getElementById(target);
+                        $el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
 
-      // Get all "navbar-burger" elements
-      var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-      // Check if there are any navbar burgers
-      if ($navbarBurgers.length > 0) {
-
-        // Add a click event on each of them
-        $navbarBurgers.forEach(function ($el) {
-          $el.addEventListener('click', function () {
-
-            // Get the target from the "data-target" attribute
-            var target = $el.dataset.target;
-            var $target = document.getElementById(target);
-
-            // Toggle the class on both the "navbar-burger" and the "navbar-menu"
-            $el.classList.toggle('is-active');
-            $target.classList.toggle('is-active');
-
-          });
+                    });
+                });
+            }
         });
-      }
-    });
     </script>
 </body>
 

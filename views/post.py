@@ -84,7 +84,6 @@ def api_post_dislike(request, id):
 def api_post_delete(request):
     if request.method == "POST":
         post_data = json.loads(request.data)
-        print(post_data)
         id = post_data['postId']
         post = Post.filter(id=id)
         if not post:

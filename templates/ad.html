@@ -80,6 +80,31 @@
 </div>
 
 <script>
+	class Imgur {
+		constructor(token, API_URL = "https://api.imgur.com/3/image") {
+			this.token = token;
+			this.API_URL = API_URL;
+		}
+
+		upload(selector) {
+			var file = document.querySelector(selector).files;
+			if (!file) throw "Incorrect file input element.";
+			file = file[0];
+			var formData = new FormData();
+			formData.append("image", file);
+
+			return fetch("https://api.imgur.com/3/image", {
+				method: "POST",
+				headers: new Headers({
+					Authorization: `Client-ID ${this.token}`,
+					Accept: 'application/json'
+				}),
+				mode: "cors",
+				body: formData
+			}).then(r => r.json())
+		}
+	}
+
 	function readURL(input) {
 		if (input.files && input.files[0]) {
 			var file = input.files[0];
@@ -112,23 +137,12 @@
 
 		if (file.size > document.querySelector('#imgur-file').dataset['max-size'] * 1024) {
 			alert("太大ㄌ ❤️");
-			return false;
+			return;
 		}
 
 		// Imgur
-		var formData = new FormData();
-		formData.append("image", file);
-
-		fetch("https://api.imgur.com/3/image", {
-			method: "POST",
-			headers: new Headers({
-				Authorization: 'Client-ID ba74cde600e29e8',
-				Accept: 'application/json',
-			}),
-			mode: "cors",
-			body: formData
-		})
-			.then(r => r.json())
+		new Imgur("ba74cde600e29e8")
+			.upload("#imgur-file")
 			.then(imgurData => {
 				return fetch("/api/ad", {
 					method: "POST",
@@ -147,8 +161,7 @@
 				} else {
 					alert(r.message);
 				}
-			})
-			.catch(r => alert("怪怪ㄉ"));
+			}).catch(r => alert("怪怪ㄉ"));
 	}
 </script>
 

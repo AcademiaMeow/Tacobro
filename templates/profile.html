@@ -1,46 +1,46 @@
 <script>
-    function follow(){
-        fetch('/api/follow/{{user.id}}',{
-            'method':'POST'
+    function follow() {
+        fetch('/api/follow/{{user.id}}', {
+            method: 'POST'
         });
         document.querySelector('#bt_follow').style.display = "none";
         document.querySelector('#bt_unfollow').style.display = "inline-block";
     };
-    function unfollow(){
-        fetch('/api/unfollow/{{user.id}}',{
-            'method':'POST'
+    function unfollow() {
+        fetch('/api/unfollow/{{user.id}}', {
+            method: 'POST'
         });
         document.querySelector('#bt_follow').style.display = "inline-block";
         document.querySelector('#bt_unfollow').style.display = "none";
     };
     {% if is_me %}
-    function edit(){
+    function edit() {
         document.querySelector('#ta_profile').style.display = "inline-block";
         document.querySelector('#profile').style.display = "none";
         document.querySelector('#bt_edit').style.display = "none";
         document.querySelector('#bt_save').style.display = "inline-block";
         document.querySelector('#bt_cancel').style.display = "inline-block";
     };
-    function save(){
-        fetch('/api/user/profile',{
-            'method':'POST',
+    function save() {
+        fetch('/api/user/profile', {
+            method: 'POST',
             body: JSON.stringify({
-                'content': document.querySelector('#ta_profile').value
+                content: document.querySelector('#ta_profile').value
             })
         });
         document.querySelector('#profile').innerText = document.querySelector('#ta_profile').value;
-        document.querySelector('#profile').style.display = "inline-block";
-        document.querySelector('#bt_edit').style.display = "inline-block";
-        document.querySelector('#ta_profile').style.display = "none";
-        document.querySelector('#bt_save').style.display = "none";
-        document.querySelector('#bt_cancel').style.display = "none";
+        document.querySelector('#profile').style.display
+            = document.querySelector('#bt_edit').style.display = "inline-block";
+        document.querySelector('#ta_profile').style.display
+            = document.querySelector('#bt_save').style.display
+            = document.querySelector('#bt_cancel').style.display = "none";
     }
-    function cancel(){
-        document.querySelector('#profile').style.display = "inline-block";
-        document.querySelector('#bt_edit').style.display = "inline-block";
-        document.querySelector('#ta_profile').style.display = "none";
-        document.querySelector('#bt_save').style.display = "none";
-        document.querySelector('#bt_cancel').style.display = "none";
+    function cancel() {
+        document.querySelector('#profile').style.display
+            = document.querySelector('#bt_edit').style.display = "inline-block";
+        document.querySelector('#ta_profile').style.display
+            = document.querySelector('#bt_save').style.display
+            = document.querySelector('#bt_cancel').style.display = "none";
     }
     {% endif %}
 </script>
@@ -75,8 +75,10 @@
                 @{{ user.username }} · $ {{user.tacobit}}
             </h2>
             {% if not is_me and request.user%}
-            <a id="bt_follow" class="button is-success is-inverted" {%if is_followed%} style="display: none;" {%endif%} onclick="follow()">仰慕此人</a>
-            <a id="bt_unfollow" class="button is-danger is-inverted" {%if not is_followed%} style="display: none;" {%endif%} onclick="unfollow()">與他絕交</a>
+            <a id="bt_follow" class="button is-success is-inverted" {%if is_followed %} style="display: none;"
+                {%endif%} onclick="follow()">仰慕此人</a>
+            <a id="bt_unfollow" class="button is-danger is-inverted" {%if not is_followed %} style="display: none;" {%
+                endif %} onclick="unfollow()">與他絕交</a>
             {% endif %}
         </div>
     </div>
@@ -88,10 +90,9 @@
 
             <div class="box content">
                 <span id="profile">{{user.profile}}</span>
-                
+
                 {% if is_me %}
                 <textarea id="ta_profile" class="textarea" style="display: none;">{{user.profile}}</textarea>
-                
                 <span id="bt_edit" class="button tag is-light" onclick="edit()">編輯</span>
                 <span id="bt_save" class="button tag is-link" style="display: none;" onclick="save()">儲存</span>
                 <span id="bt_cancel" class="button tag is-light" style="display: none;" onclick="cancel()">取消</span>
@@ -99,45 +100,42 @@
                 <hr>
                 <!-- friends -->
                 <span class="subtitle">羈絆</span>
-                
+
                 {% if not friendship %}
-                    <br>
-                    <br>
-                    <p>當兩人互相仰慕時，就會產生羈絆關係，可以透過互動提升親密度等級～</p>
+                <br>
+                <br>
+                <p>當兩人互相仰慕時，就會產生羈絆關係，可以透過互動提升親密度等級～</p>
                 {% endif %}
 
                 {% for friend in friendship%}
                 <div class="media" style="margin-top: 30px;">
-                  <div class="media-left">
-                    <figure class="image is-64x64" style="margin-right: 0.2em;margin-left: 1em">
-                      <img src="{{friend.picture}}" alt="Placeholder image">
-                    </figure>
-                  </div>
-                  <div class="media-content">
-                    <a href="/user/{{friend.username}}">
-                        <p class="title is-6">{{friend.first_name}}</p>
-                    </a>
-                    <p class="subtitle is-6">@{{friend.username}}</p>
-                  </div>
-                  <div class="media-right">
+                    <div class="media-left">
+                        <figure class="image is-64x64" style="margin-right: 0.2em;margin-left: 1em">
+                            <img src="{{friend.picture}}" alt="Placeholder image">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <a href="/user/{{friend.username}}">
+                            <p class="title is-6">{{friend.first_name}}</p>
+                        </a>
+                        <p class="subtitle is-6">@{{friend.username}}</p>
+                    </div>
+                    <div class="media-right">
                         {% if friend.strength > 200 %}
-                            <span class="tag is-warning media-ri">不鏽鋼交</span>
+                        <span class="tag is-warning media-ri">不鏽鋼交</span>
                         {% elif friend.strength > 150 %}
-                            <span class="tag is-primary media-ri">鑽石之交</span>
+                        <span class="tag is-primary media-ri">鑽石之交</span>
                         {% elif friend.strength > 100 %}
-                            <span class="tag is-success media-ri">情如兄弟</span>
+                        <span class="tag is-success media-ri">情如兄弟</span>
                         {% elif friend.strength > 10 %}
-                            <span class="tag is-info media-ri">點頭之交</span>
+                        <span class="tag is-info media-ri">點頭之交</span>
                         {% elif friend.strength > -1 %}
-                            <span class="tag is-light media-ri">萍水相逢</span>
+                        <span class="tag is-light media-ri">萍水相逢</span>
                         {% endif %}
-                    </span>
+                        </span>
                     </div>
                 </div>
                 {% endfor %}
-
-
-
             </div>
 
 
@@ -178,7 +176,7 @@
                                 <br>
                             </p>
                             <p style="word-wrap: break-word;word-break: break-all;">
-                                {{ post['content'] }}</p>
+                                {{ post.content }}</p>
                         </div>
                         <a class="button is-small is-fullwidth" href="/post/{{post.id}}">閱讀全文</a>
                     </div>

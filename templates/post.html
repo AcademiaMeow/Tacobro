@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title>{{ author['first_name'] }} - {{ post['content'][:20] }} | Tacabro</title>
+<title>{{ author.first_name }} - {{ post.content[:20] }} | Tacabro</title>
 <style>
     .container.context {
         margin-top: 3em !important;
@@ -22,16 +22,16 @@
                     <article class="media">
                         <div class="media-left">
                             <figure class="image is-64x64">
-                                <img src="{{ author['picture'] }}" alt="Image">
+                                <img src="{{ author.picture }}" alt="Image">
                             </figure>
                         </div>
                         <div class="media-content">
                             <div class="content">
                                 <p>
-                                    <strong><a href="/user/{{ author['username'] }}">{{ author['first_name'] }}</a></strong> <small>@{{ author['username'] }}</small> <small>{{ post['publish_date'] }}</small>
+                                    <strong><a href="/user/{{ author.username }}">{{ author.first_name }}</a></strong> <small>@{{ author.username }}</small> <small>{{ post.publish_date }}</small>
                                 </p>
                                 <p style="word-wrap: break-word;word-break: break-all;">
-                                {{ post['content'] }}</p>
+                                {{ post.content }}</p>
                             </div>
                             <br>
                             <!-- icons -->
@@ -40,19 +40,19 @@
                                     <span class="icon is-small">
                                         <i class="fas fa-thumbs-up"></i>
                                     </span>
-                                    <span id="like-count">{{ post['like_count'] }}</span>
+                                    <span id="like-count">{{ post.like_count }}</span>
                                 </a>
                                 <a id="bt_dislike" class="button is-fullwidth is-danger is-outlined column">
                                     <span class="icon is-small">
                                         <i class="fas fa-thumbs-down"></i>
                                     </span>
-                                    <span id="dislike-count">{{ post['dislike_count'] }}</span>
+                                    <span id="dislike-count">{{ post.dislike_count }}</span>
                                 </a>
                                 <a class="button is-fullwidth is-info is-outlined column" href="#comment-block">
                                     <span class="icon is-small">
                                         <i class="far fa-comment"></i>
                                     </span>
-                                    <span id="comment-count">{{ post['comment_count'] }}</span>
+                                    <span id="comment-count">{{ post.comment_count }}</span>
                                 </a>
                             </div>
                             <!-- /icons -->
@@ -68,20 +68,20 @@
                         <article class="media">
                             <div class="media-left">
                                 <figure class="image is-64x64">
-                                    <img src="{{ comment['author_data']['picture'] }}" alt="Image">
+                                    <img src="{{ comment.author_data.picture }}" alt="Image">
                                 </figure>
                             </div>
                             <div class="media-content">
                                 <div class="content">
                                     <p>
                                         <strong>
-                                            <a href="/user/{{ comment['author_data']['username'] }}">
-                                            {{ comment['author_data']['first_name'] }}
+                                            <a href="/user/{{ comment.author_data.username }}">
+                                            {{ comment.author_data.first_name }}
                                             </a>
-                                        </strong> <small>@{{ comment['author_data']['username'] }}</small> <small>{{ comment['publish_date'] }}</small>
+                                        </strong> <small>@{{ comment.author_data.username }}</small> <small>{{ comment.publish_date }}</small>
                                         <br>
                                     </p>
-                                    <p style="word-wrap: break-word;word-break: break-all;">{{ comment['content'] }}</p>
+                                    <p style="word-wrap: break-word;word-break: break-all;">{{ comment.content }}</p>
                                 </div>
                             </div>
                         </article>
