@@ -8,16 +8,23 @@
         margin-bottom: 3em !important;
     }
 
-    .avatar {
-        border-radius: 4em;
+    .avatar.profile-avatar {
         position: relative;
         width: 8em;
         height: 8em;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
         margin: 0 auto;
         margin-bottom: 1em;
+        background-color: white;
+        box-shadow: 0px 0px 5px black;
+    }
+
+    .preview {
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        width:100%;
+        height:auto;
+        background-image: url('https://dummyimage.com/256');
     }
 
     .avatar #edit-avatar {
@@ -32,7 +39,7 @@
 <section class="hero is-primary has-text-centered is-bold">
     <div class="hero-body">
         <div class="container">
-            <div class="avatar" style="background-image: url('{% if not user.picture %}https://e-kitaplar.net/assets/images/profil.png{%else%}{{user.picture}}{% endif %}')">
+            <div class="avatar profile-avatar" style="background-image: url('{% if not user.picture %}https://e-kitaplar.net/assets/images/profil.png{%else%}{{user.picture}}{% endif %}')">
                 {% if is_me and request.user %}
                 <button class="button is-rounded" id="edit-avatar">
                     <span class="icon">
@@ -83,9 +90,7 @@
                 {% for friend in friendship%}
                 <div class="media" style="margin-top: 30px;">
                     <div class="media-left">
-                        <figure class="image is-64x64" style="margin-right: 0.2em;margin-left: 1em">
-                            <img src="{{friend.picture}}" alt="Placeholder image">
-                        </figure>
+                        <figure class="image is-64x64 avatar" style="background-image: url('{{friend.picture}}');margin-right: 0.2em;margin-left: 1em;"></figure>
                     </div>
                     <div class="media-content">
                         <a href="/user/{{friend.username}}">
@@ -138,9 +143,7 @@
             <div class="box">
                 <article class="media">
                     <div class="media-left">
-                        <figure class="image is-64x64">
-                            <img src="{{user.picture}}" alt="Image">
-                        </figure>
+                        <figure class="image is-64x64 avatar" style="background-image: url('{{user.picture}}');margin-right: 0.2em;margin-left: 1em;"></figure>
                     </div>
                     <div class="media-content">
                         <div class="content">
@@ -196,7 +199,7 @@
                 <div class="column">
                     <div class="card">
                         <div class="card-image">
-                            <figure id="preview-img" class="image avatar is-1by1" style="width:100%; height:auto; background-image: url('https://dummyimage.com/256');">
+                            <figure id="preview-img" class="image preview is-1by1">
                             </figure>
                         </div>
                         <span class="card-header-title">圖片預覽</span>

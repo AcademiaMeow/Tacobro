@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<title>{{ author.first_name }} - {{ post.content[:20] }} | Tacabro</title>
+<title>{{ author.first_name }} - {{ (post.content | no_markdown)[:20] }} | Tacabro</title>
 <style>
     .container.context {
         margin-top: 3em !important;
@@ -21,17 +21,16 @@
                 <div class="box">
                     <article class="media">
                         <div class="media-left">
-                            <figure class="image is-64x64">
-                                <img src="{{ author.picture }}" alt="Image">
-                            </figure>
+                            <figure class="image is-64x64 avatar" style="background-image: url('{{ author.picture }}')"></figure>
                         </div>
                         <div class="media-content">
                             <div class="content">
                                 <p>
-                                    <strong><a href="/user/{{ author.username }}">{{ author.first_name }}</a></strong> <small>@{{ author.username }}</small> <small>{{ post.publish_date }}</small>
+                                    <strong><a href="/user/{{ author.username }}">{{ author.first_name }}</a></strong>
+                                    <small>@{{ author.username }}</small> <small>{{ post.publish_date }}</small>
                                 </p>
                                 <p style="word-wrap: break-word;word-break: break-all;">
-                                {{ post.content | markdown }}</p>
+                                    {{ post.content | markdown }}</p>
                             </div>
                             <br>
                             <!-- icons -->
@@ -67,18 +66,17 @@
                         {% for comment in comments %}
                         <article class="media">
                             <div class="media-left">
-                                <figure class="image is-64x64">
-                                    <img src="{{ comment.author_data.picture }}" alt="Image">
-                                </figure>
+                                <figure class="image is-64x64 avatar" style="background-image: url('{{ comment.author_data.picture }}')"></figure>
                             </div>
                             <div class="media-content">
                                 <div class="content">
                                     <p>
                                         <strong>
                                             <a href="/user/{{ comment.author_data.username }}">
-                                            {{ comment.author_data.first_name }}
+                                                {{ comment.author_data.first_name }}
                                             </a>
-                                        </strong> <small>@{{ comment.author_data.username }}</small> <small>{{ comment.publish_date }}</small>
+                                        </strong> <small>@{{ comment.author_data.username }}</small> <small>{{
+                                            comment.publish_date }}</small>
                                         <br>
                                     </p>
                                     <p style="word-wrap: break-word;word-break: break-all;">{{ comment.content }}</p>
@@ -91,11 +89,7 @@
                     <hr>
                     {% if request.user %}
                     <article class="media" id="comment-block">
-                        <figure class="media-left">
-                            <p class="image is-64x64">
-                                <img src="{{request.user.picture}}">
-                            </p>
-                        </figure>
+                        <figure class="media-left image is-64x64 avatar" style="background-image: url('{{request.user.picture}}')"></figure>
                         <div class="media-content">
                             <div class="field">
                                 <p class="control">
@@ -121,8 +115,8 @@
 {% if request.user %}
 <script>
     document.getElementById("post-comment").onclick = () => {
-        fetch('/api/comment/{{post.id}}',{
-            'method':'POST',
+        fetch('/api/comment/{{post.id}}', {
+            'method': 'POST',
             body: JSON.stringify({
                 'content': document.getElementById("comment-content").value
             })
@@ -131,9 +125,7 @@
         var commentMedia = document.createElement("article");
         commentMedia.className = "media";
         commentMedia.innerHTML = `<div class="media-left">
-                                <figure class="image is-64x64">
-                                    <img src="{{request.user.picture}}" alt="Image">
-                                </figure>
+                                <figure class="media-left image is-64x64 avatar" style="background-image: url('{{request.user.picture}}')"></figure>
                             </div>
                             <div class="media-content">
                                 <div class="content">
@@ -150,17 +142,17 @@
     }
 
     document.getElementById("bt_like").onclick = () => {
-        fetch('/api/post/like/{{post.id}}',{
-            'method':'POST'
+        fetch('/api/post/like/{{post.id}}', {
+            'method': 'POST'
         });
-        document.getElementById("like-count").innerText = parseInt(document.getElementById("like-count").innerText)+1
+        document.getElementById("like-count").innerText = parseInt(document.getElementById("like-count").innerText) + 1
     }
 
     document.getElementById("bt_dislike").onclick = () => {
-        fetch('/api/post/dislike/{{post.id}}',{
-            'method':'POST'
+        fetch('/api/post/dislike/{{post.id}}', {
+            'method': 'POST'
         });
-        document.getElementById("dislike-count").innerText = parseInt(document.getElementById("dislike-count").innerText)+1
+        document.getElementById("dislike-count").innerText = parseInt(document.getElementById("dislike-count").innerText) + 1
     }
 
 </script>
