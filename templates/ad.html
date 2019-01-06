@@ -17,66 +17,69 @@
 	<span class="title">購買廣告</span>
 	<hr>
 
-	<form method="POST" enctype="multipart/form-data">
-
-		<div class="columns has-text-centered">
-			<div class="column">
+	<div class="columns has-text-centered">
+		<div class="column">
+			<label class="radio">
 				<img src="https://i.imgur.com/fu7NcoF.jpg" width="200">
 				<br>
-				<input type="radio" name="ad" value="left"> 貼文列表左側 $128
-			</div>
-			<div class="column">
+				<input type="radio" name="ad" value="left">
+				<span>貼文列表左側 $128</span>
+			</label>
+		</div>
+		<div class="column">
+			<label class="radio">
 				<img src="https://i.imgur.com/31YJ6xe.jpg" width="200">
 				<br>
-				<input type="radio" name="ad" value="middle"> 貼文列表下面 $256
-			</div>
-			<div class="column">
+				<input type="radio" name="ad" value="middle">
+				<span>貼文列表下面 $256</span>
+			</label>
+		</div>
+		<div class="column">
+			<label class="radio">
 				<img src="https://i.imgur.com/JV0PLbB.jpg" width="200">
 				<br>
-				<input type="radio" name="ad" value="right"> 貼文列表右側 $512
-			</div>
+				<input type="radio" name="ad" value="right">
+				<span>貼文列表右側 $512</span>
+			</label>
 		</div>
+	</div>
 
-		<br>
+	<br>
 
-		<div>
-			<input type="hidden" name="imagestring">
-			<div class="columns">
-				<div class="column">
-					<div class="field">
-						<div class="file is-large is-boxed has-name">
-							<label class="file-label">
-								<input class="file-input" id="imgur-file" type="file" onchange="readURL(this)" name="ad_img" targetID="preview_img"
-								 accept="image/*" data-max-size="5000" />
-								<span class="file-cta">
-									<span class="file-icon">
-										<i class="fas fa-upload"></i>
-									</span>
-									<span class="file-label">
-										上傳廣告圖片
-									</span>
-								</span>
-								<span class="file-name has-text-centered" id="file-name">請上傳你的檔案</span>
-							</label>
-						</div>
-					</div>
-				</div>
-				<div class="column">
-					<img id="preview_img" src="" width="200">
-				</div>
-			</div>
+	<div class="columns">
+		<div class="column">
 			<div class="field">
-				<label class="label">廣告點下去會去的網址</label>
-				<div class="control">
-					<input class="input" id="link-url" type="text" placeholder="http(s)://">
+				<div class="file is-large is-boxed has-name">
+					<label class="file-label">
+						<input class="file-input" id="imgur-file" type="file" onchange="readURL(this)" name="ad_img" targetID="preview_img"
+						 accept="image/*" data-max-size="5000" />
+						<span class="file-cta">
+							<span class="file-icon">
+								<i class="fas fa-upload"></i>
+							</span>
+							<span class="file-label">
+								上傳廣告圖片
+							</span>
+						</span>
+						<span class="file-name has-text-centered" id="file-name">請上傳你的檔案</span>
+					</label>
 				</div>
 			</div>
-			<div class="control">
-				<button class="button is-primary is-large is-fullwidth" id="post-ad">發佈我ㄉ廣告</button>
-			</div>
 		</div>
+		<div class="column">
+			<img id="preview_img" src="" width="200">
+		</div>
+	</div>
+	<div class="field">
+		<label class="label">廣告點下去會去的網址</label>
+		<div class="control">
+			<input class="input" id="link-url" type="text" placeholder="http(s)://">
+		</div>
+	</div>
+	<div class="control">
+		<button class="button is-primary is-large is-fullwidth" id="post-ad">發佈我ㄉ廣告</button>
+	</div>
 
-	</form>
 </div>
 
 <script>

@@ -75,14 +75,24 @@
                                             <a href="/user/{{ comment.author_data.username }}">
                                                 {{ comment.author_data.first_name }}
                                             </a>
-                                        </strong> <small>@{{ comment.author_data.username }}</small> <small>{{
-                                            comment.publish_date }}</small>
-                                        <br>
+                                        </strong>
+                                        <small>@{{ comment.author_data.username }}</small>
+                                        <small>{{ comment.publish_date }}</small>
                                     </p>
                                     <p style="word-wrap: break-word;word-break: break-all;">{{ comment.content }}</p>
                                 </div>
                             </div>
                         </article>
+                        {% else %}
+                        <div class="card has-text-centered" id="no-comment">
+                            <div class="card-content">
+                                <span class="icon" style="vertical-align:middle;">
+                                    <i class="fas fa-3x fa-comment-dots"></i>
+                                </span>
+                                <br><br>
+                                <p>這裡還沒有留言欸，說些什麼吧</p>
+                            </div>
+                        </div>
                         {% endfor %}
                     </div>
 
@@ -114,31 +124,49 @@
 
 {% if request.user %}
 <script>
-    document.getElementById("post-comment").onclick = () => {
-        fetch('/api/comment/{{post.id}}', {
-            'method': 'POST',
-            body: JSON.stringify({
-                'content': document.getElementById("comment-content").value
-            })
-        });
+    function htmlencode(s) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(s));
+        return div.innerHTML;
+    }
+    document.getElementById("post-comment").onclick = (e) => {
         var commentContent = document.getElementById("comment-content");
-        var commentMedia = document.createElement("article");
-        commentMedia.className = "media";
-        commentMedia.innerHTML = `<div class="media-left">
-                                <figure class="media-left image is-64x64 avatar" style="background-image: url('{{request.user.picture}}')"></figure>
+        if (commentContent.value.trim() == "") return;
+        e.target.classList.add("is-loading");
+        fetch('/api/comment/{{post.id}}', {
+            method: 'POST',
+            body: JSON.stringify({ content: commentContent.value })
+        })
+            .then(r => r.json())
+            .then(r => {
+                if (r.success) {
+                    var commentMedia = document.createElement("article");
+                    commentMedia.className = "media";
+                    commentMedia.innerHTML = `<div class="media-left">
+                                <figure class="image is-64x64 avatar" style="background-image: url('{{ request.user.picture }}')"></figure>
                             </div>
                             <div class="media-content">
                                 <div class="content">
                                     <p>
-                                        <strong><a href="/user/{{request.user.first_name}}">{{request.user.first_name}}</a></strong> <small>@{{request.user.username}}</small> <small>剛剛</small>
-                                        <br>
-                                        ${commentContent.value}
+                                        <strong>
+                                            <a href="/user/{{ request.user.username }}">
+                                                {{ request.user.first_name }}
+                                            </a>
+                                        </strong>
+                                        <small>@{{ request.user.username }}</small>
+                                        <small>剛剛</small>
                                     </p>
+                                    <p style="word-wrap: break-word;word-break: break-all;">${htmlencode(commentContent.value)}</p>
                                 </div>
                             </div>`;
-        document.getElementById("comments").appendChild(commentMedia);
-        document.getElementById("comment-count").innerText = parseInt(document.getElementById("comment-count").innerText) + 1;
-        commentContent.value = "";
+                    document.getElementById("comments").appendChild(commentMedia);
+                    document.getElementById("comment-count").innerText = parseInt(document.getElementById("comment-count").innerText) + 1;
+                    if (document.getElementById("no-comment"))
+                        document.getElementById("no-comment").remove()
+                } else alert(r.message);
+                commentContent.value = "";
+                e.target.classList.remove("is-loading");
+            });
     }
 
     document.getElementById("bt_like").onclick = () => {

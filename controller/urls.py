@@ -56,14 +56,20 @@ url_patterns = [
     # # # # # # # # #
     path('api/user/profile', user.api_profile, True),
     path('api/user/avatar', user.api_avatar, True),
+
     path('api/follow/<follow_id:int>', user.api_follow, True),
     path('api/unfollow/<follow_id:int>', user.api_unfollow, True),
     path('api/drawcard', user.api_drawcard, True),
+
     path('api/post_article', post.api_post_article, True),
     path('api/comment/<id:int>', post.api_comment, True),
+
     path('api/post/like/<id:int>', post.api_post_like, True),
     path('api/post/dislike/<id:int>', post.api_post_dislike, True),
+
     path('api/ad', advertisement.api_buy_ad, True),
+    path('api/read_notification/<id:int>', user.api_read_notification, True),
+    
 ]
 
 

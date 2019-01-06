@@ -7,6 +7,7 @@ from flask import request, session, redirect, render_template, jsonify
 from models.User import User
 from models.Post import Post
 from models.Following import Following, Friendship
+from models.Notifications import Notifications
 
 
 def profile(request, username):
@@ -125,6 +126,7 @@ def api_profile(request):
     else:
         return 'FLAG{you_GET_nothing}'
 
+
 def api_avatar(request):
     if request.method == 'POST':
         try:
@@ -149,3 +151,12 @@ def api_drawcard(request):
         return '400 - 整個網站都是你的好友了！'
     else:
         return jsonify(choice(avaliable_user))
+
+
+def api_read_notification(request, id):
+    try:
+        Notifications.update(id=id, has_read=True)
+        return jsonify({"success": True})
+    except:
+        return jsonify({"success": False})
+
