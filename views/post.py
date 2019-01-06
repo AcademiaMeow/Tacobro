@@ -5,6 +5,7 @@ from models.User import User
 from models.Comment import Comment
 from models.Board import Board
 from models.Following import Friendship
+from models.Notifications import Notifications
 from datetime import datetime
 
 
@@ -28,6 +29,15 @@ def post(request, id):
 def api_comment(request, id):
     if request.method == 'POST':
         try:
+            article = Post.filter(id=id)[0]
+            if request.user['id'] != article['author']:
+                Notifications(
+                    link="/post/{0}".format(id),
+                    content="你的貼文「{0}{1}」有一則新回應。".format(
+                        article['content'][:10],
+                        "..." if len(article['content']) > 10 else ""),
+                    user=article['author']
+                ).create()
             post_data = json.loads(request.data)
             if post_data['content'].strip() == "":
                 return jsonify({"success": False, "message": "空白留言 = ="})

@@ -96,6 +96,15 @@ CREATE TABLE IF NOT EXISTS Ad (
     FOREIGN KEY (board)  REFERENCES AdBoard(id)
 );
 
+CREATE TABLE IF NOT EXISTS Notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    notified_date datetime default current_timestamp,
+    link text,
+    content text,
+    has_read BOOLEAN default 0,
+    user INTEGER,
+    FOREIGN KEY (user) REFERENCES User(id)
+);
 
 insert into Board (name, description) values ('C_Chat', '姆咪');
 insert into Board (name, description) values ('Sex', 'ii');

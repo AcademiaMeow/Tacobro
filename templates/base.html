@@ -46,6 +46,26 @@
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
                     {% if request.user %}
+
+                    <div class="navbar-item has-dropdown is-right is-hoverable">
+                        <a class="navbar-link is-arrowless">
+                            <span class="icon">
+                                <i class="fas fa-bell"></i>
+                            </span>
+                            <span class="tag is-danger is-normal">{{ request.user.notifications | length}}</span>
+                        </a>
+                        <div class="navbar-dropdown is-right">
+                            {% for n in request.user.notifications %}
+                            <a class="navbar-item noti-item" data-id="{{n.id}}" data-href="{{n.link}}">
+                                {{ n.content | no_markdown }}
+                            </a>
+                            {% else %}
+                            <span class="navbar-item">
+                                你沒有未讀通知了
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
                             {{ request.user.username }}，安安
@@ -121,6 +141,14 @@
                 document.querySelector("link").setAttribute("href", `https://jenil.github.io/bulmaswatch/${element.dataset.theme}/bulmaswatch.min.css`)
             }
         });
+
+        document.querySelectorAll(".noti-item").forEach(
+            (elem) =>
+                elem.onclick = () =>
+                    fetch(`/api/read_notification/${elem.dataset.id}`)
+                        .then(r => r.json())
+                        .then(r => window.location.href = elem.dataset.href)
+        )
 
 
         document.addEventListener('DOMContentLoaded', function () {

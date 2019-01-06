@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request, render_template, redirect, session
 from models.User import User
+from models.Notifications import Notifications
 from controller import urls
 import re
 import jinja2
@@ -18,6 +19,7 @@ def set_user():
     if user:
         if User.filter(id=user['id']):
             request.user = User.filter(id=user['id'])[0]
+            request.user['notifications'] = Notifications.filter(user=user['id'], has_read=0)
         else:
             request.user = None
     else:
