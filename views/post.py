@@ -7,7 +7,7 @@ from models.Board import Board
 from models.Following import Friendship
 from models.Notifications import Notifications
 from datetime import datetime
-from run import markdown
+from kernel.template_engine import markdown
 
 
 def post(request, id):
