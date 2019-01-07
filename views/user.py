@@ -131,7 +131,8 @@ def api_avatar(request):
     if request.method == 'POST':
         try:
             POST = json.loads(request.data)
-            if POST['avatar'].startswith("https://i.imgur.com/"):
+            import re
+            if re.match(r"^https?:\/\/(\w+\.)?imgur.com\/[\w\d]+(\.[a-zA-Z]{3})?$", POST['avatar']):
                 User.update(id=request.user['id'], picture=POST['avatar'])
                 return jsonify({"success": True})
             else:

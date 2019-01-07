@@ -19,8 +19,8 @@ def api_buy_ad(request):
         try:
             ad_data = json.loads(request.data)
             user_id = int(request.user['id'])
-
-            if not check_url(ad_data['img_url'], "i.imgur.com") or not check_url(ad_data['link_url']):
+            
+            if not re.match(r"^https?:\/\/(\w+\.)?imgur.com\/[\w\d]+(\.[a-zA-Z]{3})?$", ad_data['img_url']) or not check_url(ad_data['link_url']):
                 return jsonify({"success": False, "message": "網址怪怪ㄉ喔"})
 
             ad_position = AdBoard.filter(position=ad_data['positoin'])[0]
