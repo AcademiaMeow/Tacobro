@@ -152,7 +152,7 @@
                                 <br>
                             </p>
                             <p style="word-wrap: break-word;word-break: break-all;">
-                                {{ post.content | no_markdown }}</p>
+                                {{ (post.content | no_markdown)[:128] }}</p>
                         </div>
                         <a class="button is-small is-fullwidth" href="/post/{{post.id}}">閱讀全文</a>
                     </div>

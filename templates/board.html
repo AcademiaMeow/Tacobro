@@ -95,8 +95,8 @@
                                             post.author_data.first_name }}</a></strong>
                                     <small>@{{ post.author_data.username }}</small> <small>{{ post.publish_date }}</small>
                                     <br>
-                                    {{ post.content[:128] | no_markdown }}
-                                    {% if post.content|length > 128 %} ... {% endif %}
+                                    {{ (post.content | no_markdown)[:128] }}
+                                    {% if (post.content | no_markdown)|length > 128 %} ... {% endif %}
                                 </p>
                             </div>
                             <a class="button is-small is-fullwidth" href="/post/{{ post.id }}">閱讀全文</a>

@@ -7,6 +7,7 @@ from models.Board import Board
 from models.Following import Friendship
 from models.Notifications import Notifications
 from datetime import datetime
+from run import markdown
 
 
 def post(request, id):
@@ -26,9 +27,33 @@ def post(request, id):
     return render_template("post.html", **locals())
 
 
+def api_edit(request, id):
+    if request.method == 'POST':
+        try:
+            post_article = json.loads(request.data)
+            post = Post.filter(id=id)[0]
+            if request.user['id'] != post['author']:
+                return jsonify({"success": False, "message": "403"})
+
+            Post.update(id=id,
+                        content=post_article['content'],
+                        last_modify=datetime.now())
+            return jsonify({"success": True, "content": markdown(post_article['content'])})
+        except:
+            return jsonify({"success": False, "message": "Unknown error :("})
+    else:
+        return 'FLAG{you_GET_nothing}'
+
+
 def api_comment(request, id):
     if request.method == 'POST':
         try:
+            post_data = json.loads(request.data)
+            if post_data['content'].strip() == "":
+                return jsonify({"success": False, "message": "空白留言 = ="})
+            if len(post_data['content']) > 150:
+                return jsonify({"success": False, "message": "留言太長了"})
+
             article = Post.filter(id=id)[0]
             if request.user['id'] != article['author']:
                 Notifications(
@@ -38,11 +63,7 @@ def api_comment(request, id):
                         "..." if len(article['content']) > 10 else ""),
                     user=article['author']
                 ).create()
-            post_data = json.loads(request.data)
-            if post_data['content'].strip() == "":
-                return jsonify({"success": False, "message": "空白留言 = ="})
-            if len(post_data['content']) > 150:
-                return jsonify({"success": False, "message": "留言太長了"})
+
             Comment(author=request.user['id'],
                     post=id,
                     content=post_data['content'],
@@ -104,6 +125,8 @@ def api_post_delete(request):
         post = Post.filter(id=id)
         if not post:
             return jsonify({"success": False})
+        if request.user['id'] != post[0]['author'] and not request.user['is_admin']:
+            return jsonify({"success": False, "message": "403"})
         Post.delete(post[0]['id'])
         return jsonify({"success": True})
     else:
