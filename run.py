@@ -35,8 +35,8 @@ def no_markdown(string):
         markdown_type = matched.lastgroup
         return matched.groupdict()[markdown_type]
 
-    markup = re.sub(r"\*\*(?P<bold>[^**]+)\*\*|__(?P<italics>[^*]+)__|~~(?P<strike>[^~]+)~~|`(?P<code>[^`]+)`",
-                    _repl, string, re.MULTILINE)
+    markup = re.sub(r"\*\*(?P<bold>[^**]+)\*\*|__(?P<italics>[^_]+)__|~~(?P<strike>[^~]+)~~|`(?P<code>[^`]+)`",
+                    _repl, string, flags=re.MULTILINE)
     return jinja2.Markup(markup)
 
 @app.template_filter('markdown')
@@ -52,8 +52,8 @@ def markdown(string):
             tagname=mapping[markdown_type],
             content=matched.groupdict()[markdown_type])
 
-    markup = re.sub(r"\*\*(?P<bold>[^**]+)\*\*|__(?P<italics>[^*]+)__|~~(?P<strike>[^~]+)~~|`(?P<code>[^`]+)`",
-                    _repl, markup, re.MULTILINE)
+    markup = re.sub(r"\*\*(?P<bold>[^**]+)\*\*|__(?P<italics>[^_]+)__|~~(?P<strike>[^~]+)~~|`(?P<code>[^`]+)`",
+                    _repl, markup, flags=re.MULTILINE)
     return jinja2.Markup(markup)
 
 

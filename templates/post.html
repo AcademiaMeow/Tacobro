@@ -29,8 +29,28 @@
                                     <strong><a href="/user/{{ author.username }}">{{ author.first_name }}</a></strong>
                                     <small>@{{ author.username }}</small> <small>{{ post.publish_date }}</small>
                                 </p>
-                                <p style="word-wrap: break-word;word-break: break-all;">
-                                    {{ post.content | markdown }}</p>
+                                {% if request.user.id == post.author %}
+                                <div class="field" id="edit-post-content" style="display:none">
+                                    <p class="control">
+                                        <textarea class="textarea">{{ post.content }}</textarea>
+                                    </p>
+                                    <div class="field is-grouped">
+                                        <p class="control">
+                                            <a class="button is-link" id="btn-save">
+                                                儲存
+                                            </a>
+                                        </p>
+                                        <p class="control">
+                                            <a class="button" id="btn-cancel">
+                                                取消
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <p id="post-content" style="word-wrap: break-word;word-break: break-all;">
+                                    {{ post.content | markdown }}
+                                </p>
                             </div>
                             <br>
                             <!-- icons -->
@@ -56,6 +76,32 @@
                             </div>
                             <!-- /icons -->
                         </div>
+                        {% if request.user.id == post.author %}
+                        <div class="media-right">
+                            <div class="dropdown is-right is-hoverable">
+                                <div class="dropdown-trigger">
+                                    <a aria-haspopup="true" aria-controls="post-dropdown-menu">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="dropdown-menu" id="post-dropdown-menu" role="menu">
+                                    <div class="dropdown-content">
+                                        <a class="dropdown-item" id="edit-post">
+                                            <span class="icon" style="vertical-align:middle;"><i class="fa fa-pen"></i></span>
+                                            <span>編輯貼文</span>
+                                        </a>
+                                        <a href="#" class="dropdown-item" id="delete-post">
+                                            <span class="icon" style="vertical-align:middle;"><i class="fas fa-trash-alt"></i></span>
+                                            <span>刪除貼文</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        {% endif %}
                     </article>
                 </div>
                 <!-- /box -->
@@ -124,6 +170,7 @@
 
 {% if request.user %}
 <script>
+    const postId = {{ post.id }};
     function htmlencode(s) {
         var div = document.createElement('div');
         div.appendChild(document.createTextNode(s));
@@ -133,7 +180,7 @@
         var commentContent = document.getElementById("comment-content");
         if (commentContent.value.trim() == "") return;
         e.target.classList.add("is-loading");
-        fetch('/api/comment/{{post.id}}', {
+        fetch('/api/comment/' + postId, {
             method: 'POST',
             body: JSON.stringify({ content: commentContent.value })
         })
@@ -168,17 +215,67 @@
                 e.target.classList.remove("is-loading");
             });
     }
+    {% if request.user.id == post.author %}
+    document.getElementById("delete-post").onclick = (e) => {
+        if (confirm("確定要刪除這篇文嗎？")) {
+            fetch("/api/post_delete", {
+                method: "POST",
+                body: JSON.stringify({ postId: postId })
+            })
+                .then(r => r.json())
+                .then(result => {
+                    if (result.success)
+                        window.location.href = "/";
+                    else
+                        alert("刪除貼文失敗QQ");
+                })
+        }
+    };
+
+
+    const editBlock = document.getElementById("edit-post-content"),
+        textarea = editBlock.querySelector("textarea"),
+        postContent = document.getElementById("post-content");
+    document.getElementById("edit-post").onclick = (e) => {
+        editBlock.style.display = "block";
+        postContent.style.display = "none";
+    }
+
+    document.getElementById("btn-save").onclick = (e) => {
+        e.target.classList.add("is-loading");
+        fetch("/api/post/edit/" + postId, {
+            method: "POST",
+            body: JSON.stringify({ content: textarea.value })
+        })
+            .then(r => r.json())
+            .then(r => {
+                if (r.success) {
+                    postContent.innerHTML = r.content
+                    editBlock.style.display = "none";
+                    postContent.style.display = "block";
+                }
+                else
+                    alert(r.message);
+                e.target.classList.remove("is-loading");
+            })
+    }
+
+    document.getElementById("btn-cancel").onclick = (e) => {
+        editBlock.style.display = "none";
+        postContent.style.display = "block";
+    }
+    {% endif %}
 
     document.getElementById("bt_like").onclick = () => {
-        fetch('/api/post/like/{{post.id}}', {
-            'method': 'POST'
+        fetch('/api/post/like/' + postId, {
+            method: 'POST'
         });
         document.getElementById("like-count").innerText = parseInt(document.getElementById("like-count").innerText) + 1
     }
 
     document.getElementById("bt_dislike").onclick = () => {
-        fetch('/api/post/dislike/{{post.id}}', {
-            'method': 'POST'
+        fetch('/api/post/dislike/' + postId, {
+            method: 'POST'
         });
         document.getElementById("dislike-count").innerText = parseInt(document.getElementById("dislike-count").innerText) + 1
     }

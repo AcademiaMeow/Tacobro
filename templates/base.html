@@ -52,7 +52,9 @@
                             <span class="icon">
                                 <i class="fas fa-bell"></i>
                             </span>
-                            <span class="tag is-danger is-normal">{{ request.user.notifications | length}}</span>
+                            {% if request.user.notifications | length > 0 %}
+                            <span class="tag is-danger is-normal">{{ request.user.notifications | length }}</span>
+                            {% endif %}
                         </a>
                         <div class="navbar-dropdown is-right">
                             {% for n in request.user.notifications %}

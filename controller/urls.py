@@ -31,44 +31,45 @@ url_patterns = [
     # account
     path('login', account.login),
     path('register', account.register),
-    path('logout', account.logout, True),
+    path('logout', account.logout, login_required=True),
 
     path('robots.txt', robots),
     path('admin_panel', admin),
 
     # user
-    path('me', user.me, True),
-    path('card', user.card, True),
+    path('me', user.me, login_required=True),
+    path('card', user.card, login_required=True),
     path('user/<username:str>', user.profile),
 
     # board
     path('board/<name:str>', board.list),
-    path('api/board_add', board.api_board_add, False, True),
+    path('api/board_add', board.api_board_add, admin_required=True),
 
     # post
     path('post/<id:int>', post.post),
-    path('api/post_delete', post.api_post_delete, False, True),
+    path('api/post_delete', post.api_post_delete, login_required=True),
 
-    path('ad', advertisement.buy_ad, True),
+    path('ad', advertisement.buy_ad, login_required=True),
 
     # # # # # # # # #
     # SOME COOL API #
     # # # # # # # # #
-    path('api/user/profile', user.api_profile, True),
-    path('api/user/avatar', user.api_avatar, True),
+    path('api/user/profile', user.api_profile, login_required=True),
+    path('api/user/avatar', user.api_avatar, login_required=True),
 
-    path('api/follow/<follow_id:int>', user.api_follow, True),
-    path('api/unfollow/<follow_id:int>', user.api_unfollow, True),
-    path('api/drawcard', user.api_drawcard, True),
+    path('api/follow/<follow_id:int>', user.api_follow, login_required=True),
+    path('api/unfollow/<follow_id:int>', user.api_unfollow, login_required=True),
+    path('api/drawcard', user.api_drawcard, login_required=True),
 
-    path('api/post_article', post.api_post_article, True),
-    path('api/comment/<id:int>', post.api_comment, True),
+    path('api/post_article', post.api_post_article, login_required=True),
+    path('api/comment/<id:int>', post.api_comment, login_required=True),
 
-    path('api/post/like/<id:int>', post.api_post_like, True),
-    path('api/post/dislike/<id:int>', post.api_post_dislike, True),
+    path('api/post/edit/<id:int>', post.api_edit, login_required=True),
+    path('api/post/like/<id:int>', post.api_post_like, login_required=True),
+    path('api/post/dislike/<id:int>', post.api_post_dislike, login_required=True),
 
-    path('api/ad', advertisement.api_buy_ad, True),
-    path('api/read_notification/<id:int>', user.api_read_notification, True),
+    path('api/ad', advertisement.api_buy_ad, login_required=True),
+    path('api/read_notification/<id:int>', user.api_read_notification, login_required=True),
     
 ]
 
