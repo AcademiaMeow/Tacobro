@@ -1,1 +1,1 @@
-sqlite3 tacobro.db < create_table.sql
+sqlite3 tacobro.db < create_tables.sql
