@@ -84,6 +84,11 @@ def api_follow(request, follow_id):
             # exist
             return '403'
         else:
+            Notifications(
+                link="/user/{0}".format(request.user['username']),
+                content="@{0} 開始仰慕你了！".format(request.user['username']),
+                user=follow_id
+            ).create()
             Following(user_no=user_id, following_no=follow_id).create()
 
             if Following.filter(user_no=follow_id, following_no=user_id):
@@ -163,4 +168,3 @@ def api_read_notification(request, id):
         return jsonify({"success": True})
     except:
         return jsonify({"success": False})
-
